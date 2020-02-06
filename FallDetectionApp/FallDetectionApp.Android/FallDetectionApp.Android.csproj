@@ -15,7 +15,6 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <AndroidUseAapt2>true</AndroidUseAapt2>
@@ -88,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FallDetectionApp\FallDetectionApp.csproj">
-      <Project>{59852A89-471D-4626-ABBC-B1E75388E191}</Project>
+      <Project>{F8B80097-6232-40D1-B5EF-0B7E886EAF8F}</Project>
       <Name>FallDetectionApp</Name>
     </ProjectReference>
   </ItemGroup>
