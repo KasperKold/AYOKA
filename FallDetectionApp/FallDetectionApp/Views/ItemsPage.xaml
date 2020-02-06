@@ -20,26 +20,46 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <StackLayout>
-
-        <StackLayout>
-
-
-            <Label Text="Fall App" FontSize="Header" TextColor="{StaticResource Primary}" VerticalOptions="Start" HorizontalOptions="Center" />
-
-
-            <Button Margin="0,10,0,0" Text="Activate" x:Name="btnActivate" HorizontalOptions="Fill" VerticalOptions="Fill"
-                        Command="{Binding OpenWebCommand}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" />
-
-            <Button Margin="0,10,0,0" Text="Configuration" x:Name="btnConfiguration" HorizontalOptions="Fill" VerticalOptions="End"
-                        Command="{Binding OpenWebCommand}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" />
+     <StackLayout>
+        <Label Text="CONTACT LIST" HorizontalOptions="Center" Margin="20" FontSize="22"  />
+        <ListView x:Name="ItemsListView" ItemsSource="{Binding Items}" VerticalOptions="FillAndExpand" HasUnevenRows="true" RefreshCommand="{Binding LoadItemsCommand}" IsPullToRefreshEnabled="true" IsRefreshing="{Binding IsBusy, Mode=OneWay}" CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
+            <d:ListView.ItemsSource >
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>1</x:String>
+                    <x:String>2</x:String>
+                    <x:String>3</x:String>
+                </x:Array>
+            </d:ListView.ItemsSource>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="10">
+                            <StackLayout Orientation="Horizontal">
 
 
-        </StackLayout>
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding Text}" d:Text="{Binding .}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
+                                    <Label Text="{Binding Description}" d:Text="Maya Wassli" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="13" />
+                                </StackLayout >
+                                <Image Source="redCross.png" HorizontalOptions="EndAndExpand"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Margin="30,20,30,30" Text="Add Contacts " Command="{Binding OpenWebCommand}" BackgroundColor="{StaticResource Primary}" FontSize="22" TextColor="White" />
+         <Label x:Name="displayLabel" Margin="0,0,0,30"
+               Text="{Binding Source={x:Reference slider},
+                              Path=Value,
+                              StringFormat='Detecting Interval: {0:F0} min'}"
+               HorizontalOptions="Center"
+               VerticalOptions="CenterAndExpand" FontSize="22"  />
+        <Slider Margin="20,0,0,20" Minimum="0"  Maximum="60" ThumbColor="DarkGreen" MinimumTrackColor="Red" MaximumTrackColor="LightSeaGreen" x:Name="slider"/>
+       
+        <Button Margin="30,20,30,40" Text="Manage Message" Command="{Binding OpenWebCommand}" BackgroundColor="{StaticResource Primary}" FontSize="22" TextColor="White" />
+
+    </StackLayout>
 
         <!--<ListView x:Name="ItemsListView"
                 ItemsSource="{Binding Items}"
@@ -79,6 +99,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>-->
-    </StackLayout>
+    
 
 </ContentPage>
