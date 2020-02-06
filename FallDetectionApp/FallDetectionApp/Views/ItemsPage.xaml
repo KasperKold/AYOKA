@@ -12,8 +12,36 @@
         <ToolbarItem Text="Add" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="Accent">#96d1ff</Color>
+            <Color x:Key="LightTextColor">#999999</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <StackLayout>
-        <ListView x:Name="ItemsListView"
+
+        <StackLayout>
+
+
+            <Label Text="Fall App" FontSize="Header" TextColor="{StaticResource Primary}" VerticalOptions="Start" HorizontalOptions="Center" />
+
+
+            <Button Margin="0,10,0,0" Text="Activate" x:Name="btnActivate" HorizontalOptions="Fill" VerticalOptions="Fill"
+                        Command="{Binding OpenWebCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White" />
+
+            <Button Margin="0,10,0,0" Text="Configuration" x:Name="btnConfiguration" HorizontalOptions="Fill" VerticalOptions="End"
+                        Command="{Binding OpenWebCommand}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White" />
+
+
+        </StackLayout>
+
+        <!--<ListView x:Name="ItemsListView"
                 ItemsSource="{Binding Items}"
                 VerticalOptions="FillAndExpand"
                 HasUnevenRows="true"
@@ -50,7 +78,7 @@
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>
+        </ListView>-->
     </StackLayout>
 
 </ContentPage>
