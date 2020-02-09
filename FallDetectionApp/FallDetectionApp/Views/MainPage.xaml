@@ -15,7 +15,7 @@
                 </OnPlatform>
             </NavigationPage.Icon>
             <x:Arguments>
-                <views:ItemsPage />
+                <views:AboutPage />
             </x:Arguments>
         </NavigationPage>
         
@@ -26,7 +26,7 @@
                 </OnPlatform>
             </NavigationPage.Icon>
             <x:Arguments>
-                <views:AboutPage />
+                <views:ItemsPage />
             </x:Arguments>
         </NavigationPage>
     </TabbedPage.Children>
