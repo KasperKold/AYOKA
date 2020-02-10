@@ -38,8 +38,13 @@
 
 
                                 <StackLayout Orientation="Vertical">
+                  
+                                    <Label Text="{Binding Prio}" d:Text="{Binding .}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
+                                    <StackLayout Orientation="Horizontal">
                                     <Label Text="{Binding Text}" d:Text="{Binding .}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
-                                    <Label Text="{Binding Description}" d:Text="Maya Wassli" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="13" />
+                                         <Label Text="{Binding PhoneNr}" d:Text="{Binding .}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
+                                          </StackLayout >
+                                    <Label Text="{Binding Description}" d:Text="{Binding .}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="13" />
                                 </StackLayout >
                                 <Image Source="redCross.png" HorizontalOptions="EndAndExpand"/>
                             </StackLayout>

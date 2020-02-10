@@ -14,12 +14,12 @@ namespace FallDetectionApp.Services
         {
             items = new List<Item>()
             {
-                new Item { Id = Guid.NewGuid().ToString(), Text = "First item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Second item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Third item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fourth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Fifth item", Description="This is an item description." },
-                new Item { Id = Guid.NewGuid().ToString(), Text = "Sixth item", Description="This is an item description." }
+                new Item { Id = Guid.NewGuid().ToString(),Prio=1, Text = "Kim Hammel", Description= "Mother", PhoneNr="+41733111111"},
+                new Item { Id = Guid.NewGuid().ToString(),Prio=2,Text = "Christian List", Description="Father" , PhoneNr="+42733222222"  },
+                new Item { Id = Guid.NewGuid().ToString(),Prio=3, Text = "Peder Nilsson", Description="Close colleague", PhoneNr="+43733333333" },
+                new Item { Id = Guid.NewGuid().ToString(),Prio=4,Text = "Kasper Kold", Description="Close friend", PhoneNr="+44733444444" },
+                new Item { Id = Guid.NewGuid().ToString(),Prio=5,Text = "Clark Kent", Description="My savior", PhoneNr="+45733555555" },
+                new Item { Id = Guid.NewGuid().ToString(),Prio=6,Text = "Leonardo", Description="My favourite Ninja Turtle", PhoneNr="+46733666666" }
             };
         }
 

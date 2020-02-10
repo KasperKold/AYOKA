@@ -8,10 +8,13 @@
              Title="{Binding Title}">
 
     <StackLayout Spacing="20" Padding="15">
-        <Label Text="Text:" FontSize="Medium" />
-        <Label Text="{Binding Item.Text}" d:Text="Item name" FontSize="Small"/>
+        <Label Text="{Binding Item.Prio}" d:Text="Prioritization" FontSize="Medium"/>
+        <Label Text="Name:" FontSize="Medium" />
+        <Label Text="{Binding Item.Text}" d:Text="name of contact" FontSize="Small"/>
+         <Label Text="Phone Number:" FontSize="Medium" />
+        <Label Text="{Binding Item.PhoneNr}" d:Text="xxxxxxxxxxx" FontSize="Small"/>
         <Label Text="Description:" FontSize="Medium" />
-        <Label Text="{Binding Item.Description}" d:Text="Item description" FontSize="Small"/>
+        <Label Text="{Binding Item.Description}" d:Text="relation to contact" FontSize="Small"/>
     </StackLayout>
     
 </ContentPage>
