@@ -9,10 +9,6 @@
   <!-- Necessary for apps that target Android 9.0 or higher -->
   <uses-library android:name="org.apache.http.legacy" android:required="false" />
 
-  <!-- Permission to receive remote notifications from Google Play Services -->
-  <!-- Notice here that we have the package name of our application as a prefix on the permissions. -->
-  <uses-permission android:name="com.companyname.falldetectionapp.permission.MAPS_RECEIVE" />
-  <permission android:name="com.companyname.falldetectionapp.permission.MAPS_RECEIVE" android:protectionLevel="signature" />
 
 
 
@@ -25,6 +21,7 @@
     <uses-library android:name="org.apache.http.legacy" android:required="false" />
   </application>
 
+  
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -32,4 +29,9 @@
   <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
   <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
   <uses-permission android:name="android.permission.BATTERY_STATS" />
+  <!-- Permission to receive remote notifications from Google Play Services -->
+  <!-- Notice here that we have the package name of our application as a prefix on the permissions. -->
+  <uses-permission android:name="com.companyname.falldetectionapp.android.permission.MAPS_RECEIVE" />
+  <uses-permission android:name="com.companyname.falldetectionapp.android.permission.MAPS_RECEIVE" android:protectionLevel="signature" />
+
 </manifest>
