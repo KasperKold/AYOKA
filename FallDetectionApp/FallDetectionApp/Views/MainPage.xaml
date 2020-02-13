@@ -15,10 +15,10 @@
                 </OnPlatform>
             </NavigationPage.Icon>
             <x:Arguments>
-                <views:AboutPage />
+                <views:HomePage />
             </x:Arguments>
         </NavigationPage>
-        
+
         <NavigationPage Title="Configuration">
             <NavigationPage.Icon>
                 <OnPlatform x:TypeArguments="FileImageSource">
@@ -30,5 +30,5 @@
             </x:Arguments>
         </NavigationPage>
     </TabbedPage.Children>
-    
+
 </TabbedPage>

@@ -4,12 +4,12 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="FallDetectionApp.Views.AboutPage"
+             x:Class="FallDetectionApp.Views.HomePage"
              xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"
              Title="{Binding Title}">
 
     <ContentPage.BindingContext>
-        <vm:AboutViewModel />
+        <vm:HomeViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Resources>
@@ -26,17 +26,23 @@
 
 
         <Label Text="Fall App" FontSize="Header" TextColor="{StaticResource Primary}" VerticalOptions="Start" HorizontalOptions="Center" />
-
-
         <Button Margin="0,10,0,0" Text="Activate" x:Name="btnActivate" HorizontalOptions="Fill" VerticalOptions="Fill"
                         Command="{Binding OpenWebCommand}"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
 
-        <Button Margin="0,10,0,0" Text="Configuration" x:Name="btnConfiguration" HorizontalOptions="Fill" VerticalOptions="End"
-                        Command="{Binding OpenWebCommand}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" />
+        <Button Margin="0,10,0,0" x:Name="btnLastLocation" Text="Last Location" HorizontalOptions="Fill" VerticalOptions="End"   BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"/>
+
+
+        <Label x:Name="latitude" />
+        <Label x:Name="longitude" />
+        <Label x:Name="provider" />
+        <Button Margin="0,10,0,0"  x:Name="btnReqLocation" Text="Get location"  HorizontalOptions="Fill" VerticalOptions="End"  Command="{Binding GetGeoLocation}" BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"/>
+        <Label x:Name="latitude2"/>
+        <Label x:Name="longitude2" />
+        <Label x:Name="provider2" />
 
 
     </StackLayout>
@@ -47,5 +53,5 @@
 
 
 
-    
+
 </ContentPage>

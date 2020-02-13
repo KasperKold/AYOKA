@@ -1,31 +1,24 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using FallDetectionApp.Services;
-using Xamarin.Essentials;
 using Xamarin.Forms;
-namespace FallDetectionApp.ViewModels
+using Xamarin.Essentials;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using FallDetectionApp.Models;
+
+namespace FallDetectionApp.Services
 {
-    public class HomeViewModel : BaseViewModel
+    public class GeoLocationClass : IGeoLocation<Item>
     {
-        public HomeViewModel()
+        public GeoLocationClass()
         {
-            Title = "Home";
-            OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://xamarin.com"));
-            GetGeoLocation = new Command(async () => await GetGeoLocationAsync());
+
         }
-
-        public ICommand OpenWebCommand { get; }
-        public ICommand GetGeoLocation { get; }
-
-
-
-
         public async Task<bool> GetGeoLocationAsync()
         {
             try
             {
-                var location = await Geolocation.GetLocationAsync();
+                var location = await Geolocation.GetLastKnownLocationAsync();
 
                 if (location != null)
                 {
@@ -51,5 +44,9 @@ namespace FallDetectionApp.ViewModels
 
             return await Task.FromResult(true);
         }
+
+
+
     }
 }
+
