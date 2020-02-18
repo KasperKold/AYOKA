@@ -18,13 +18,13 @@ namespace FallDetectionApp.Views
     [DesignTimeVisible(false)]
     public partial class ItemsPage : ContentPage
     {
-        ItemsViewModel viewModel;
+        ConfigViewModel viewModel;
 
         public ItemsPage()
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new ItemsViewModel();
+            BindingContext = viewModel = new ConfigViewModel();
         }
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)

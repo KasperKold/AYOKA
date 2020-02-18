@@ -17,5 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ViewModels\EmptyCSharpFile.cs" />
+    <Compile Remove="Services\GeoLocationClass.cs" />
   </ItemGroup>
 </Project>

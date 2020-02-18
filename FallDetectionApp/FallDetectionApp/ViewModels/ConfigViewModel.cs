@@ -10,12 +10,12 @@ using FallDetectionApp.Views;
 
 namespace FallDetectionApp.ViewModels
 {
-    public class ItemsViewModel : BaseViewModel
+    public class ConfigViewModel : BaseViewModel
     {
         public ObservableCollection<Item> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
-        public ItemsViewModel()
+        public ConfigViewModel()
         {
             Title = "Browse";
             Items = new ObservableCollection<Item>();

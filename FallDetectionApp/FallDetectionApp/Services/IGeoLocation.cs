@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace FallDetectionApp.Services
 {
-    public interface IGeoLocation<T>
+    public interface IGeoLocation
     {
         Task<bool> GetGeoLocationAsync();
         //Task<bool> UpdateItemAsync(T item);
