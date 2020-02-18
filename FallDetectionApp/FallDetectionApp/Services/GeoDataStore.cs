@@ -6,6 +6,10 @@ using FallDetectionApp.Models;
 
 namespace FallDetectionApp.Services
 {
+
+    //THIS CLASS IS NOT USED ATM!!!!!!!!!!!!!!!!!!
+    //
+    //
     public class GeoDataStore
     {
         readonly List<GeoLocation> locations;
