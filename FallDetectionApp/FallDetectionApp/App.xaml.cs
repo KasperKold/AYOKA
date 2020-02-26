@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using FallDetectionApp.Services;
 using FallDetectionApp.Views;
+using FallDetectionApp.Data;
 
 namespace FallDetectionApp
 {
@@ -16,6 +17,8 @@ namespace FallDetectionApp
             DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5000" : "http://localhost:5000";
         public static bool UseMockDataStore = true;
 
+        public static TodoItemDatabase database;
+
         public App()
         {
             InitializeComponent();
@@ -25,6 +28,18 @@ namespace FallDetectionApp
             else
                 DependencyService.Register<AzureDataStore>();
             MainPage = new MainPage();
+        }
+
+        public static TodoItemDatabase Database
+        {
+            get
+            {
+                if (database == null)
+                {
+                    database = new TodoItemDatabase();
+                }
+                return database;
+            }
         }
 
         protected override void OnStart()

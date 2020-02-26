@@ -31,7 +31,7 @@
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
 
-        <Button Margin="0,10,0,0" x:Name="btnLastLocation" Text="Last Location" HorizontalOptions="Fill" VerticalOptions="End"   BackgroundColor="{StaticResource Primary}"
+        <Button Margin="0,10,0,0" x:Name="btnDatabasePage" Text="Database" Clicked="btnDbPageClicked" HorizontalOptions="Fill" VerticalOptions="End"   BackgroundColor="{StaticResource Primary}"
                         TextColor="White"/>
 
         <StackLayout Padding="10,10">
