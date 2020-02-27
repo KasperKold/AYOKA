@@ -26,7 +26,7 @@
                 </OnPlatform>
             </NavigationPage.Icon>
             <x:Arguments>
-                <views:ItemsPage />
+                <views:TodoListPage />
             </x:Arguments>
         </NavigationPage>
     </TabbedPage.Children>

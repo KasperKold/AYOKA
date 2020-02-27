@@ -37,6 +37,14 @@ namespace FallDetectionApp.Views
                     };
                     label.SetBinding(Label.TextProperty, "Name");
 
+
+                    var labelPhone = new Label
+                    {
+                        VerticalTextAlignment = TextAlignment.Center,
+                        HorizontalOptions = LayoutOptions.StartAndExpand
+                    };
+                    label.SetBinding(Label.TextProperty, "PhoneNr");
+
                     var tick = new Image
                     {
                         Source = ImageSource.FromFile("check.png"),

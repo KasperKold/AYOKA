@@ -12,7 +12,7 @@ namespace FallDetectionApp.Views
             nameEntry.SetBinding(Entry.TextProperty, "Name");
 
             var notesEntry = new Entry();
-            notesEntry.SetBinding(Entry.TextProperty, "Notes");
+            notesEntry.SetBinding(Entry.TextProperty, "PhoneNr");
 
             var doneSwitch = new Switch();
             doneSwitch.SetBinding(Switch.IsToggledProperty, "Done");
@@ -47,7 +47,7 @@ namespace FallDetectionApp.Views
                 {
                     new Label { Text = "Name" },
                     nameEntry,
-                    new Label { Text = "Notes" },
+                    new Label { Text = "PhoneNr" },
                     notesEntry,
                     new Label { Text = "Done" },
                     doneSwitch,
