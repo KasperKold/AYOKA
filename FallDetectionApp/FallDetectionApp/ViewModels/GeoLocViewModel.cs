@@ -25,6 +25,7 @@ namespace FallDetectionApp.ViewModels
             {
                 privateCurrentLatitude = value;
                 OnPropertyChanged(nameof(CurrentLatitude)); // Notify that there was a change on this property
+
             }
         }
 
@@ -111,6 +112,8 @@ namespace FallDetectionApp.ViewModels
 
                     Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
                     Console.WriteLine($"Latitudeeeeee:" + CurrentLatitude + "Longitudeeeeee: " + CurrentLongitude);
+
+
                 }
             }
             catch (FeatureNotSupportedException fnsEx)

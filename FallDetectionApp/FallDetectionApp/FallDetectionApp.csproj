@@ -21,8 +21,15 @@
     <Compile Remove="Services\GeoLocationClass.cs" />
     <Compile Remove="Services\GeoDataStore.cs" />
     <Compile Remove="Views\MyView.cs" />
+    <Compile Remove="Views\DatabasePage.xaml.cs" />
+    <Compile Remove="Views\TestPage.xaml.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Views\DatabasePage.xaml" />
+    <EmbeddedResource Remove="Views\DatabasePage.xaml" />
+    <EmbeddedResource Remove="Views\TestPage.xaml" />
   </ItemGroup>
 </Project>
