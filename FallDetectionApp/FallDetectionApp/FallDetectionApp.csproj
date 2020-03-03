@@ -32,4 +32,9 @@
     <EmbeddedResource Remove="Views\DatabasePage.xaml" />
     <EmbeddedResource Remove="Views\TestPage.xaml" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\ConfigPage.xaml.cs">
+      <DependentUpon>ConfigPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>
