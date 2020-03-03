@@ -6,7 +6,7 @@
              mc:Ignorable="d"
              x:Class="FallDetectionApp.Views.HomePage"
              xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"
-             Title="{Binding Title}">
+             Title="">
 
     <ContentPage.BindingContext>
         <vm:HomeViewModel />
