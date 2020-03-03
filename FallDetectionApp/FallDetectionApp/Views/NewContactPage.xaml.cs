@@ -12,14 +12,14 @@ namespace FallDetectionApp.Views
 
         async void OnSaveClicked(object sender, EventArgs e)
         {
-            var todoItem = (TodoItem)BindingContext;
+            var todoItem = (Contact)BindingContext;
             await App.Database.SaveItemAsync(todoItem);
             await Navigation.PopAsync();
         }
 
         async void OnDeleteClicked(object sender, EventArgs e)
         {
-            var todoItem = (TodoItem)BindingContext;
+            var todoItem = (Contact)BindingContext;
             await App.Database.DeleteItemAsync(todoItem);
             await Navigation.PopAsync();
         }

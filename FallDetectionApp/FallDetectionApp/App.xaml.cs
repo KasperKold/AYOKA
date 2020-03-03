@@ -17,7 +17,7 @@ namespace FallDetectionApp
             DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5000" : "http://localhost:5000";
         public static bool UseMockDataStore = true;
 
-        public static TodoItemDatabase database;
+        public static SQLiteDatabase database;
 
         public App()
         {
@@ -30,13 +30,13 @@ namespace FallDetectionApp
             MainPage = new MainPage();
         }
 
-        public static TodoItemDatabase Database
+        public static SQLiteDatabase Database
         {
             get
             {
                 if (database == null)
                 {
-                    database = new TodoItemDatabase();
+                    database = new SQLiteDatabase();
                 }
                 return database;
             }

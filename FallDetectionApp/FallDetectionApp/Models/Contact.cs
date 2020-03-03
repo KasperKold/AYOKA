@@ -2,7 +2,7 @@
 
 namespace FallDetectionApp
 {
-    public class TodoItem
+    public class Contact
     {
         [PrimaryKey, AutoIncrement]
         public int ID { get; set; }

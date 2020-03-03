@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -23,9 +23,6 @@
     <Compile Remove="Views\MyView.cs" />
     <Compile Remove="Views\DatabasePage.xaml.cs" />
     <Compile Remove="Views\TestPage.xaml.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Views\DatabasePage.xaml" />

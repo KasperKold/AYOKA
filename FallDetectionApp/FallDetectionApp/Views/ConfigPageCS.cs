@@ -20,7 +20,7 @@ namespace FallDetectionApp.Views
             {
                 await Navigation.PushAsync(new NewContactPageCS
                 {
-                    BindingContext = new TodoItem()
+                    BindingContext = new Contact()
                 });
             };
             ToolbarItems.Add(toolbarItem);
@@ -70,7 +70,7 @@ namespace FallDetectionApp.Views
                 {
                     await Navigation.PushAsync(new NewContactPageCS
                     {
-                        BindingContext = e.SelectedItem as TodoItem
+                        BindingContext = e.SelectedItem as Contact
                     });
                 }
             };

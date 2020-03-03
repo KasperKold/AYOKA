@@ -24,7 +24,7 @@ namespace FallDetectionApp.Views
         {
             await Navigation.PushAsync(new NewContactPage
             {
-                BindingContext = new TodoItem()
+                BindingContext = new Contact()
             });
         }
 
@@ -34,7 +34,7 @@ namespace FallDetectionApp.Views
             {
                 await Navigation.PushAsync(new NewContactPage
                 {
-                    BindingContext = e.SelectedItem as TodoItem
+                    BindingContext = e.SelectedItem as Contact
                 });
             }
         }

@@ -20,7 +20,7 @@ namespace FallDetectionApp.Views
             var saveButton = new Button { Text = "Save" };
             saveButton.Clicked += async (sender, e) =>
             {
-                var todoItem = (TodoItem)BindingContext;
+                var todoItem = (Contact)BindingContext;
                 await App.Database.SaveItemAsync(todoItem);
                 await Navigation.PopAsync();
             };
@@ -28,7 +28,7 @@ namespace FallDetectionApp.Views
             var deleteButton = new Button { Text = "Delete" };
             deleteButton.Clicked += async (sender, e) =>
             {
-                var todoItem = (TodoItem)BindingContext;
+                var todoItem = (Contact)BindingContext;
                 await App.Database.DeleteItemAsync(todoItem);
                 await Navigation.PopAsync();
             };

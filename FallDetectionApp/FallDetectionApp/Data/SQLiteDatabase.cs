@@ -6,7 +6,7 @@ using SQLite;
 
 namespace FallDetectionApp.Data
 {
-    public class TodoItemDatabase
+    public class SQLiteDatabase
     {
         static readonly Lazy<SQLiteAsyncConnection> lazyInitializer = new Lazy<SQLiteAsyncConnection>(() =>
         {
@@ -16,7 +16,7 @@ namespace FallDetectionApp.Data
         static SQLiteAsyncConnection Database => lazyInitializer.Value;
         static bool initialized = false;
 
-        public TodoItemDatabase()
+        public SQLiteDatabase()
         {
             InitializeAsync().SafeFireAndForget(false);
         }
@@ -25,30 +25,30 @@ namespace FallDetectionApp.Data
         {
             if (!initialized)
             {
-                if (!Database.TableMappings.Any(m => m.MappedType.Name == typeof(TodoItem).Name))
+                if (!Database.TableMappings.Any(m => m.MappedType.Name == typeof(Contact).Name))
                 {
-                    await Database.CreateTablesAsync(CreateFlags.None, typeof(TodoItem)).ConfigureAwait(false);
+                    await Database.CreateTablesAsync(CreateFlags.None, typeof(Contact)).ConfigureAwait(false);
                     initialized = true;
                 }
             }
         }
 
-        public Task<List<TodoItem>> GetItemsAsync()
+        public Task<List<Contact>> GetItemsAsync()
         {
-            return Database.Table<TodoItem>().ToListAsync();
+            return Database.Table<Contact>().ToListAsync();
         }
 
-        public Task<List<TodoItem>> GetItemsNotDoneAsync()
+        public Task<List<Contact>> GetItemsNotDoneAsync()
         {
-            return Database.QueryAsync<TodoItem>("SELECT * FROM [TodoItem] WHERE [Done] = 0");
+            return Database.QueryAsync<Contact>("SELECT * FROM [Contact] WHERE [Done] = 0");
         }
 
-        public Task<TodoItem> GetItemAsync(int id)
+        public Task<Contact> GetItemAsync(int id)
         {
-            return Database.Table<TodoItem>().Where(i => i.ID == id).FirstOrDefaultAsync();
+            return Database.Table<Contact>().Where(i => i.ID == id).FirstOrDefaultAsync();
         }
 
-        public Task<int> SaveItemAsync(TodoItem item)
+        public Task<int> SaveItemAsync(Contact item)
         {
             if (item.ID != 0)
             {
@@ -60,7 +60,7 @@ namespace FallDetectionApp.Data
             }
         }
 
-        public Task<int> DeleteItemAsync(TodoItem item)
+        public Task<int> DeleteItemAsync(Contact item)
         {
             return Database.DeleteAsync(item);
         }
