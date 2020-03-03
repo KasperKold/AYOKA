@@ -2,11 +2,11 @@
 
 namespace FallDetectionApp.Views
 {
-    public class TodoItemPageCS : ContentPage
+    public class NewContactPageCS : ContentPage
     {
-        public TodoItemPageCS()
+        public NewContactPageCS()
         {
-            Title = "Todo Item";
+            Title = "New Contact";
 
             var nameEntry = new Entry();
             nameEntry.SetBinding(Entry.TextProperty, "Name");

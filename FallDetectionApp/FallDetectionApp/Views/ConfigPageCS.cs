@@ -3,11 +3,11 @@ using Xamarin.Forms;
 
 namespace FallDetectionApp.Views
 {
-    public class TodoListPageCS : ContentPage
+    public class ConfigPageCS : ContentPage
     {
         ListView listView;
 
-        public TodoListPageCS()
+        public ConfigPageCS()
         {
             Title = "Todo";
 
@@ -18,7 +18,7 @@ namespace FallDetectionApp.Views
             };
             toolbarItem.Clicked += async (sender, e) =>
             {
-                await Navigation.PushAsync(new TodoItemPageCS
+                await Navigation.PushAsync(new NewContactPageCS
                 {
                     BindingContext = new TodoItem()
                 });
@@ -68,7 +68,7 @@ namespace FallDetectionApp.Views
 
                 if (e.SelectedItem != null)
                 {
-                    await Navigation.PushAsync(new TodoItemPageCS
+                    await Navigation.PushAsync(new NewContactPageCS
                     {
                         BindingContext = e.SelectedItem as TodoItem
                     });

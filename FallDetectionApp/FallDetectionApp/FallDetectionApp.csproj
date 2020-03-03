@@ -33,8 +33,14 @@
     <EmbeddedResource Remove="Views\TestPage.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\OldConfigPage.xaml.cs">
+      <DependentUpon>OldConfigPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\ConfigPage.xaml.cs">
       <DependentUpon>ConfigPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\NewContactPage.xaml.cs">
+      <DependentUpon>NewContactPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

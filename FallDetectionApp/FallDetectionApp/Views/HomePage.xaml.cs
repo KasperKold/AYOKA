@@ -19,7 +19,7 @@ namespace FallDetectionApp.Views
 
         private async void btnDbPageClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new TodoListPage()));
+            await Navigation.PushModalAsync(new NavigationPage(new ConfigPage()));
         }
     }
 }

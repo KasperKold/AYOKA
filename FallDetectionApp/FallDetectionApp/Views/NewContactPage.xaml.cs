@@ -3,9 +3,9 @@ using Xamarin.Forms;
 
 namespace FallDetectionApp.Views
 {
-    public partial class TodoItemPage : ContentPage
+    public partial class NewContactPage : ContentPage
     {
-        public TodoItemPage()
+        public NewContactPage()
         {
             InitializeComponent();
         }
