@@ -14,8 +14,8 @@ namespace FallDetectionApp.Views
             var notesEntry = new Entry();
             notesEntry.SetBinding(Entry.TextProperty, "PhoneNr");
 
-            var doneSwitch = new Switch();
-            doneSwitch.SetBinding(Switch.IsToggledProperty, "Done");
+            //var doneSwitch = new Switch();
+            //doneSwitch.SetBinding(Switch.IsToggledProperty, "Done");    - The Done-switch is not used, so it has been commented out for now.
 
             var saveButton = new Button { Text = "Save" };
             saveButton.Clicked += async (sender, e) =>
@@ -49,8 +49,8 @@ namespace FallDetectionApp.Views
                     nameEntry,
                     new Label { Text = "PhoneNr" },
                     notesEntry,
-                    new Label { Text = "Done" },
-                    doneSwitch,
+                    //new Label { Text = "Done" },
+                    //doneSwitch,
                     saveButton,
                     deleteButton,
                     cancelButton

@@ -38,7 +38,7 @@ namespace FallDetectionApp.Data
             return Database.Table<Contact>().ToListAsync();
         }
 
-        public Task<List<Contact>> GetItemsNotDoneAsync()
+        public Task<List<Contact>> GetAllContactsInDatabase()
         {
             return Database.QueryAsync<Contact>("SELECT * FROM [Contact] "); // WHERE[Done] = 0
         }

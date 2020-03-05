@@ -45,19 +45,19 @@ namespace FallDetectionApp.Views
                     };
                     label.SetBinding(Label.TextProperty, "PhoneNr");
 
-                    var tick = new Image
-                    {
-                        Source = ImageSource.FromFile("check.png"),
-                        HorizontalOptions = LayoutOptions.End
-                    };
-                    tick.SetBinding(VisualElement.IsVisibleProperty, "Done");
+                    //var tick = new Image
+                    //{
+                    //    Source = ImageSource.FromFile("check.png"),
+                    //    HorizontalOptions = LayoutOptions.End
+                    //};
+                    //tick.SetBinding(VisualElement.IsVisibleProperty, "Done");
 
                     var stackLayout = new StackLayout
                     {
                         Margin = new Thickness(20, 0, 0, 0),
                         Orientation = StackOrientation.Horizontal,
                         HorizontalOptions = LayoutOptions.FillAndExpand,
-                        Children = { label, tick }
+                        Children = { label } // , tick}
                     };
 
                     return new ViewCell { View = stackLayout };
