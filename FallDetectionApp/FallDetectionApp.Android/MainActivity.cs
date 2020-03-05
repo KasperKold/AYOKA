@@ -226,7 +226,7 @@ namespace FallDetectionApp.Droid
                 if (notMovedCounter == 0)
                 {
                     notMovedCounter++;
-                    Console.WriteLine("COUNTER: INCRESED with 1 now: " + notMovedCounter);
+                    Console.WriteLine("COUNTER: INCREASED with 1 - Now: " + notMovedCounter);
                     latText = $"Latitude: {location.Latitude}";
                     savedLat = latText;
                     longText = $"Longitude: {location.Longitude}";
@@ -261,14 +261,14 @@ namespace FallDetectionApp.Droid
                     if (latText.Equals(savedLat) && longText.Equals(longText))
                     {
                         notMovedCounter++;
-                        Console.WriteLine("COUNTER: INCRESED with 1 now: " + notMovedCounter);
+                        Console.WriteLine("COUNTER: INCREASED with 1 - Now: " + notMovedCounter);
                     }
                     else
                     {
                         savedLat = latText;
                         savedLong = longText;
                         notMovedCounter--;
-                        Console.WriteLine("COUNTER: decreased with 1 now: " + notMovedCounter);
+                        Console.WriteLine("COUNTER: decreased with 1 - Now: " + notMovedCounter);
                     }
                 }
 
