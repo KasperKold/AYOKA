@@ -32,10 +32,12 @@ namespace FallDetectionApp.Droid.Services
             // both when teh app is in the background, and in the foreground
             Log.Debug(logTag, $"Latitude is {location.Latitude}");
             Log.Debug(logTag, $"Longitude is {location.Longitude}");
+            /*
             Log.Debug(logTag, $"Altitude is {location.Altitude}");
             Log.Debug(logTag, $"Speed is {location.Speed}");
             Log.Debug(logTag, $"Accuracy is {location.Accuracy}");
             Log.Debug(logTag, $"Bearing is {location.Bearing}");
+            */
         }
 
         public void OnProviderDisabled(string provider)

@@ -58,6 +58,7 @@ namespace FallDetectionApp.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
             GeoLocation loc = new GeoLocation();
+            notMovedCounter = 0;
             /*
 
             timer = new Timer();
@@ -228,14 +229,19 @@ namespace FallDetectionApp.Droid
                 {
                     notMovedCounter++;
                     Console.WriteLine("COUNTER: +1 --> : " + notMovedCounter);
-                    latText = $"Latitude: {location.Latitude}";
+                    latText = $"{location.Latitude}";
                     savedLat = latText;
-                    longText = $"Longitude: {location.Longitude}";
+                    longText = $"{location.Longitude}";
                     savedLong = longText;
+                    /*
                     altText = $"Altitude: {location.Altitude}";
                     speedText = $"Speed: {location.Speed}";
                     accText = $"Accuracy: {location.Accuracy}";
                     bearText = $"Bearing: {location.Bearing}";
+                    */
+
+                    Console.WriteLine("Compared Lat:  " + latText.Substring(0, 7));
+                    Console.WriteLine("Compared Long: " + longText.Substring(0, 7));
 
                 }
                 else if (notMovedCounter >= 4)
@@ -244,6 +250,8 @@ namespace FallDetectionApp.Droid
                     Console.WriteLine("*********************************************");
                     Console.WriteLine("THE DEVICE HAS NOT MOVED FOR 5 SECONDS ! ! !");
                     Console.WriteLine("*********************************************");
+                    Console.WriteLine("Compared Lat:  " + latText.Substring(0, 7));
+                    Console.WriteLine("Compared Long: " + longText.Substring(0, 7));
 
                     notMovedCounter = 0;
 
@@ -252,14 +260,23 @@ namespace FallDetectionApp.Droid
                 else
                 {
 
-                    latText = $"Latitude: {location.Latitude}";
-                    longText = $"Longitude: {location.Longitude}";
+                    latText = $"{location.Latitude}";
+                    longText = $"{location.Longitude}";
+
+                    /*
                     altText = $"Altitude: {location.Altitude}";
                     speedText = $"Speed: {location.Speed}";
                     accText = $"Accuracy: {location.Accuracy}";
                     bearText = $"Bearing: {location.Bearing}";
 
-                    if (latText.Substring(0, 6).Equals(savedLat) && longText.Substring(0, 6).Equals(longText))
+    */
+
+                    Console.WriteLine("Compared Lat:  " + latText.Substring(0, 7));
+                    Console.WriteLine("Compared Long: " + longText.Substring(0, 7));
+
+
+
+                    if (latText.Substring(0, 7).Equals(savedLat.Substring(0, 7)) && longText.Substring(0, 7).Equals(savedLong.Substring(0, 7)))
                     {
                         notMovedCounter++;
                         Console.WriteLine("COUNTER: +1 --> " + notMovedCounter);
