@@ -9,7 +9,7 @@ namespace FallDetectionApp.Views
 
         public ConfigPageCS()
         {
-            Title = "Todo";
+            Title = "Configuration";
 
             var toolbarItem = new ToolbarItem
             {
