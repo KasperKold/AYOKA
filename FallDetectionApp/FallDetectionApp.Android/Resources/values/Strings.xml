@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string
+        name="ok"
+        >ok</string>
+ <string
+        name="app_name"
+        >Fall Detector</string>
+ <string
+        name="permission_location_rationale"
+        >permission_location_rationale</string>
+ <string
+        name="notification_text"
+        >notification_text</string>
+</resources>

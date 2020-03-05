@@ -14,6 +14,7 @@ using Android.Locations;
 using System.Timers;
 using Android.Support.Design.Widget;
 using Android.Support.V4.App;
+using FallDetectionApp.Models;
 
 namespace FallDetectionApp.Droid
 {
@@ -56,8 +57,8 @@ namespace FallDetectionApp.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
-
-
+            GeoLocation loc = new GeoLocation();
+            /*
 
             timer = new Timer();
             timer.Interval = 1000;
@@ -67,7 +68,7 @@ namespace FallDetectionApp.Droid
             timer.Start();
 
             Log.Debug(TAG, "OnCreate: Timer started. ");
-
+            */
 
 
 
@@ -258,7 +259,7 @@ namespace FallDetectionApp.Droid
                     accText = $"Accuracy: {location.Accuracy}";
                     bearText = $"Bearing: {location.Bearing}";
 
-                    if (latText.Equals(savedLat) && longText.Equals(longText))
+                    if (latText.Substring(0, 6).Equals(savedLat) && longText.Substring(0, 6).Equals(longText))
                     {
                         notMovedCounter++;
                         Console.WriteLine("COUNTER: +1 --> " + notMovedCounter);
