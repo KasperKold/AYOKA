@@ -23,6 +23,7 @@
     <Compile Remove="Views\MyView.cs" />
     <Compile Remove="Views\DatabasePage.xaml.cs" />
     <Compile Remove="Views\TestPage.xaml.cs" />
+    <Compile Remove="Services\EmptyClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Views\DatabasePage.xaml" />

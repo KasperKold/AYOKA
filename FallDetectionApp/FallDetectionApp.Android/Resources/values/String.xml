@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string
+        name="app_name"
+        >Fall Detector</string>
+<string
+        name="notification"
+        >Build Notification</string>
+    <string
+        name="permission_location_rationale"
+        >Build Notification</string>
+     <string
+        name="ok"
+        >Build Notification</string>
+     <string
+        name=""
+        >ok</string>
+
+
+</resources>

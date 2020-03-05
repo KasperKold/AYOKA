@@ -45,6 +45,7 @@
             <Label x:Name="latitude2"  Text="{Binding CurrentLatitude}" FontSize="Medium" FontAttributes ="Bold" d:Text="Latitude:" />
             <Label x:Name="longitude2" Text="{Binding CurrentLongitude}"  FontSize="Medium" FontAttributes="Bold" d:Text="Longitude:" />
             <Label x:Name="provider2" Text="{}" d:Text="Provider" />
+            <Label x:Name="loopCount" Text="{Binding lblTxtLoopCount}"  FontSize="Medium" FontAttributes="Bold" d:Text="LoopCount:" />
         </StackLayout>
 
     </StackLayout>

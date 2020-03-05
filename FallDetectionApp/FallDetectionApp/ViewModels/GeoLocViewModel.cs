@@ -63,6 +63,27 @@ namespace FallDetectionApp.ViewModels
             }
         }
 
+        //Updating HomePage with lbl count - try out
+
+        private string privateLblTxtLoopCount;
+        public string lblTxtLoopCount
+        {
+            get { return privateLblTxtLoopCount; }
+            set
+            {
+                privateLblTxtLoopCount = value;
+                OnPropertyChanged(nameof(lblTxtLoopCount)); // Notify that there was a change on this property
+
+            }
+        }
+
+
+
+
+
+
+
+
 
         bool isBusy = false;
         public bool IsBusy
@@ -111,7 +132,7 @@ namespace FallDetectionApp.ViewModels
 
 
                     Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
-                    Console.WriteLine($"Latitudeeeeee:" + CurrentLatitude + "Longitudeeeeee: " + CurrentLongitude);
+                    Console.WriteLine($"Latitude from variable:" + CurrentLatitude + "Longitude from variable: " + CurrentLongitude);
 
 
                 }
@@ -135,6 +156,7 @@ namespace FallDetectionApp.ViewModels
 
             return await Task.FromResult(true);
         }
+
 
 
 
