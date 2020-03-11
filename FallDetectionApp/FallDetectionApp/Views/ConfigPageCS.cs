@@ -1,5 +1,5 @@
-﻿
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
+using FallDetectionApp.Models;
 
 namespace FallDetectionApp.Views
 {

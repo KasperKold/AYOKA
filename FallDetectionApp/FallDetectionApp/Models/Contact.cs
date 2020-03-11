@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace FallDetectionApp
+namespace FallDetectionApp.Models
 {
     public class Contact
     {

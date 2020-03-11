@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
+using FallDetectionApp.Models;
 
 namespace FallDetectionApp.Data
 {
@@ -28,6 +29,7 @@ namespace FallDetectionApp.Data
                 if (!Database.TableMappings.Any(m => m.MappedType.Name == typeof(Contact).Name))
                 {
                     await Database.CreateTablesAsync(CreateFlags.None, typeof(Contact)).ConfigureAwait(false);
+                    await Database.CreateTableAsync<GeoLocation>().ConfigureAwait(false);
                     initialized = true;
                 }
             }
@@ -36,6 +38,11 @@ namespace FallDetectionApp.Data
         public Task<List<Contact>> GetItemsAsync()
         {
             return Database.Table<Contact>().ToListAsync();
+        }
+
+        public Task<List<GeoLocation>> GetGeoLocationItemsAsync()
+        {
+            return Database.Table<GeoLocation>().ToListAsync();
         }
 
         public Task<List<Contact>> GetAllContactsInDatabase()
@@ -64,6 +71,25 @@ namespace FallDetectionApp.Data
         {
             return Database.DeleteAsync(item);
         }
+
+        // For the new GeoLocation table
+        public Task<int> SaveGeoLocationItemAsync(GeoLocation item)
+        {
+            if (item.Id != null)
+            {
+                return Database.UpdateAsync(item);
+            }
+            else
+            {
+                return Database.InsertAsync(item);
+            }
+        }
+
+        public Task<int> DeleteGeoLocationItemAsync(GeoLocation item)
+        {
+            return Database.DeleteAsync(item);
+        }
+
     }
 }
 

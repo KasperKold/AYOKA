@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FallDetectionApp.ViewModels;
+using System;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -15,6 +16,7 @@ namespace FallDetectionApp.Views
         public HomePage()
         {
             InitializeComponent();
+            BindingContext = new HomeViewModel(); 
         }
 
         private async void btnDbPageClicked(object sender, EventArgs e)

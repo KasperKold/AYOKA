@@ -119,11 +119,13 @@ namespace FallDetectionApp.ViewModels
             try
             {
                 var location = await Geolocation.GetLocationAsync();
+                
 
                 if (location != null)
 
                 {
-                    GeoLocation geoLoc = new GeoLocation { Id = Guid.NewGuid().ToString(), Latitude = location.Latitude.ToString(), Longitude = location.Longitude.ToString(), Altitude = location.Altitude.ToString() };
+                    Random random = new Random();   // Changed id from Guid.NewGuid.ToString() to using a simple Random instead.
+                    GeoLocation geoLoc = new GeoLocation { Id = random.Next(), Latitude = location.Latitude.ToString(), Longitude = location.Longitude.ToString(), Altitude = location.Altitude.ToString() };
 
 
                     CurrentLatitude = geoLoc.Latitude;

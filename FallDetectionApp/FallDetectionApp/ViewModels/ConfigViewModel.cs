@@ -7,6 +7,7 @@ using Xamarin.Forms;
 
 using FallDetectionApp.Models;
 using FallDetectionApp.Views;
+using System.Windows.Input;
 
 namespace FallDetectionApp.ViewModels
 {
@@ -15,11 +16,20 @@ namespace FallDetectionApp.ViewModels
         public ObservableCollection<Item> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
+        public ICommand CommandToConfigPage { get; private set; }
+
         public ConfigViewModel()
         {
+            CommandToConfigPage = new Command(async () =>
+            {
+                await Application.Current.MainPage.Navigation.PopAsync();
+            });
+
             Title = "Browse";
             Items = new ObservableCollection<Item>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+
+            
 
             MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
             {

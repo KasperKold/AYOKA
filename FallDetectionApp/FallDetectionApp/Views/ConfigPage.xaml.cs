@@ -1,5 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
+using FallDetectionApp.Models;
+using FallDetectionApp.ViewModels;
 
 namespace FallDetectionApp.Views
 
@@ -11,6 +13,7 @@ namespace FallDetectionApp.Views
         public ConfigPage()
         {
             InitializeComponent();
+            BindingContext = new ConfigViewModel(); 
         }
 
         protected override async void OnAppearing()
