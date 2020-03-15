@@ -14,7 +14,7 @@ namespace FallDetectionApp.ViewModels
             Title = "Home";
             OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://xamarin.com"));
             GetGeoLocation = new Command(async () => await GetGeoLocationAsync());
-            OpenGeoDatabase = new Command(async () => { await Application.Current.MainPage.Navigation.PushModalAsync(new Views.ConfigPage()); });
+            OpenGeoDatabase = new Command(async () => { await Application.Current.MainPage.Navigation.PushModalAsync(new Views.GeoDataPage()); });
 
 
         }
