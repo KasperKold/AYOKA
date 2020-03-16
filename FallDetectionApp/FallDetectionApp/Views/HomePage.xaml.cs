@@ -3,6 +3,7 @@ using System;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using FallDetectionApp.Models;
 
 namespace FallDetectionApp.Views
 {
@@ -19,9 +20,19 @@ namespace FallDetectionApp.Views
             BindingContext = new HomeViewModel(); 
         }
 
-        private async void btnDbPageClicked(object sender, EventArgs e)
+        private async void OnActivateBtnClicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new ConfigPage()));
+            var todoItem = new GeoLocation();
+            todoItem.Id = 123;
+            todoItem.Latitude = "13,5";
+            await App.Database.SaveGeoLocationItemAsync(todoItem);
+            Console.WriteLine("HEEEEJ!");
+            //await Navigation.PopAsync();
         }
+
+        //private async void btnDbPageClicked(object sender, EventArgs e)
+        //{
+        //    await Navigation.PushModalAsync(new NavigationPage(new ConfigPage()));
+        //}
     }
 }

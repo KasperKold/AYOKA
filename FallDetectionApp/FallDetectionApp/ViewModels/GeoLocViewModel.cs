@@ -119,7 +119,7 @@ namespace FallDetectionApp.ViewModels
             try
             {
                 var location = await Geolocation.GetLocationAsync();
-                
+
 
                 if (location != null)
 
@@ -136,6 +136,8 @@ namespace FallDetectionApp.ViewModels
                     Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
                     Console.WriteLine($"Latitude from variable:" + CurrentLatitude + "Longitude from variable: " + CurrentLongitude);
 
+               
+                    await App.Database.SaveGeoLocationItemAsync(geoLoc);
 
                 }
             }
@@ -159,6 +161,18 @@ namespace FallDetectionApp.ViewModels
             return await Task.FromResult(true);
         }
 
+        //public async Task<bool> SaveGeoLocationToDatabase()
+        //{
+        //    try
+        //    {
+        //        await GetGeoLocationAsync();
+                
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        //}
 
 
 

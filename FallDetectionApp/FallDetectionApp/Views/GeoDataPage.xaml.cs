@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using FallDetectionApp.Models;
+using FallDetectionApp.ViewModels;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -17,6 +18,8 @@ namespace FallDetectionApp.Views
         public GeoDataPage()
         {
             InitializeComponent();
+            BindingContext = new GeoDataViewModel();
+
         }
 
         protected override async void OnAppearing()
@@ -44,6 +47,15 @@ namespace FallDetectionApp.Views
                 });
             }
         }
+
+        async void SaveGeoLocationItem(object sender, EventArgs e)
+        {
+            var todoItem = new GeoLocation();
+            todoItem.Id = 123;
+            await App.Database.SaveGeoLocationItemAsync(todoItem);
+            await Navigation.PopAsync();
+        }
+
     }
 }
 

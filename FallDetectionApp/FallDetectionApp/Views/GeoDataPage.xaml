@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"
              mc:Ignorable="d"
              x:Class="FallDetectionApp.Views.GeoDataPage">
+
+    <ContentPage.BindingContext>
+        <vm:GeoDataViewModel />
+    </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="+" Clicked="OnItemAdded">
@@ -15,6 +20,7 @@
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
+
 
     <ContentPage.Content>
         <StackLayout>
@@ -29,13 +35,13 @@
             <DataTemplate>
                 <ViewCell>
                     <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                        <Label Text="{Binding Name}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                        <Label Text="{Binding PhoneNr}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                        <!--<Image Source="check.png" HorizontalOptions="End" IsVisible="{Binding Done}" /> -->
+                        <Label Text="{Binding Id}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
+                        <Label Text="{Binding Latitude}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>
-    
+
+
 </ContentPage>

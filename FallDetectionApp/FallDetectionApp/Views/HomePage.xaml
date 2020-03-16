@@ -26,9 +26,9 @@
 
 
         <Label Text="Fall App" FontSize="Header" TextColor="{StaticResource Primary}" VerticalOptions="Start" HorizontalOptions="Center" />
-        
+
         <Button Margin="0,10,0,0" Text="Activate" x:Name="btnActivate" HorizontalOptions="Fill" VerticalOptions="Fill"
-                        Command="{Binding OpenWebCommand}"
+                        Clicked="OnActivateBtnClicked"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
 
