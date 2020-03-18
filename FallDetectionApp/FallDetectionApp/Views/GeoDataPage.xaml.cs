@@ -18,7 +18,7 @@ namespace FallDetectionApp.Views
         public GeoDataPage()
         {
             InitializeComponent();
-            BindingContext = new GeoDataViewModel();
+            //BindingContext = new GeoDataViewModel();
 
         }
 
@@ -31,7 +31,7 @@ namespace FallDetectionApp.Views
 
         async void OnItemAdded(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new NewContactPage
+            await Navigation.PushAsync(new GeoDataPage
             {
                 BindingContext = new GeoLocation()
             });
@@ -41,7 +41,7 @@ namespace FallDetectionApp.Views
         {
             if (e.SelectedItem != null)
             {
-                await Navigation.PushAsync(new NewContactPage
+                await Navigation.PushAsync(new GeoDataPage
                 {
                     BindingContext = e.SelectedItem as GeoLocation
                 });

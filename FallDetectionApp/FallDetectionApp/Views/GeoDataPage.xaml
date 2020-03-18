@@ -3,15 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"
+             
              mc:Ignorable="d"
              x:Class="FallDetectionApp.Views.GeoDataPage">
+             <!--xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"-->
 
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <vm:GeoDataViewModel />
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
 
-    <ContentPage.ToolbarItems>
+    <!--<ContentPage.ToolbarItems>
         <ToolbarItem Text="+" Clicked="OnItemAdded">
             <ToolbarItem.IconImageSource>
                 <OnPlatform x:TypeArguments="ImageSource">
@@ -19,29 +20,39 @@
                 </OnPlatform>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
-    </ContentPage.ToolbarItems>
+    </ContentPage.ToolbarItems>-->
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="Accent">#96d1ff</Color>
+            <Color x:Key="LightTextColor">#999999</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout>
+        <Label Text="GeoLocation database"
+               FontSize="Medium"
+               TextColor="{StaticResource Primary}"
+               VerticalOptions="CenterAndExpand" 
+               HorizontalOptions="CenterAndExpand" />
+
+        <Button Text="Save" Clicked="SaveGeoLocationItem" />
 
 
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
-
-    <ListView x:Name="geoDataListView" Margin="20" ItemSelected="OnListItemSelected">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                        <Label Text="{Binding Id}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                        <Label Text="{Binding Latitude}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+        <ListView x:Name="geoDataListView" Margin="20" ItemSelected="OnListItemSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Label Text="{Binding Id}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
+                            <Label Text="{Binding Latitude}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
 
 
 </ContentPage>

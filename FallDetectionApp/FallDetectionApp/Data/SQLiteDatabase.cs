@@ -28,7 +28,8 @@ namespace FallDetectionApp.Data
             {
                 if (!Database.TableMappings.Any(m => m.MappedType.Name == typeof(Contact).Name))
                 {
-                    await Database.CreateTablesAsync(CreateFlags.None, typeof(Contact)).ConfigureAwait(false);
+                    //await Database.CreateTableAsync(CreateFlags.None, typeof(Contact)).ConfigureAwait(false);
+                    await Database.CreateTableAsync<Contact>().ConfigureAwait(false);
                     await Database.CreateTableAsync<GeoLocation>().ConfigureAwait(false);
                     initialized = true;
                 }
