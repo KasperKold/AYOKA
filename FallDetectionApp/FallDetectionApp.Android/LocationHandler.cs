@@ -16,7 +16,7 @@ namespace FallDetectionApp.Droid
         protected static LocationServiceConnection locationServiceConnection;
 
         // declarations
-        protected readonly string logTag = "LocationHandler";
+        protected readonly string TAG = "LocationHandler";
 
         static LocationHandler()
         {
@@ -28,10 +28,10 @@ namespace FallDetectionApp.Droid
             // create a new service connection so we can get a binder to the service
             locationServiceConnection = new LocationServiceConnection(null);
 
-            // this event will fire when the Service connectin in the OnServiceConnected call 
+            // this event will fire when the Service connecting in the OnServiceConnected call 
             locationServiceConnection.ServiceConnected += (sender, e) =>
             {
-                Log.Debug(logTag, "Service Connected");
+                Log.Debug(TAG, "Service Connected");
                 // we will use this event to notify MainActivity when to start updating the UI
                 LocationServiceConnected(this, e);
             };

@@ -47,12 +47,12 @@
                         Command="{Binding GetGeoLocation}" 
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White"/>
-        
+
         <StackLayout Padding="10,10">
             <Label x:Name="latitude2"  Text="{Binding CurrentLatitude}" FontSize="Medium" FontAttributes ="Bold" d:Text="Latitude:" />
             <Label x:Name="longitude2" Text="{Binding CurrentLongitude}"  FontSize="Medium" FontAttributes="Bold" d:Text="Longitude:" />
-            <Label x:Name="provider2" Text="{}" d:Text="Provider" />
-            <Label x:Name="loopCount" Text="{Binding lblTxtLoopCount}"  FontSize="Medium" FontAttributes="Bold" d:Text="LoopCount:" />
+            <Label x:Name="geoInfo2" Text="{Binding GeoInfo}" d:Text="GeoInfo" />
+            <Label x:Name="geoTime2" Text="{Binding CurrentTimeDate}" d:Text="GeoTimeDate" />
         </StackLayout>
 
     </StackLayout>

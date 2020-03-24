@@ -59,4 +59,4 @@ namespace FallDetectionApp.Views
     }
 }
 
-    
+

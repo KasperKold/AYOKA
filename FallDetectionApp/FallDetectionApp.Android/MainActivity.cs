@@ -15,7 +15,13 @@ using System.Timers;
 using Android.Support.Design.Widget;
 using Android.Support.V4.App;
 using FallDetectionApp.Models;
+using FallDetectionApp.Services;
+using Xamarin.Forms;
+using System.Threading.Tasks;
+using Android.Icu.Util;
+using View = Android.Views.View;
 
+[assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
 namespace FallDetectionApp.Droid
 {
 
@@ -34,15 +40,18 @@ namespace FallDetectionApp.Droid
         private Timer timer;
         private string savedLat;
         private string savedLong;
+        private string prevLat;
+        private string prevLong;
         private int notMovedCounter;
 
 
         private string latText;
         private string longText;
-        private string speedText;
-        private string altText;
-        private string accText;
-        private string bearText;
+
+        private string geoInfo;
+
+        private GeoLocation currentGeoPos;
+        private UiLocationHandler iUiImplementation;
 
 
 
@@ -56,9 +65,19 @@ namespace FallDetectionApp.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
+            //Store our interface class.
+            iUiImplementation = DependencyService.Get<IUiHandler>() as UiLocationHandler;
+
+            //Init our interface.
+            //iUiImplementation.Init();
             LoadApplication(new App());
-            GeoLocation loc = new GeoLocation();
+            currentGeoPos = new GeoLocation { Id = 766, Latitude = "no lat yet", Longitude = "no long yet" };
+
             notMovedCounter = 0;
+
+
+
             /*
 
             timer = new Timer();
@@ -104,6 +123,14 @@ namespace FallDetectionApp.Droid
 
 
         }
+
+        public GeoLocation getCurrentGeoPos()
+        {
+            return currentGeoPos;
+        }
+
+
+
         /*
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
@@ -214,44 +241,104 @@ namespace FallDetectionApp.Droid
 
         /// <summary>
         ///     Updates UI with location data
-        /// </summary>
+        /// </summary
+        ///
+
+        public string setInfoString(string a, string b, string c, string d, string e, string f, string g, string h, string i, string j, string k, string l, string m, int n)
+        {
+            return a + b + c + d + e + f + g + h + i + j + k + l + m + n;
+
+        }
 
 
         public void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
+            string txtCounter1plus = "COUNTER: +1 --> : ";
+            string txtCounter1minus = "COUNTER: -1 --> : ";
+            string txtCounter = "COUNTER: ";
+            string txtComparedLat = "Compared Lat: ";
+            string txtComparedLong = "Compared Long: ";
+            string txtStarRow = "*********************************************\n";
+            string txtNewRow = "\n";
+            string txtPrevLat = "Previous Lat: ";
+            string txtPrevLong = "Previous Long: ";
+            string txtNotMoved = "THE DEVICE HAS NOT MOVED FOR 25 SECONDS ! ! !\n";
+
+            DateTime dateTime = DateTime.Now.ToLocalTime();
+            //string time_string = dateTime.ToString("yyyy-MM-dd");
+            string date_string = dateTime.Date.ToString(); // just date
+
             var location = e.Location;
-            Log.Debug(TAG, "Foreground updating");
+            // Log.Debug(TAG, "Foreground updating");
 
             // these events are on a background thread, need to update on the UI thread
-            RunOnUiThread(() =>
+            RunOnUiThread(async () =>
             {
+
+
+
                 if (notMovedCounter == 0)
                 {
                     notMovedCounter++;
-                    Console.WriteLine("COUNTER: +1 --> : " + notMovedCounter);
+
                     latText = $"{location.Latitude}";
                     savedLat = latText;
+                    // prevLat =latText;
                     longText = $"{location.Longitude}";
                     savedLong = longText;
-                    /*
-                    altText = $"Altitude: {location.Altitude}";
-                    speedText = $"Speed: {location.Speed}";
-                    accText = $"Accuracy: {location.Accuracy}";
-                    bearText = $"Bearing: {location.Bearing}";
-                    */
+                    // prevLong = longText;
 
-                    Console.WriteLine("Compared Lat:  " + latText.Substring(0, 7));
-                    Console.WriteLine("Compared Long: " + longText.Substring(0, 7));
+
+                    Console.WriteLine(txtNewRow + txtCounter1plus + notMovedCounter);
+                    Console.WriteLine(txtComparedLat + latText.Substring(0, 7));
+                    Console.WriteLine(txtComparedLong + longText.Substring(0, 7) + "\n");
+
+
+                    //assigns location to instance of GeoLocation
+                    currentGeoPos.Latitude = latText;
+                    currentGeoPos.Longitude = longText;
+                    //assigns info
+                    currentGeoPos.Info = setInfoString(txtPrevLat, savedLat.Substring(0, 7), txtNewRow,
+                          txtPrevLong, savedLong.Substring(0, 7), txtNewRow, txtComparedLat, latText.Substring(0, 7), txtNewRow,
+                     txtComparedLong, longText.Substring(0, 7), txtNewRow,
+
+                     txtCounter1plus, notMovedCounter);
+
+                    //sends Geolcation to separate class
+                    iUiImplementation.setCurrentGeoPos(currentGeoPos);
+
+                    // trigger the dependenyservice to get the location for UI but cannot update UI from here ATM
+                    await iUiImplementation.UiTriggerAsync();
+
+
+
 
                 }
                 else if (notMovedCounter >= 4)
                 {
-                    Console.WriteLine("COUNTER: " + notMovedCounter);
-                    Console.WriteLine("*********************************************");
-                    Console.WriteLine("THE DEVICE HAS NOT MOVED FOR 5 SECONDS ! ! !");
-                    Console.WriteLine("*********************************************");
-                    Console.WriteLine("Compared Lat:  " + latText.Substring(0, 7));
-                    Console.WriteLine("Compared Long: " + longText.Substring(0, 7));
+
+                    Console.WriteLine(txtNewRow + txtStarRow);
+                    Console.WriteLine(txtCounter + notMovedCounter);
+                    Console.WriteLine(txtNotMoved);
+                    Console.WriteLine(txtComparedLat + latText.Substring(0, 7));
+                    Console.WriteLine(txtComparedLong + longText.Substring(0, 7));
+                    Console.WriteLine(txtStarRow + txtNewRow);
+
+
+
+                    currentGeoPos.Info =
+                    txtStarRow + txtNotMoved + txtStarRow + txtPrevLat + savedLat.Substring(0, 7) +
+                    txtNewRow + txtPrevLong + savedLong.Substring(0, 7) + txtNewRow + txtComparedLat +
+                    latText.Substring(0, 7) + txtNewRow +
+                    txtComparedLong + longText.Substring(0, 7) + txtNewRow +
+                    txtCounter + notMovedCounter;
+
+                    currentGeoPos.TimeDate = dateTime.ToString();
+
+
+                    iUiImplementation.setCurrentGeoPos(currentGeoPos);
+                    await iUiImplementation.UiTriggerAsync();
+
 
                     notMovedCounter = 0;
 
@@ -259,34 +346,68 @@ namespace FallDetectionApp.Droid
                 }
                 else
                 {
-
+                    savedLat = latText;
+                    savedLong = longText;
                     latText = $"{location.Latitude}";
                     longText = $"{location.Longitude}";
 
-                    /*
-                    altText = $"Altitude: {location.Altitude}";
-                    speedText = $"Speed: {location.Speed}";
-                    accText = $"Accuracy: {location.Accuracy}";
-                    bearText = $"Bearing: {location.Bearing}";
-
-    */
-
-                    Console.WriteLine("Compared Lat:  " + latText.Substring(0, 7));
-                    Console.WriteLine("Compared Long: " + longText.Substring(0, 7));
-
+                    currentGeoPos.Latitude = latText;
+                    currentGeoPos.Longitude = longText;
 
 
                     if (latText.Substring(0, 7).Equals(savedLat.Substring(0, 7)) && longText.Substring(0, 7).Equals(savedLong.Substring(0, 7)))
                     {
                         notMovedCounter++;
-                        Console.WriteLine("COUNTER: +1 --> " + notMovedCounter);
+
+                        Console.WriteLine(txtNewRow + txtCounter1plus + notMovedCounter + txtNewRow);
+                        Console.WriteLine(txtComparedLat + latText.Substring(0, 7));
+                        Console.WriteLine(txtComparedLong + longText.Substring(0, 7));
+
+                        currentGeoPos.Info = setInfoString(txtPrevLat, savedLat.Substring(0, 7), txtNewRow,
+                        txtPrevLong, savedLong.Substring(0, 7), txtNewRow, txtComparedLat, latText.Substring(0, 7), txtNewRow,
+                        txtComparedLong, longText.Substring(0, 7), txtNewRow,
+                        txtCounter1plus, notMovedCounter);
+
+                        currentGeoPos.TimeDate = dateTime.ToString();
+
+
+                        iUiImplementation.setCurrentGeoPos(currentGeoPos);
+                        await iUiImplementation.UiTriggerAsync();
+
                     }
                     else
                     {
-                        savedLat = latText;
-                        savedLong = longText;
+
+
+
+
                         notMovedCounter--;
-                        Console.WriteLine("COUNTER: -1 --> : " + notMovedCounter);
+
+                        Console.WriteLine(txtNewRow + txtCounter1minus + notMovedCounter);
+                        Console.WriteLine(txtComparedLat + latText.Substring(0, 7));
+                        Console.WriteLine(txtComparedLong + longText.Substring(0, 7));
+
+
+
+
+                        currentGeoPos.Latitude = latText;
+                        currentGeoPos.Longitude = longText;
+                        currentGeoPos.Info = txtPrevLat + savedLat.Substring(0, 7) + txtNewRow +
+                        txtPrevLong + savedLong.Substring(0, 7) + txtNewRow + txtComparedLat + latText.Substring(0, 7) +
+                        txtNewRow + txtComparedLong + longText.Substring(0, 7) + txtNewRow +
+                        txtCounter1minus + notMovedCounter;
+                        currentGeoPos.TimeDate = dateTime.ToString();
+
+
+
+
+                        iUiImplementation.setCurrentGeoPos(currentGeoPos);
+                        await iUiImplementation.UiTriggerAsync();
+
+
+
+
+
                     }
                 }
 

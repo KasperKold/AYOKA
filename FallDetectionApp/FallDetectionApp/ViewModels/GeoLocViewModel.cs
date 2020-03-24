@@ -15,7 +15,13 @@ namespace FallDetectionApp.ViewModels
 {
     public class GeoLocViewModel : INotifyPropertyChanged, IGeoLocation
     {
-        public IGeoLocation GeoLoc => DependencyService.Get<IGeoLocation>();
+        // public IGeoLocation GeoLoc => DependencyService.Get<IGeoLocation>(); // NOT NEEDED? PDR Question
+        //public IGeoLocationAndroid GeoLocAndroid => DependencyService.Get<IGeoLocationAndroid>();
+
+        //public  UiLocationHandler handler => DependencyService.Get<UiLocationhandler>();
+        //DependencyService.Get<UiLocationhandler>()
+
+
 
         private string privateCurrentLatitude;
         public string CurrentLatitude
@@ -63,21 +69,30 @@ namespace FallDetectionApp.ViewModels
             }
         }
 
-        //Updating HomePage with lbl count - try out
-
-        private string privateLblTxtLoopCount;
-        public string lblTxtLoopCount
+        private string privateGeoInfo;
+        public string GeoInfo
         {
-            get { return privateLblTxtLoopCount; }
+            get { return privateGeoInfo; }
             set
             {
-                privateLblTxtLoopCount = value;
-                OnPropertyChanged(nameof(lblTxtLoopCount)); // Notify that there was a change on this property
+                privateGeoInfo = value;
+                OnPropertyChanged(nameof(GeoInfo)); // Notify that there was a change on this property
 
             }
         }
 
 
+        private string privateCurrentTimeDate;
+        public string CurrentTimeDate
+        {
+            get { return privateCurrentTimeDate; }
+            set
+            {
+                privateCurrentTimeDate = value;
+                OnPropertyChanged(nameof(CurrentTimeDate)); // Notify that there was a change on this property
+
+            }
+        }
 
 
 
@@ -116,66 +131,52 @@ namespace FallDetectionApp.ViewModels
 
         public async Task<bool> GetGeoLocationAsync()
         {
+            //Console.WriteLine("Inside GetGeoLocationAsync" + "\n");
             try
             {
-                var location = await Geolocation.GetLocationAsync();
 
-
+                var location = await DependencyService.Get<IUiHandler>().GeoUpdateAsync();
+                //  Console.WriteLine("TESTING if instance of GeoLocation coming through: " + location.Latitude + "\n");
                 if (location != null)
 
                 {
-                    Random random = new Random();   // Changed id from Guid.NewGuid.ToString() to using a simple Random instead.
-                    GeoLocation geoLoc = new GeoLocation { Id = random.Next(), Latitude = location.Latitude.ToString(), Longitude = location.Longitude.ToString(), Altitude = location.Altitude.ToString() };
+                    //GeoLocation geoLoca = new GeoLocation { Id = Guid.NewGuid().ToString(), Latitude = location.Latitude.ToString(), Longitude = location.Longitude.ToString() };
 
 
-                    CurrentLatitude = geoLoc.Latitude;
-                    CurrentLongitude = geoLoc.Longitude;
+                    CurrentLatitude = location.Latitude;
+                    CurrentLongitude = location.Longitude;
+                    GeoInfo = location.Info;
+                    CurrentTimeDate = location.TimeDate;
 
 
+                    //Altitude: {location.Altitude}"
+                    //Console.WriteLine("\nFrom Dependencyservice GetGeoLocationAsync");
+                    //Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}");
+                    //Console.WriteLine($"Latitude from var: " + CurrentLatitude + " Longitude from var: " + CurrentLongitude);
+                    //Console.WriteLine("\n");
 
-                    Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
-                    Console.WriteLine($"Latitude from variable:" + CurrentLatitude + "Longitude from variable: " + CurrentLongitude);
-
-               
-                    await App.Database.SaveGeoLocationItemAsync(geoLoc);
 
                 }
             }
             catch (FeatureNotSupportedException fnsEx)
             {
-                // Handle not supported on device exception
+                Console.WriteLine("GeoLocViewModel: Not supported on device exception");
             }
             catch (FeatureNotEnabledException fneEx)
             {
-                // Handle not enabled on device exception
+                Console.WriteLine("GeoLocViewMode:  Not enabled on device Excepetion");
             }
             catch (PermissionException pEx)
             {
-                // Handle permission exception
+                Console.WriteLine("GeoLocViewMode:  Permissionexcepetion");
             }
             catch (Exception ex)
             {
-                // Unable to get location
+                Console.WriteLine("GeoLocViewModel: Cannot get a location");
             }
 
             return await Task.FromResult(true);
         }
-
-        //public async Task<bool> SaveGeoLocationToDatabase()
-        //{
-        //    try
-        //    {
-        //        await GetGeoLocationAsync();
-                
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //    }
-        //}
-
-
-
 
 
 
@@ -189,6 +190,12 @@ namespace FallDetectionApp.ViewModels
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
+
+
+
+
         #endregion
     }
 }

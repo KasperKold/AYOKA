@@ -17,7 +17,7 @@ namespace FallDetectionApp.Views
         public HomePage()
         {
             InitializeComponent();
-            BindingContext = new HomeViewModel(); 
+            BindingContext = new HomeViewModel();
         }
 
         private async void OnActivateBtnClicked(object sender, EventArgs e)

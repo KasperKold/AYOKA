@@ -11,6 +11,8 @@ namespace FallDetectionApp.Models
         public string Longitude { get; set; }
         public string Altitude { get; set; }
         public string Provider { get; set; }
+        public string Info { get; set; }
+        public string TimeDate { get; set; }
 
     }
 }
