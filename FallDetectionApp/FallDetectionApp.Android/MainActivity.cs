@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using Android.Icu.Util;
 using View = Android.Views.View;
 
+
 [assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
 namespace FallDetectionApp.Droid
 {
@@ -45,10 +46,13 @@ namespace FallDetectionApp.Droid
         private int notMovedCounter;
 
 
+
         private string latText;
         private string longText;
 
         private string geoInfo;
+        private string sessionStartDateTime;
+
 
         private GeoLocation currentGeoPos;
         private UiLocationHandler iUiImplementation;
@@ -72,9 +76,10 @@ namespace FallDetectionApp.Droid
             //Init our interface.
             //iUiImplementation.Init();
             LoadApplication(new App());
-            currentGeoPos = new GeoLocation { Id = 766, Latitude = "no lat yet", Longitude = "no long yet" };
+            currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
 
             notMovedCounter = 0;
+
 
 
 
@@ -250,6 +255,14 @@ namespace FallDetectionApp.Droid
 
         }
 
+        public void saveToDb(GeoLocation currentGeo)
+        {
+            Console.WriteLine("SAVEtoDB" + currentGeo.Info + "\n");
+
+            App.Database.SaveGeoLocationItemAsync(currentGeo);
+
+        }
+
 
         public void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
@@ -274,19 +287,23 @@ namespace FallDetectionApp.Droid
             // these events are on a background thread, need to update on the UI thread
             RunOnUiThread(async () =>
             {
-
+                if (sessionStartDateTime == "")
+                {
+                    sessionStartDateTime = "Session: " + date_string;
+                }
 
 
                 if (notMovedCounter == 0)
                 {
+
                     notMovedCounter++;
 
                     latText = $"{location.Latitude}";
                     savedLat = latText;
-                    // prevLat =latText;
+
                     longText = $"{location.Longitude}";
                     savedLong = longText;
-                    // prevLong = longText;
+
 
 
                     Console.WriteLine(txtNewRow + txtCounter1plus + notMovedCounter);
@@ -297,6 +314,8 @@ namespace FallDetectionApp.Droid
                     //assigns location to instance of GeoLocation
                     currentGeoPos.Latitude = latText;
                     currentGeoPos.Longitude = longText;
+                    currentGeoPos.sessionGeoCounter = notMovedCounter;
+                    currentGeoPos.sessionId = sessionStartDateTime;
                     //assigns info
                     currentGeoPos.Info = setInfoString(txtPrevLat, savedLat.Substring(0, 7), txtNewRow,
                           txtPrevLong, savedLong.Substring(0, 7), txtNewRow, txtComparedLat, latText.Substring(0, 7), txtNewRow,
@@ -308,6 +327,7 @@ namespace FallDetectionApp.Droid
                     iUiImplementation.setCurrentGeoPos(currentGeoPos);
 
                     // trigger the dependenyservice to get the location for UI but cannot update UI from here ATM
+                    saveToDb(currentGeoPos);
                     await iUiImplementation.UiTriggerAsync();
 
 
@@ -334,9 +354,12 @@ namespace FallDetectionApp.Droid
                     txtCounter + notMovedCounter;
 
                     currentGeoPos.TimeDate = dateTime.ToString();
+                    currentGeoPos.sessionGeoCounter = notMovedCounter;
+                    currentGeoPos.sessionId = sessionStartDateTime;
 
 
                     iUiImplementation.setCurrentGeoPos(currentGeoPos);
+                    saveToDb(currentGeoPos);
                     await iUiImplementation.UiTriggerAsync();
 
 
@@ -355,6 +378,7 @@ namespace FallDetectionApp.Droid
                     currentGeoPos.Longitude = longText;
 
 
+
                     if (latText.Substring(0, 7).Equals(savedLat.Substring(0, 7)) && longText.Substring(0, 7).Equals(savedLong.Substring(0, 7)))
                     {
                         notMovedCounter++;
@@ -369,9 +393,12 @@ namespace FallDetectionApp.Droid
                         txtCounter1plus, notMovedCounter);
 
                         currentGeoPos.TimeDate = dateTime.ToString();
+                        currentGeoPos.sessionGeoCounter = notMovedCounter;
+                        currentGeoPos.sessionId = sessionStartDateTime;
 
 
                         iUiImplementation.setCurrentGeoPos(currentGeoPos);
+                        saveToDb(currentGeoPos);
                         await iUiImplementation.UiTriggerAsync();
 
                     }
@@ -397,12 +424,17 @@ namespace FallDetectionApp.Droid
                         txtNewRow + txtComparedLong + longText.Substring(0, 7) + txtNewRow +
                         txtCounter1minus + notMovedCounter;
                         currentGeoPos.TimeDate = dateTime.ToString();
+                        currentGeoPos.sessionGeoCounter = notMovedCounter;
+                        currentGeoPos.sessionId = sessionStartDateTime;
 
 
 
 
                         iUiImplementation.setCurrentGeoPos(currentGeoPos);
+                        //await App.Database.SaveGeoLocationItemAsync(currentGeoPos);
+                        saveToDb(currentGeoPos);
                         await iUiImplementation.UiTriggerAsync();
+
 
 
 
