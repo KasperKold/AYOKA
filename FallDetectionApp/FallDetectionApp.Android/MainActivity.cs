@@ -20,7 +20,8 @@ using Xamarin.Forms;
 using System.Threading.Tasks;
 using Android.Icu.Util;
 using View = Android.Views.View;
-
+using FallDetectionApp.Views;
+using FallDetectionApp.ViewModels;
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
 namespace FallDetectionApp.Droid
@@ -57,6 +58,8 @@ namespace FallDetectionApp.Droid
         private GeoLocation currentGeoPos;
         private UiLocationHandler iUiImplementation;
 
+        private IGeoLocation iGeoLoc;
+
 
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -73,6 +76,8 @@ namespace FallDetectionApp.Droid
             //Store our interface class.
             iUiImplementation = DependencyService.Get<IUiHandler>() as UiLocationHandler;
 
+            //iUiImplementation = new UiLocationHandler();
+            //iUiImplementation = DependencyService.Get<IUpdateGeo>() as UiLocationHandler;
             //Init our interface.
             //iUiImplementation.Init();
             LoadApplication(new App());
@@ -255,11 +260,16 @@ namespace FallDetectionApp.Droid
 
         }
 
+
+
+
         public void saveToDb(GeoLocation currentGeo)
         {
             Console.WriteLine("SAVEtoDB" + currentGeo.Info + "\n");
 
             App.Database.SaveGeoLocationItemAsync(currentGeo);
+
+
 
         }
 
@@ -271,7 +281,7 @@ namespace FallDetectionApp.Droid
             string txtCounter = "COUNTER: ";
             string txtComparedLat = "Compared Lat: ";
             string txtComparedLong = "Compared Long: ";
-            string txtStarRow = "*********************************************\n";
+            string txtStarRow = "******************************************************\n";
             string txtNewRow = "\n";
             string txtPrevLat = "Previous Lat: ";
             string txtPrevLong = "Previous Long: ";
@@ -325,10 +335,11 @@ namespace FallDetectionApp.Droid
 
                     //sends Geolcation to separate class
                     iUiImplementation.setCurrentGeoPos(currentGeoPos);
-
+                    //DependencyService.Get<IUpdateGeo>().updateGeo();
+                    //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
                     // trigger the dependenyservice to get the location for UI but cannot update UI from here ATM
                     saveToDb(currentGeoPos);
-                    await iUiImplementation.UiTriggerAsync();
+                    // await iUiImplementation.UiTriggerAsync();
 
 
 
@@ -359,8 +370,10 @@ namespace FallDetectionApp.Droid
 
 
                     iUiImplementation.setCurrentGeoPos(currentGeoPos);
+                    //DependencyService.Get<IUpdateGeo>().updateGeo();
+                    // DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
                     saveToDb(currentGeoPos);
-                    await iUiImplementation.UiTriggerAsync();
+                    //await iUiImplementation.UiTriggerAsync();
 
 
                     notMovedCounter = 0;
@@ -398,8 +411,10 @@ namespace FallDetectionApp.Droid
 
 
                         iUiImplementation.setCurrentGeoPos(currentGeoPos);
+                        //DependencyService.Get<IUpdateGeo>().updateGeo();
+                        //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
                         saveToDb(currentGeoPos);
-                        await iUiImplementation.UiTriggerAsync();
+                        //await iUiImplementation.UiTriggerAsync();
 
                     }
                     else
@@ -431,9 +446,11 @@ namespace FallDetectionApp.Droid
 
 
                         iUiImplementation.setCurrentGeoPos(currentGeoPos);
-                        //await App.Database.SaveGeoLocationItemAsync(currentGeoPos);
+                        // await App.Database.SaveGeoLocationItemAsync(currentGeoPos);
+                        // DependencyService.Get<IUpdateGeo>().updateGeo();
+                        //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
                         saveToDb(currentGeoPos);
-                        await iUiImplementation.UiTriggerAsync();
+                        //await iUiImplementation.UiTriggerAsync();
 
 
 
