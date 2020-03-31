@@ -8,6 +8,7 @@ using FallDetectionApp.Data;
 using System.Runtime.CompilerServices;
 using System.ComponentModel;
 using System.Collections.Generic;
+using FallDetectionApp.Views;
 // [assembly: Dependency(typeof(FallDetectionApp.Droid.HomeViewModel))]
 namespace FallDetectionApp.ViewModels
 {
@@ -19,6 +20,7 @@ namespace FallDetectionApp.ViewModels
             OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://xamarin.com"));
             GetGeoLocation = new Command(async () => await GetGeoLocationAsync());
             OpenGeoDatabase = new Command(async () => { await Application.Current.MainPage.Navigation.PushModalAsync(new Views.GeoDataPage()); });
+            // RefreshListView = new Command(async () => { await App.Database.GetGeoLocationItemsAsync(); });
             // AddGeoLocationToDatabase = new Command(async () =>   
 
         }
@@ -26,11 +28,8 @@ namespace FallDetectionApp.ViewModels
         public ICommand OpenWebCommand { get; }
         public ICommand GetGeoLocation { get; }
         public ICommand OpenGeoDatabase { get; }
-        public ICommand AddGeoLocationToDatabase { get; }
-
-        // public IGeoLocation GeoLoc => DependencyService.Get<IGeoLocation>(); // NOT NEEDED? PDR Question
-        //public IGeoLocationAndroid GeoLocAndroid => DependencyService.Get<IGeoLocationAndroid>();
-
+        //public ICommand RefreshListView { get; }
+        //public ICommand AddGeoLocationToDatabase { get; }
         //public  UiLocationHandler handler => DependencyService.Get<UiLocationhandler>();
         //DependencyService.Get<UiLocationhandler>()
 
@@ -161,16 +160,11 @@ namespace FallDetectionApp.ViewModels
                 CurrentTimeDate = location.TimeDate;
             }
 
-
             //Altitude: {location.Altitude}"
             //Console.WriteLine("\nFrom Dependencyservice GetGeoLocationAsync");
             //Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}");
             //Console.WriteLine($"Latitude from var: " + CurrentLatitude + " Longitude from var: " + CurrentLongitude);
             //Console.WriteLine("\n");
-
-
-
-
 
             return await Task.FromResult(true);
         }
@@ -187,11 +181,6 @@ namespace FallDetectionApp.ViewModels
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-
-
-
-
 
         #endregion
 

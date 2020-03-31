@@ -47,7 +47,8 @@
 
         <Button Text="Save" Clicked="SaveGeoLocationItem" />
 
-        <!--x:Name="geoDataListView"-->
+        <!--x:Name="geoDataListView"       Command="{Binding OpenGeoDatabase}" IsRefreshing="{Binding IsBusy, Mode=OneWay}"  CachingStrategy="RecycleElement"  RefreshCommand="{Binding RefreshListView}"
+                IsPullToRefreshEnabled="true"-->
         <ListView x:Name="geoItems" Margin="20" ItemSelected="OnListItemSelected" HasUnevenRows="True">
             <ListView.ItemTemplate>
                 <DataTemplate>

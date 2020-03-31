@@ -30,6 +30,7 @@ namespace FallDetectionApp.Views
 
             // geoDataListView.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
             geoItems.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
+            scrollToEndOfList(geoItems);
         }
 
         async void OnItemAdded(object sender, EventArgs e)
@@ -59,7 +60,7 @@ namespace FallDetectionApp.Views
             testGeo.Id = 999;
             testGeo.Latitude = "888888";
             testGeo.Longitude = "7777777";
-            testGeo.Info = "from Save Button DataGeoPage";
+            testGeo.Info = "from Save Button GeoDataPage";
             await App.Database.SaveGeoLocationItemAsync(testGeo);
             //await Navigation.PopAsync();
         }
@@ -67,8 +68,16 @@ namespace FallDetectionApp.Views
         async void UpdateDataListView(object sender, EventArgs e)
         {
             geoItems.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
+            scrollToEndOfList(geoItems);
+
             //geoDataListView.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
             //await Navigation.PopAsync();
+        }
+
+        void scrollToEndOfList(ListView geoItems)
+        {
+            var v = geoItems.ItemsSource.Cast<object>().LastOrDefault();
+            geoItems.ScrollTo(v, ScrollToPosition.End, true);
         }
 
 
