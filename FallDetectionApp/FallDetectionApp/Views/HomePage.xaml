@@ -45,8 +45,11 @@
                         TextColor="White"/>
 
         <StackLayout >
-            <Label x:Name="latitude2"  Text="{Binding CurrentLatitude}" FontSize="Medium" FontAttributes ="Bold" d:Text="Latitude:" />
-            <Label x:Name="longitude2" Text="{Binding CurrentLongitude}"  FontSize="Medium" FontAttributes="Bold" d:Text="Longitude:" />
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                <Label x:Name="latitude2"  Text="{Binding CurrentLatitude}" FontSize="Medium" FontAttributes ="Bold" d:Text="Latitude:" />
+                <Label x:Name="space2" Text="          "  FontSize="Medium" FontAttributes="Bold" d:Text="Longitude:" />
+                <Label x:Name="longitude2" Text="{Binding CurrentLongitude}"  FontSize="Medium" FontAttributes="Bold" d:Text="Longitude:" />
+            </StackLayout>
             <Label x:Name="geoInfo2" Text="{Binding GeoInfo}" d:Text="GeoInfo" />
             <Label x:Name="geoTime2" Text="{Binding CurrentTimeDate}" d:Text="GeoTimeDate" />
         </StackLayout>

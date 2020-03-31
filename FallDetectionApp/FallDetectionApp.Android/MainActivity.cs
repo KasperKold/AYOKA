@@ -44,8 +44,8 @@ namespace FallDetectionApp.Droid
 
 
 
-        private string latText;
-        private string longText;
+        private string lati;
+        private string longi;
 
         //private string geoInfo;
         private string sessionStartDateTime;
@@ -216,20 +216,27 @@ namespace FallDetectionApp.Droid
         /// </summary
         ///
 
-        public string setInfoString(string a, string b, string c, string d, string e, string f, string g, string h, string i, string j, string k, string l, string m, int n)
-        {
-            return a + b + c + d + e + f + g + h + i + j + k + l + m + n;
+        //DependencyService.Get<IUpdateGeo>().updateGeo();
+        //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
+        //await iUiImplementation.UiTriggerAsync();
 
-        }
 
 
 
 
         public void saveToDb(GeoLocation currentGeo)
         {
-            Console.WriteLine("SAVEtoDB" + currentGeo.Info + "\n");
+            Console.WriteLine("SAVE to DB " + "\n");
 
             App.Database.SaveGeoLocationItemAsync(currentGeo);
+        }
+
+
+        public void setGeoInstance(string lati, string longi, string dateTime)
+        {
+            currentGeoPos.Latitude = lati;
+            currentGeoPos.Longitude = longi;
+            currentGeoPos.TimeDate = dateTime;
         }
 
 
@@ -238,13 +245,14 @@ namespace FallDetectionApp.Droid
             string txtCounter1plus = "COUNTER: +1 --> : ";
             string txtCounter1minus = "COUNTER: -1 --> : ";
             string txtCounter = "COUNTER: ";
-            string txtComparedLat = "Compared Lat: ";
-            string txtComparedLong = "Compared Long: ";
             string txtStarRow = "******************************************************\n";
             string txtNewRow = "\n";
             string txtPrevLat = "Previous Lat: ";
             string txtPrevLong = "Previous Long: ";
-            string txtNotMoved = "THE DEVICE HAS NOT MOVED FOR 25 SECONDS ! ! !\n";
+            string txtNotMoved = "DEVICE HAS NOT MOVED FOR 25 SECONDS ! ! !\n";
+            string space16 = "                ";
+            string space11 = "          ";
+
 
 
             DateTime dateTime = DateTime.Now.ToLocalTime();
@@ -262,134 +270,85 @@ namespace FallDetectionApp.Droid
                     sessionStartDateTime = "Session: " + date_string;
                 }
 
+                lati = $"{location.Latitude}".Substring(0, 7);
+                longi = $"{location.Longitude}".Substring(0, 7);
+
+
+                //assigns location to instance of GeoLocation
+                setGeoInstance(lati, longi, dateTime.ToString());
 
                 if (notMovedCounter == 0)
                 {
+                    savedLat = lati;
+                    savedLong = longi;
                     notMovedCounter++;
 
-                    latText = $"{location.Latitude}";
-                    savedLat = latText;
-
-                    longText = $"{location.Longitude}";
-                    savedLong = longText;
-
                     Console.WriteLine(txtNewRow + txtCounter1plus + notMovedCounter);
-                    Console.WriteLine(txtComparedLat + latText.Substring(0, 7));
-                    Console.WriteLine(txtComparedLong + longText.Substring(0, 7) + "\n");
-
-
-                    //assigns location to instance of GeoLocation
-                    currentGeoPos.Latitude = latText;
-                    currentGeoPos.Longitude = longText;
-                    //currentGeoPos.sessionGeoCounter = notMovedCounter;
-                    //currentGeoPos.sessionId = sessionStartDateTime;
 
                     //assigns info
-                    currentGeoPos.Info = setInfoString(txtPrevLat, savedLat.Substring(0, 7), txtNewRow,
-                    txtPrevLong, savedLong.Substring(0, 7), txtNewRow, txtComparedLat, latText.Substring(0, 7), txtNewRow,
-                    txtComparedLong, longText.Substring(0, 7), txtNewRow, txtCounter1plus, notMovedCounter);
+                    currentGeoPos.Info =
+                    txtPrevLat + space16 + txtPrevLong + txtNewRow +
+                    savedLat + space16 + space11 + savedLong + txtNewRow +
+                    txtCounter1plus + notMovedCounter;
 
                     //sends Geolcation to separate class
                     iUiImplementation.setCurrentGeoPos(currentGeoPos);
-
-                    //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
-                    // trigger the dependencyservice to get the location for UI but cannot update UI from here ATM
                     saveToDb(currentGeoPos);
-
-                    // await iUiImplementation.UiTriggerAsync();
-
-
-
-
                 }
                 else if (notMovedCounter >= 4)
                 {
+                    savedLat = lati;
+                    savedLong = longi;
+
                     Console.WriteLine(txtNewRow + txtStarRow);
                     Console.WriteLine(txtCounter + notMovedCounter);
                     Console.WriteLine(txtNotMoved);
-                    Console.WriteLine(txtComparedLat + latText.Substring(0, 7));
-                    Console.WriteLine(txtComparedLong + longText.Substring(0, 7));
                     Console.WriteLine(txtStarRow + txtNewRow);
 
                     currentGeoPos.Info =
-                    txtStarRow + txtNotMoved + txtStarRow + txtPrevLat + savedLat.Substring(0, 7) +
-                    txtNewRow + txtPrevLong + savedLong.Substring(0, 7) + txtNewRow + txtComparedLat +
-                    latText.Substring(0, 7) + txtNewRow +
-                    txtComparedLong + longText.Substring(0, 7) + txtNewRow +
+                    txtStarRow + txtNotMoved + txtStarRow +
+                    txtPrevLat + space16 + txtPrevLong + txtNewRow +
+                    savedLat + space16 + space11 + savedLong + txtNewRow +
                     txtCounter + notMovedCounter;
 
-                    currentGeoPos.TimeDate = dateTime.ToString();
-                    //currentGeoPos.sessionGeoCounter = notMovedCounter;
-                    //currentGeoPos.sessionId = sessionStartDateTime;
-
-
                     iUiImplementation.setCurrentGeoPos(currentGeoPos);
-                    //DependencyService.Get<IUpdateGeo>().updateGeo();
-                    //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
                     saveToDb(currentGeoPos);
-                    //await iUiImplementation.UiTriggerAsync();
                     notMovedCounter = 0;
+
                 }
                 else
+
+                // if both lat and long are equal to the previous lat and long - device has not moved
                 {
-                    savedLat = latText;
-                    savedLong = longText;
-                    latText = $"{location.Latitude}";
-                    longText = $"{location.Longitude}";
-
-                    currentGeoPos.Latitude = latText;
-                    currentGeoPos.Longitude = longText;
-
-                    if (latText.Substring(0, 7).Equals(savedLat.Substring(0, 7)) && longText.Substring(0, 7).Equals(savedLong.Substring(0, 7)))
+                    if (lati.Equals(savedLat) && longi.Equals(savedLong))
                     {
+                        savedLat = lati;
+                        savedLong = longi;
                         notMovedCounter++;
 
                         Console.WriteLine(txtNewRow + txtCounter1plus + notMovedCounter + txtNewRow);
-                        Console.WriteLine(txtComparedLat + latText.Substring(0, 7));
-                        Console.WriteLine(txtComparedLong + longText.Substring(0, 7));
 
-                        currentGeoPos.Info = setInfoString(txtPrevLat, savedLat.Substring(0, 7), txtNewRow,
-                        txtPrevLong, savedLong.Substring(0, 7), txtNewRow, txtComparedLat, latText.Substring(0, 7), txtNewRow,
-                        txtComparedLong, longText.Substring(0, 7), txtNewRow,
-                        txtCounter1plus, notMovedCounter);
-
-                        currentGeoPos.TimeDate = dateTime.ToString();
-                        //currentGeoPos.sessionGeoCounter = notMovedCounter;
-                        //currentGeoPos.sessionId = sessionStartDateTime;
+                        currentGeoPos.Info =
+                        txtPrevLat + space16 + txtPrevLong + txtNewRow +
+                        savedLat + space16 + space11 + savedLong + txtNewRow +
+                        txtCounter1plus + notMovedCounter;
 
                         iUiImplementation.setCurrentGeoPos(currentGeoPos);
-                        //DependencyService.Get<IUpdateGeo>().updateGeo();
-                        //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
                         saveToDb(currentGeoPos);
-                        //await iUiImplementation.UiTriggerAsync();
-
                     }
                     else
                     {
-
                         notMovedCounter--;
 
                         Console.WriteLine(txtNewRow + txtCounter1minus + notMovedCounter);
-                        Console.WriteLine(txtComparedLat + latText.Substring(0, 7));
-                        Console.WriteLine(txtComparedLong + longText.Substring(0, 7));
 
-                        currentGeoPos.Latitude = latText;
-                        currentGeoPos.Longitude = longText;
-                        currentGeoPos.Info = txtPrevLat + savedLat.Substring(0, 7) + txtNewRow +
-                        txtPrevLong + savedLong.Substring(0, 7) + txtNewRow + txtComparedLat + latText.Substring(0, 7) +
-                        txtNewRow + txtComparedLong + longText.Substring(0, 7) + txtNewRow +
+                        currentGeoPos.Info =
+                        txtPrevLat + space16 + txtPrevLong + txtNewRow +
+                        savedLat + space16 + space11 + savedLong + txtNewRow +
                         txtCounter1minus + notMovedCounter;
-                        currentGeoPos.TimeDate = dateTime.ToString();
-                        //currentGeoPos.sessionGeoCounter = notMovedCounter;
-                        //currentGeoPos.sessionId = sessionStartDateTime;
 
                         iUiImplementation.setCurrentGeoPos(currentGeoPos);
-                        // await App.Database.SaveGeoLocationItemAsync(currentGeoPos);
-                        // DependencyService.Get<IUpdateGeo>().updateGeo();
-                        //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
                         saveToDb(currentGeoPos);
-                        //await iUiImplementation.UiTriggerAsync();
-
                     }
                 }
             });
