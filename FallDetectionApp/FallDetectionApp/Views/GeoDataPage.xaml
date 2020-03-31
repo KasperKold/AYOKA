@@ -3,9 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"
+
              
              mc:Ignorable="d"
              x:Class="FallDetectionApp.Views.GeoDataPage">
+
     <!--xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"-->
 
     <!--<ContentPage.BindingContext>
@@ -30,6 +33,11 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+
+    <ContentPage.BindingContext>
+        <vm:GeoDataViewModel />
+    </ContentPage.BindingContext>
+
     <StackLayout>
         <Label Text="GeoLocation database"
                FontSize="Medium"
@@ -39,8 +47,8 @@
 
         <Button Text="Save" Clicked="SaveGeoLocationItem" />
 
-
-        <ListView x:Name="geoDataListView" Margin="20" ItemSelected="OnListItemSelected" HasUnevenRows="True">
+        <!--x:Name="geoDataListView"-->
+        <ListView x:Name="geoItems" Margin="20" ItemSelected="OnListItemSelected" HasUnevenRows="True">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

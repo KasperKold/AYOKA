@@ -51,6 +51,7 @@
             <Label x:Name="geoTime2" Text="{Binding CurrentTimeDate}" d:Text="GeoTimeDate" />
         </StackLayout>
 
+
     </StackLayout>
 
 

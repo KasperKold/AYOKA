@@ -13,13 +13,14 @@ namespace FallDetectionApp.ViewModels
 {
     public class GeoDataViewModel : BaseViewModel
     {
-        public ObservableCollection<Item> Items { get; set; }
+        public ObservableCollection<GeoLocation> GeoItems { get; set; }
         public Command LoadItemsCommand { get; set; }
 
         public GeoDataViewModel()
         {
-            Title = "Browse";            
-            Items = new ObservableCollection<Item>();
+
+            //Title = "Browse";
+            GeoItems = new ObservableCollection<GeoLocation>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
         }
@@ -33,11 +34,11 @@ namespace FallDetectionApp.ViewModels
 
             try
             {
-                Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
+                GeoItems.Clear();
+                var items = await App.Database.GetGeoLocationItemsAsync();
                 foreach (var item in items)
                 {
-                    Items.Add(item);
+                    GeoItems.Add(item);
                 }
             }
             catch (Exception ex)

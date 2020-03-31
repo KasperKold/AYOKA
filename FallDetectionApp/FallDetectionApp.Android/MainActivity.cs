@@ -32,9 +32,7 @@ namespace FallDetectionApp.Droid
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         private readonly string TAG = "Log MainActivity";
-
         static readonly int RC_REQUEST_LOCATION_PERMISSION = 1000;
-
         static readonly string[] REQUIRED_PERMISSIONS = { Manifest.Permission.AccessFineLocation };
 
 
@@ -42,8 +40,6 @@ namespace FallDetectionApp.Droid
         private Timer timer;
         private string savedLat;
         private string savedLong;
-        private string prevLat;
-        private string prevLong;
         private int notMovedCounter;
 
 
@@ -51,15 +47,12 @@ namespace FallDetectionApp.Droid
         private string latText;
         private string longText;
 
-        private string geoInfo;
+        //private string geoInfo;
         private string sessionStartDateTime;
 
 
         private GeoLocation currentGeoPos;
         private UiLocationHandler iUiImplementation;
-
-        private IGeoLocation iGeoLoc;
-
 
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -71,7 +64,7 @@ namespace FallDetectionApp.Droid
 
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            Forms.Init(this, savedInstanceState);
 
             //Store our interface class.
             iUiImplementation = DependencyService.Get<IUiHandler>() as UiLocationHandler;
@@ -80,12 +73,11 @@ namespace FallDetectionApp.Droid
             //iUiImplementation = DependencyService.Get<IUpdateGeo>() as UiLocationHandler;
             //Init our interface.
             //iUiImplementation.Init();
+
             LoadApplication(new App());
             currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
 
             notMovedCounter = 0;
-
-
 
 
             /*
@@ -99,8 +91,6 @@ namespace FallDetectionApp.Droid
 
             Log.Debug(TAG, "OnCreate: Timer started. ");
             */
-
-
 
             // This event fires when the ServiceConnection lets the client (our App class) know that
             // the Service is connected. We use this event to start updating the UI with location
@@ -130,8 +120,6 @@ namespace FallDetectionApp.Droid
                 RequestLocationPermission();
             }
 
-
-
         }
 
         public GeoLocation getCurrentGeoPos()
@@ -139,28 +127,6 @@ namespace FallDetectionApp.Droid
             return currentGeoPos;
         }
 
-
-
-        /*
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
-        {
-            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-        */
-
-        /*
-                public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-                {
-
-                    Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
-                    base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-
-                }
-
-            */
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
@@ -174,8 +140,6 @@ namespace FallDetectionApp.Droid
                 this.RunOnUiThread(() =>
                 {
                     Console.WriteLine("Timer: " + countSeconds.ToString() + " SECONDS");
-
-                    //FindViewById<TextView>(Resource.Id.textView).Text = countSeconds.ToString();
                 });
             }
         }
@@ -223,8 +187,6 @@ namespace FallDetectionApp.Droid
             }
 
 
-
-
         }
 
         void RequestLocationPermission()
@@ -268,9 +230,6 @@ namespace FallDetectionApp.Droid
             Console.WriteLine("SAVEtoDB" + currentGeo.Info + "\n");
 
             App.Database.SaveGeoLocationItemAsync(currentGeo);
-
-
-
         }
 
 
@@ -286,6 +245,7 @@ namespace FallDetectionApp.Droid
             string txtPrevLat = "Previous Lat: ";
             string txtPrevLong = "Previous Long: ";
             string txtNotMoved = "THE DEVICE HAS NOT MOVED FOR 25 SECONDS ! ! !\n";
+
 
             DateTime dateTime = DateTime.Now.ToLocalTime();
             //string time_string = dateTime.ToString("yyyy-MM-dd");
@@ -305,7 +265,6 @@ namespace FallDetectionApp.Droid
 
                 if (notMovedCounter == 0)
                 {
-
                     notMovedCounter++;
 
                     latText = $"{location.Latitude}";
@@ -313,8 +272,6 @@ namespace FallDetectionApp.Droid
 
                     longText = $"{location.Longitude}";
                     savedLong = longText;
-
-
 
                     Console.WriteLine(txtNewRow + txtCounter1plus + notMovedCounter);
                     Console.WriteLine(txtComparedLat + latText.Substring(0, 7));
@@ -325,20 +282,20 @@ namespace FallDetectionApp.Droid
                     currentGeoPos.Latitude = latText;
                     currentGeoPos.Longitude = longText;
                     //currentGeoPos.sessionGeoCounter = notMovedCounter;
-                    // currentGeoPos.sessionId = sessionStartDateTime;
+                    //currentGeoPos.sessionId = sessionStartDateTime;
+
                     //assigns info
                     currentGeoPos.Info = setInfoString(txtPrevLat, savedLat.Substring(0, 7), txtNewRow,
-                          txtPrevLong, savedLong.Substring(0, 7), txtNewRow, txtComparedLat, latText.Substring(0, 7), txtNewRow,
-                     txtComparedLong, longText.Substring(0, 7), txtNewRow,
-
-                     txtCounter1plus, notMovedCounter);
+                    txtPrevLong, savedLong.Substring(0, 7), txtNewRow, txtComparedLat, latText.Substring(0, 7), txtNewRow,
+                    txtComparedLong, longText.Substring(0, 7), txtNewRow, txtCounter1plus, notMovedCounter);
 
                     //sends Geolcation to separate class
                     iUiImplementation.setCurrentGeoPos(currentGeoPos);
-                    //DependencyService.Get<IUpdateGeo>().updateGeo();
+
                     //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
-                    // trigger the dependenyservice to get the location for UI but cannot update UI from here ATM
+                    // trigger the dependencyservice to get the location for UI but cannot update UI from here ATM
                     saveToDb(currentGeoPos);
+
                     // await iUiImplementation.UiTriggerAsync();
 
 
@@ -347,15 +304,12 @@ namespace FallDetectionApp.Droid
                 }
                 else if (notMovedCounter >= 4)
                 {
-
                     Console.WriteLine(txtNewRow + txtStarRow);
                     Console.WriteLine(txtCounter + notMovedCounter);
                     Console.WriteLine(txtNotMoved);
                     Console.WriteLine(txtComparedLat + latText.Substring(0, 7));
                     Console.WriteLine(txtComparedLong + longText.Substring(0, 7));
                     Console.WriteLine(txtStarRow + txtNewRow);
-
-
 
                     currentGeoPos.Info =
                     txtStarRow + txtNotMoved + txtStarRow + txtPrevLat + savedLat.Substring(0, 7) +
@@ -371,14 +325,10 @@ namespace FallDetectionApp.Droid
 
                     iUiImplementation.setCurrentGeoPos(currentGeoPos);
                     //DependencyService.Get<IUpdateGeo>().updateGeo();
-                    // DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
+                    //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
                     saveToDb(currentGeoPos);
                     //await iUiImplementation.UiTriggerAsync();
-
-
                     notMovedCounter = 0;
-
-
                 }
                 else
                 {
@@ -389,8 +339,6 @@ namespace FallDetectionApp.Droid
 
                     currentGeoPos.Latitude = latText;
                     currentGeoPos.Longitude = longText;
-
-
 
                     if (latText.Substring(0, 7).Equals(savedLat.Substring(0, 7)) && longText.Substring(0, 7).Equals(savedLong.Substring(0, 7)))
                     {
@@ -409,7 +357,6 @@ namespace FallDetectionApp.Droid
                         //currentGeoPos.sessionGeoCounter = notMovedCounter;
                         //currentGeoPos.sessionId = sessionStartDateTime;
 
-
                         iUiImplementation.setCurrentGeoPos(currentGeoPos);
                         //DependencyService.Get<IUpdateGeo>().updateGeo();
                         //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
@@ -420,17 +367,11 @@ namespace FallDetectionApp.Droid
                     else
                     {
 
-
-
-
                         notMovedCounter--;
 
                         Console.WriteLine(txtNewRow + txtCounter1minus + notMovedCounter);
                         Console.WriteLine(txtComparedLat + latText.Substring(0, 7));
                         Console.WriteLine(txtComparedLong + longText.Substring(0, 7));
-
-
-
 
                         currentGeoPos.Latitude = latText;
                         currentGeoPos.Longitude = longText;
@@ -442,9 +383,6 @@ namespace FallDetectionApp.Droid
                         //currentGeoPos.sessionGeoCounter = notMovedCounter;
                         //currentGeoPos.sessionId = sessionStartDateTime;
 
-
-
-
                         iUiImplementation.setCurrentGeoPos(currentGeoPos);
                         // await App.Database.SaveGeoLocationItemAsync(currentGeoPos);
                         // DependencyService.Get<IUpdateGeo>().updateGeo();
@@ -452,15 +390,8 @@ namespace FallDetectionApp.Droid
                         saveToDb(currentGeoPos);
                         //await iUiImplementation.UiTriggerAsync();
 
-
-
-
-
-
                     }
                 }
-
-
             });
         }
 
@@ -478,8 +409,6 @@ namespace FallDetectionApp.Droid
         {
             Log.Debug(TAG, "Location status changed, event raised");
         }
-
-
 
     }
 

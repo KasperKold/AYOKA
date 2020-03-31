@@ -18,7 +18,8 @@ namespace FallDetectionApp.Views
         public GeoDataPage()
         {
             InitializeComponent();
-            //BindingContext = new GeoDataViewModel();
+
+            BindingContext = new GeoDataViewModel();
 
         }
 
@@ -26,7 +27,9 @@ namespace FallDetectionApp.Views
         {
             base.OnAppearing();
 
-            geoDataListView.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
+
+            // geoDataListView.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
+            geoItems.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
         }
 
         async void OnItemAdded(object sender, EventArgs e)
@@ -63,7 +66,8 @@ namespace FallDetectionApp.Views
 
         async void UpdateDataListView(object sender, EventArgs e)
         {
-            geoDataListView.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
+            geoItems.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
+            //geoDataListView.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
             //await Navigation.PopAsync();
         }
 

@@ -13,17 +13,14 @@ using FallDetectionApp.ViewModels;
 
 namespace FallDetectionApp.Droid
 {
-    public class UiLocationHandler : GeoLocViewModel, IUiHandler
+    public class UiLocationHandler : HomeViewModel, IUiHandler
     {
         private readonly string TAG = "Log UiLocationHandler";
         private GeoLocation currentGeoPos;
 
-
-
         public UiLocationHandler()
         {
             DependencyService.Register<IUiHandler>();
-
             currentGeoPos = new GeoLocation { Id = 555, Latitude = "no lat yet x", Longitude = "no long yet x", Info = "no info" };
         }
 
@@ -31,37 +28,23 @@ namespace FallDetectionApp.Droid
         public void setCurrentGeoPos(GeoLocation location)
         {
             this.currentGeoPos = location;
-
         }
 
         public GeoLocation getCurrentGeoPos()
         {
             return this.currentGeoPos;
-
         }
-        public async Task UiTriggerAsync()
-        {
-            // Log.Debug(TAG, "TRIGGER GetGeoLocationAsync() in GeoLocViewModel");
-            await GetGeoLocationAsync();
 
-
-        }
 
         async Task<GeoLocation> IUiHandler.GeoUpdateAsync()
 
         {
 
             // Only sending the geolocation further
-            //GeoLocation tempPos = getCurrentGeoPos();
-            //GeoLocation test = new GeoLocation { Id = Guid.NewGuid().ToString(), Latitude = "no lat yet", Longitude = "no long yet" };
-
             // Log.Debug(TAG, "Sending geolocation further via IUiHandler");
-
 
             return await Task.FromResult(currentGeoPos);
         }
-
-
     }
 }
 
