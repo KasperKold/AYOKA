@@ -324,8 +324,8 @@ namespace FallDetectionApp.Droid
                     //assigns location to instance of GeoLocation
                     currentGeoPos.Latitude = latText;
                     currentGeoPos.Longitude = longText;
-                    currentGeoPos.sessionGeoCounter = notMovedCounter;
-                    currentGeoPos.sessionId = sessionStartDateTime;
+                    //currentGeoPos.sessionGeoCounter = notMovedCounter;
+                    // currentGeoPos.sessionId = sessionStartDateTime;
                     //assigns info
                     currentGeoPos.Info = setInfoString(txtPrevLat, savedLat.Substring(0, 7), txtNewRow,
                           txtPrevLong, savedLong.Substring(0, 7), txtNewRow, txtComparedLat, latText.Substring(0, 7), txtNewRow,
@@ -365,8 +365,8 @@ namespace FallDetectionApp.Droid
                     txtCounter + notMovedCounter;
 
                     currentGeoPos.TimeDate = dateTime.ToString();
-                    currentGeoPos.sessionGeoCounter = notMovedCounter;
-                    currentGeoPos.sessionId = sessionStartDateTime;
+                    //currentGeoPos.sessionGeoCounter = notMovedCounter;
+                    //currentGeoPos.sessionId = sessionStartDateTime;
 
 
                     iUiImplementation.setCurrentGeoPos(currentGeoPos);
@@ -406,8 +406,8 @@ namespace FallDetectionApp.Droid
                         txtCounter1plus, notMovedCounter);
 
                         currentGeoPos.TimeDate = dateTime.ToString();
-                        currentGeoPos.sessionGeoCounter = notMovedCounter;
-                        currentGeoPos.sessionId = sessionStartDateTime;
+                        //currentGeoPos.sessionGeoCounter = notMovedCounter;
+                        //currentGeoPos.sessionId = sessionStartDateTime;
 
 
                         iUiImplementation.setCurrentGeoPos(currentGeoPos);
@@ -439,8 +439,8 @@ namespace FallDetectionApp.Droid
                         txtNewRow + txtComparedLong + longText.Substring(0, 7) + txtNewRow +
                         txtCounter1minus + notMovedCounter;
                         currentGeoPos.TimeDate = dateTime.ToString();
-                        currentGeoPos.sessionGeoCounter = notMovedCounter;
-                        currentGeoPos.sessionId = sessionStartDateTime;
+                        //currentGeoPos.sessionGeoCounter = notMovedCounter;
+                        //currentGeoPos.sessionId = sessionStartDateTime;
 
 
 
