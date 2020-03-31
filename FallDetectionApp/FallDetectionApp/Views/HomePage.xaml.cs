@@ -22,11 +22,14 @@ namespace FallDetectionApp.Views
 
         private async void OnActivateBtnClicked(object sender, EventArgs e)
         {
-            var todoItem = new GeoLocation();
-            todoItem.Id = 123;
-            todoItem.Latitude = "13,5";
-            await App.Database.SaveGeoLocationItemAsync(todoItem);
-            Console.WriteLine("HEEEEJ!");
+            var testGeo = new GeoLocation();
+            testGeo.Id = 123;
+            testGeo.Latitude = "1111111";
+            testGeo.Longitude = "2222222";
+            testGeo.Info = "from Activate Button Homepage";
+
+            await App.Database.SaveGeoLocationItemAsync(testGeo);
+            //Console.WriteLine("HEEEEJ!");
             //await Navigation.PopAsync();
         }
 

@@ -56,7 +56,9 @@
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
+
         </ListView>
+        <Button Text="Refresh List" Clicked="UpdateDataListView" />
     </StackLayout>
 
 

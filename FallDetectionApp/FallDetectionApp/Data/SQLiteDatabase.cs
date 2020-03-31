@@ -80,6 +80,7 @@ namespace FallDetectionApp.Data
         // For the new GeoLocation table
         public Task<int> SaveGeoLocationItemAsync(GeoLocation item)
         {
+            /*
             if (item.Id != 0)
             {
                 return Database.UpdateAsync(item);
@@ -88,6 +89,9 @@ namespace FallDetectionApp.Data
             {
                 return Database.InsertAsync(item);
             }
+            */
+
+            return Database.InsertAsync(item);
         }
 
         public Task<int> DeleteGeoLocationItemAsync(GeoLocation item)
