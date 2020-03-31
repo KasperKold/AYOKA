@@ -6,7 +6,7 @@
              
              mc:Ignorable="d"
              x:Class="FallDetectionApp.Views.GeoDataPage">
-             <!--xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"-->
+    <!--xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"-->
 
     <!--<ContentPage.BindingContext>
         <vm:GeoDataViewModel />
@@ -40,13 +40,18 @@
         <Button Text="Save" Clicked="SaveGeoLocationItem" />
 
 
-        <ListView x:Name="geoDataListView" Margin="20" ItemSelected="OnListItemSelected">
+        <ListView x:Name="geoDataListView" Margin="20" ItemSelected="OnListItemSelected" HasUnevenRows="True">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <StackLayout Margin="20,0,0,0" Orientation="Vertical" >
                             <Label Text="{Binding Id}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                            <Label Text="{Binding Latitude}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
+                            <StackLayout  Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                <Label Text="{Binding Latitude}" FontSize="Medium" FontAttributes= "Bold" d:Text="Latitude:" />
+                                <Label Text="{Binding Longitude}"  FontSize="Medium" FontAttributes= "Bold" d:Text="Longitude:" />
+                            </StackLayout>
+                            <Label Text="{Binding Info}" d:Text="GeoInfo" />
+                            <Label Text="{Binding TimeDate}" d:Text="GeoTimeDate" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
