@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 using FallDetectionApp.Models;
+using FallDetectionApp.Services;
 using FallDetectionApp.ViewModels;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+
 namespace FallDetectionApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class GeoDataPage : ContentPage
+    public partial class GeoDataPage : ContentPage, INotifyPropertyChanged
     {
         public GeoDataPage()
         {
@@ -79,6 +83,11 @@ namespace FallDetectionApp.Views
             var v = geoItems.ItemsSource.Cast<object>().LastOrDefault();
             geoItems.ScrollTo(v, ScrollToPosition.End, true);
         }
+
+
+
+
+
 
 
 

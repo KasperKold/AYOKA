@@ -7,6 +7,8 @@ using FallDetectionApp.Models;
 using Javax.Security.Auth;
 using Android.Util;
 using FallDetectionApp.ViewModels;
+using System.Timers;
+
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.UiLocationHandler))]
 
@@ -17,11 +19,13 @@ namespace FallDetectionApp.Droid
     {
         private readonly string TAG = "Log UiLocationHandler";
         private GeoLocation currentGeoPos;
+        private MainActivity mainActivity;
 
         public UiLocationHandler()
         {
             DependencyService.Register<IUiHandler>();
             currentGeoPos = new GeoLocation { Id = 555, Latitude = "no lat yet x", Longitude = "no long yet x", Info = "no info" };
+
         }
 
 
@@ -29,6 +33,13 @@ namespace FallDetectionApp.Droid
         {
             this.currentGeoPos = location;
         }
+
+
+        public void setMainActivity(MainActivity mainActivity)
+        {
+            this.mainActivity = mainActivity;
+        }
+
 
         public GeoLocation getCurrentGeoPos()
         {
@@ -45,6 +56,7 @@ namespace FallDetectionApp.Droid
 
             return await Task.FromResult(currentGeoPos);
         }
+
     }
 }
 

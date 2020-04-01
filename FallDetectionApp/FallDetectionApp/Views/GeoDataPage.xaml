@@ -46,6 +46,9 @@
                HorizontalOptions="CenterAndExpand" />
 
         <Button Text="Save" Clicked="SaveGeoLocationItem" />
+        <Label Text="         "   d:Text="Latitude:" />
+
+        <Button  x:Name="btnActivate" Text="{Binding btnActivateTxt}"  Command="{Binding ToggleDidYouFall}"  />
 
         <!--x:Name="geoDataListView"       Command="{Binding OpenGeoDatabase}" IsRefreshing="{Binding IsBusy, Mode=OneWay}"  CachingStrategy="RecycleElement"  RefreshCommand="{Binding RefreshListView}"
                 IsPullToRefreshEnabled="true"-->

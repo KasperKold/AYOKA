@@ -22,6 +22,7 @@ using Android.Icu.Util;
 using View = Android.Views.View;
 using FallDetectionApp.Views;
 using FallDetectionApp.ViewModels;
+using System.Security.Policy;
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
 namespace FallDetectionApp.Droid
@@ -29,23 +30,29 @@ namespace FallDetectionApp.Droid
 
 
     [Activity(Label = "FallDetectionApp", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.ScreenLayout)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity, IToggleDidYouFall
     {
         private readonly string TAG = "Log MainActivity";
         static readonly int RC_REQUEST_LOCATION_PERMISSION = 1000;
         static readonly string[] REQUIRED_PERMISSIONS = { Manifest.Permission.AccessFineLocation };
 
 
-        private int countSeconds;
-        private Timer timer;
+        //private int countSeconds;
+        //private Timer timer;
+        private Timer myTimer;
         private string savedLat;
         private string savedLong;
         private int notMovedCounter;
+        private bool readyForSession;
+        private int defaultInterval;
+        private int timerInterval;
+        private MainActivity mainActivity;
+        private IToggleDidYouFall toggle;
 
 
 
-        private string lati;
-        private string longi;
+        // private string lati;
+        // private string longi;
 
         //private string geoInfo;
         private string sessionStartDateTime;
@@ -61,36 +68,32 @@ namespace FallDetectionApp.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            //Store our interface class.
 
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
 
-            //Store our interface class.
-            iUiImplementation = DependencyService.Get<IUiHandler>() as UiLocationHandler;
+            initializeComponents();
 
-            //iUiImplementation = new UiLocationHandler();
+            iUiImplementation = new UiLocationHandler();
+            //iUiImplementation.setMainActivity(this);
+            //iUiImplementation.setTimer(getTimer());
             //iUiImplementation = DependencyService.Get<IUpdateGeo>() as UiLocationHandler;
             //Init our interface.
             //iUiImplementation.Init();
 
             LoadApplication(new App());
-            currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
+            iUiImplementation = DependencyService.Get<IUiHandler>() as UiLocationHandler;
+            toggle = DependencyService.Get<IToggleDidYouFall>();
 
-            notMovedCounter = 0;
 
 
-            /*
 
-            timer = new Timer();
-            timer.Interval = 1000;
-            timer.Elapsed += OnTimedEvent;
-            countSeconds = 20;
-            timer.Enabled = true;
-            timer.Start();
 
-            Log.Debug(TAG, "OnCreate: Timer started. ");
-            */
+
+
+
 
             // This event fires when the ServiceConnection lets the client (our App class) know that
             // the Service is connected. We use this event to start updating the UI with location
@@ -122,27 +125,75 @@ namespace FallDetectionApp.Droid
 
         }
 
-        public GeoLocation getCurrentGeoPos()
+        public void initializeComponents()
         {
-            return currentGeoPos;
+
+            defaultInterval = 5000;
+            createTimer(defaultInterval);
+            setReadyForSession(false);
+            //savedLat = " - ";
+            //savedLong = " - ";
+            currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
+            notMovedCounter = 0;
         }
 
 
-        private void OnTimedEvent(object sender, ElapsedEventArgs e)
+
+        public void toggleTimer(bool enable)
         {
-            countSeconds--;
-            if (countSeconds < 0)
-            {
-                timer.Stop();
-            }
-            else
-            {
-                this.RunOnUiThread(() =>
+            myTimer.Enabled = enable;
+        }
+
+        public void setTimerInterval(int inputInterval)
+        {
+            timerInterval = inputInterval;
+
+            // Set it to go off every n seconds 1s =10000
+            myTimer.Interval = timerInterval;
+        }
+
+        public int getTimerInterval()
+        {
+            return timerInterval;
+
+        }
+
+        public Timer getTimer()
+        {
+            return myTimer;
+
+
+        }
+
+
+        public Timer createTimer(int interval)
+        {
+            // Create a timer
+            myTimer = new Timer();
+
+            // Tell the timer what to do when it elapses
+            myTimer.Elapsed += new ElapsedEventHandler(monitorSession);
+            myTimer.Interval = interval;
+            myTimer.Enabled = false;
+            return myTimer;
+        }
+
+        // Implement a call with the right signature for events going off
+
+        /*
+                private void myEvent(object sender, ElapsedEventArgs e)
                 {
-                    Console.WriteLine("Timer: " + countSeconds.ToString() + " SECONDS");
-                });
-            }
-        }
+
+
+                    this.RunOnUiThread(() =>
+                        {
+                            Console.WriteLine("Timer: " + countSeconds.ToString() + " SECONDS");
+                        });
+
+
+
+
+                */
 
 
         protected override void OnResume()
@@ -164,6 +215,7 @@ namespace FallDetectionApp.Droid
 
             // Stop the location service:
             LocationHandler.StopLocationService();
+            //setReadyForSession(false);
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
@@ -174,16 +226,19 @@ namespace FallDetectionApp.Droid
                 {
                     Log.Debug(TAG, "User granted permission for location.");
                     LocationHandler.StartLocationService();
+
                 }
                 else
                 {
                     Log.Warn(TAG, "User did not grant permission for the location.");
+
                 }
             }
             else
             {
                 base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
                 Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
             }
 
 
@@ -211,16 +266,113 @@ namespace FallDetectionApp.Droid
             }
         }
 
-        /// <summary>
-        ///     Updates UI with location data
-        /// </summary
-        ///
-
-        //DependencyService.Get<IUpdateGeo>().updateGeo();
-        //DependencyService.Get<IGeoLocation>().GetGeoLocationAsync(currentGeoPos);
-        //await iUiImplementation.UiTriggerAsync();
 
 
+        // triggered from created loop started i HandleLocationChanged at the moment
+
+        // we wish to start this from IToggleDidYouFall at the bootom of this MainActivity from btnActivate
+        //in GeoDataPage via dependency - can´t reach the variables in Mainactivity from there atm
+
+        public void monitorSession(object sender, ElapsedEventArgs e)
+        {
+            string txtCounter1plus = "COUNTER: +1 --> : ";
+            string txtCounter1minus = "COUNTER: -1 --> : ";
+            string txtCounter = "COUNTER: ";
+            string txtStarRow = "******************************************************\n";
+            string txtNewRow = "\n";
+            string txtPrevLat = "Previous Lat: ";
+            string txtPrevLong = "Previous Long: ";
+            string txtNotMoved = "DEVICE HAS NOT MOVED FOR 25 SECONDS ! ! !\n";
+            string space16 = "                ";
+            string space11 = "          ";
+
+
+
+            DateTime dateTime = DateTime.Now.ToLocalTime();
+            //string time_string = dateTime.ToString("yyyy-MM-dd");
+
+            string date_string = dateTime.Date.ToString(); // just date
+            var tempGeoPos = getCurrentGeoPos();
+
+            // Log.Debug(TAG, "Foreground updating");
+
+            // these events are on a background thread, need to update on the UI thread
+            RunOnUiThread(async () =>
+            {
+
+                if (notMovedCounter == 0)
+                {
+
+                    savedLat = tempGeoPos.Latitude;
+                    savedLong = tempGeoPos.Longitude;
+                    notMovedCounter++;
+
+                    Console.WriteLine(txtNewRow + txtCounter1plus + notMovedCounter);
+
+                    //assigns info
+                    tempGeoPos.Info =
+                        txtPrevLat + space16 + txtPrevLong + txtNewRow +
+                        savedLat + space16 + space11 + savedLong + txtNewRow +
+                        txtCounter1plus + notMovedCounter;
+
+
+
+                }
+                else if (notMovedCounter >= 4)
+                {
+                    savedLat = tempGeoPos.Latitude;
+                    savedLong = tempGeoPos.Longitude;
+
+                    Console.WriteLine(txtNewRow + txtStarRow);
+                    Console.WriteLine(txtCounter + notMovedCounter);
+                    Console.WriteLine(txtNotMoved);
+                    Console.WriteLine(txtStarRow + txtNewRow);
+
+                    currentGeoPos.Info =
+                    txtStarRow + txtNotMoved + txtStarRow +
+                    txtPrevLat + space16 + txtPrevLong + txtNewRow +
+                    savedLat + space16 + space11 + savedLong + txtNewRow +
+                    txtCounter + notMovedCounter;
+
+                    notMovedCounter = 0;
+
+                }
+                else
+                {
+
+                    // if both lat and long are equal to the previous lat and long - device has not moved
+
+                    if (tempGeoPos.Latitude.Equals(savedLat) && tempGeoPos.Longitude.Equals(savedLong))
+                    {
+                        savedLat = tempGeoPos.Latitude;
+                        savedLong = tempGeoPos.Longitude;
+                        notMovedCounter++;
+
+                        Console.WriteLine(txtNewRow + txtCounter1plus + notMovedCounter + txtNewRow);
+
+                        currentGeoPos.Info =
+                        txtPrevLat + space16 + txtPrevLong + txtNewRow +
+                        savedLat + space16 + space11 + savedLong + txtNewRow +
+                        txtCounter1plus + notMovedCounter;
+
+                    }
+                    else
+                    {
+                        notMovedCounter--;
+
+                        Console.WriteLine(txtNewRow + txtCounter1minus + notMovedCounter);
+
+                        tempGeoPos.Info =
+                        txtPrevLat + space16 + txtPrevLong + txtNewRow +
+                        savedLat + space16 + space11 + savedLong + txtNewRow +
+                        txtCounter1minus + notMovedCounter;
+                    }
+                }
+                saveToDb(tempGeoPos);
+                iUiImplementation.setCurrentGeoPos(tempGeoPos);
+
+            });
+        }
 
 
 
@@ -239,119 +391,34 @@ namespace FallDetectionApp.Droid
             currentGeoPos.TimeDate = dateTime;
         }
 
+        public GeoLocation getCurrentGeoPos()
+        {
+            return currentGeoPos;
+        }
+
+        public void setReadyForSession(bool enabled)
+        {
+            readyForSession = enabled;
+
+        }
+        public bool getReadyForSession()
+        {
+            return readyForSession;
+
+        }
+
 
         public void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
-            string txtCounter1plus = "COUNTER: +1 --> : ";
-            string txtCounter1minus = "COUNTER: -1 --> : ";
-            string txtCounter = "COUNTER: ";
-            string txtStarRow = "******************************************************\n";
-            string txtNewRow = "\n";
-            string txtPrevLat = "Previous Lat: ";
-            string txtPrevLong = "Previous Long: ";
-            string txtNotMoved = "DEVICE HAS NOT MOVED FOR 25 SECONDS ! ! !\n";
-            string space16 = "                ";
-            string space11 = "          ";
-
-
+            var location = e.Location;
+            string lati = $"{location.Latitude}".Substring(0, 7);
+            string longi = $"{location.Longitude}".Substring(0, 7);
 
             DateTime dateTime = DateTime.Now.ToLocalTime();
-            //string time_string = dateTime.ToString("yyyy-MM-dd");
-            string date_string = dateTime.Date.ToString(); // just date
+            setGeoInstance(lati, longi, dateTime.ToString());
+            setReadyForSession(true);
+            myTimer.Start();
 
-            var location = e.Location;
-            // Log.Debug(TAG, "Foreground updating");
-
-            // these events are on a background thread, need to update on the UI thread
-            RunOnUiThread(async () =>
-            {
-                if (sessionStartDateTime == "")
-                {
-                    sessionStartDateTime = "Session: " + date_string;
-                }
-
-                lati = $"{location.Latitude}".Substring(0, 7);
-                longi = $"{location.Longitude}".Substring(0, 7);
-
-
-                //assigns location to instance of GeoLocation
-                setGeoInstance(lati, longi, dateTime.ToString());
-
-                if (notMovedCounter == 0)
-                {
-                    savedLat = lati;
-                    savedLong = longi;
-                    notMovedCounter++;
-
-                    Console.WriteLine(txtNewRow + txtCounter1plus + notMovedCounter);
-
-                    //assigns info
-                    currentGeoPos.Info =
-                    txtPrevLat + space16 + txtPrevLong + txtNewRow +
-                    savedLat + space16 + space11 + savedLong + txtNewRow +
-                    txtCounter1plus + notMovedCounter;
-
-                    //sends Geolcation to separate class
-                    iUiImplementation.setCurrentGeoPos(currentGeoPos);
-                    saveToDb(currentGeoPos);
-                }
-                else if (notMovedCounter >= 4)
-                {
-                    savedLat = lati;
-                    savedLong = longi;
-
-                    Console.WriteLine(txtNewRow + txtStarRow);
-                    Console.WriteLine(txtCounter + notMovedCounter);
-                    Console.WriteLine(txtNotMoved);
-                    Console.WriteLine(txtStarRow + txtNewRow);
-
-                    currentGeoPos.Info =
-                    txtStarRow + txtNotMoved + txtStarRow +
-                    txtPrevLat + space16 + txtPrevLong + txtNewRow +
-                    savedLat + space16 + space11 + savedLong + txtNewRow +
-                    txtCounter + notMovedCounter;
-
-                    iUiImplementation.setCurrentGeoPos(currentGeoPos);
-                    saveToDb(currentGeoPos);
-                    notMovedCounter = 0;
-
-                }
-                else
-
-                // if both lat and long are equal to the previous lat and long - device has not moved
-                {
-                    if (lati.Equals(savedLat) && longi.Equals(savedLong))
-                    {
-                        savedLat = lati;
-                        savedLong = longi;
-                        notMovedCounter++;
-
-                        Console.WriteLine(txtNewRow + txtCounter1plus + notMovedCounter + txtNewRow);
-
-                        currentGeoPos.Info =
-                        txtPrevLat + space16 + txtPrevLong + txtNewRow +
-                        savedLat + space16 + space11 + savedLong + txtNewRow +
-                        txtCounter1plus + notMovedCounter;
-
-                        iUiImplementation.setCurrentGeoPos(currentGeoPos);
-                        saveToDb(currentGeoPos);
-                    }
-                    else
-                    {
-                        notMovedCounter--;
-
-                        Console.WriteLine(txtNewRow + txtCounter1minus + notMovedCounter);
-
-                        currentGeoPos.Info =
-                        txtPrevLat + space16 + txtPrevLong + txtNewRow +
-                        savedLat + space16 + space11 + savedLong + txtNewRow +
-                        txtCounter1minus + notMovedCounter;
-
-                        iUiImplementation.setCurrentGeoPos(currentGeoPos);
-                        saveToDb(currentGeoPos);
-                    }
-                }
-            });
         }
 
         public void HandleProviderDisabled(object sender, ProviderDisabledEventArgs e)
@@ -369,6 +436,48 @@ namespace FallDetectionApp.Droid
             Log.Debug(TAG, "Location status changed, event raised");
         }
 
+
+
+
+
+
+        async Task<bool> IToggleDidYouFall.ToggleDidYouFallMainActivity()
+
+        {
+
+            bool enable = false;
+
+            if (enable)
+            {
+                enable = false;
+            }
+            else
+            {
+                enable = true;
+
+            }
+            /*
+            if (myTimer == null)
+            {
+                this.myTimer = createTimer(5000);
+                myTimer.Start();
+
+            }
+            else if (myTimer != null && myTimer.Enabled)
+
+            {
+                //createTimer(defaultInterval);
+                myTimer.Stop();
+            }
+            else
+            {
+
+                myTimer.Start();
+            }
+            */
+
+            return await Task.FromResult(enable);
+        }
     }
 
 }

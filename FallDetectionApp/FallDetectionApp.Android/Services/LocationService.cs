@@ -121,7 +121,7 @@ namespace FallDetectionApp.Droid.Services
             Log.Debug(logTag, string.Format("You are about to get location updates via {0}", locationProvider));
 
             // Get an initial fix on location
-            LocMgr.RequestLocationUpdates(locationProvider, 5000, 0, this);
+            LocMgr.RequestLocationUpdates(locationProvider, 2000, 0, this);
 
             Log.Debug(logTag, "Now sending location updates");
         }

@@ -93,7 +93,6 @@ namespace FallDetectionApp.ViewModels
             }
         }
 
-
         private string privateCurrentTimeDate;
         public string CurrentTimeDate
         {
@@ -105,11 +104,6 @@ namespace FallDetectionApp.ViewModels
 
             }
         }
-
-
-
-
-
 
 
         bool isBusy = false;
@@ -139,8 +133,6 @@ namespace FallDetectionApp.ViewModels
             return true;
         }
 
-
-
         public async Task<bool> GetGeoLocationAsync()
         {
             //Console.WriteLine("Inside GetGeoLocationAsync" + "\n");
@@ -153,7 +145,6 @@ namespace FallDetectionApp.ViewModels
             {
                 //GeoLocation geoLoca = new GeoLocation { Id = Guid.NewGuid().ToString(), Latitude = location.Latitude.ToString(), Longitude = location.Longitude.ToString() };
 
-
                 CurrentLatitude = location.Latitude;
                 CurrentLongitude = location.Longitude;
                 GeoInfo = location.Info;
@@ -161,15 +152,9 @@ namespace FallDetectionApp.ViewModels
             }
 
             //Altitude: {location.Altitude}"
-            //Console.WriteLine("\nFrom Dependencyservice GetGeoLocationAsync");
-            //Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}");
-            //Console.WriteLine($"Latitude from var: " + CurrentLatitude + " Longitude from var: " + CurrentLongitude);
-            //Console.WriteLine("\n");
 
             return await Task.FromResult(true);
         }
-
-
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -183,7 +168,5 @@ namespace FallDetectionApp.ViewModels
         }
 
         #endregion
-
-
     }
 }

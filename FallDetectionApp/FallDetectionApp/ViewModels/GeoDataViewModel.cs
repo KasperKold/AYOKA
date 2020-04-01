@@ -8,13 +8,19 @@ using Xamarin.Forms;
 using FallDetectionApp.Models;
 using FallDetectionApp.Views;
 using System.Windows.Input;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Collections.Generic;
+using FallDetectionApp.Services;
 
 namespace FallDetectionApp.ViewModels
 {
-    public class GeoDataViewModel : BaseViewModel
+    public class GeoDataViewModel : BaseViewModel, INotifyPropertyChanged
     {
         public ObservableCollection<GeoLocation> GeoItems { get; set; }
         public Command LoadItemsCommand { get; set; }
+
+
 
         public GeoDataViewModel()
         {
@@ -22,8 +28,11 @@ namespace FallDetectionApp.ViewModels
             //Title = "Browse";
             GeoItems = new ObservableCollection<GeoLocation>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
+            ToggleDidYouFall = new Command(async () => await toggleDidYouFall());
+            btnActivateTxt = "Activate";
         }
+
+        public ICommand ToggleDidYouFall { get; }
 
         async Task ExecuteLoadItemsCommand()
         {
@@ -50,5 +59,61 @@ namespace FallDetectionApp.ViewModels
                 IsBusy = false;
             }
         }
+
+        public async Task toggleDidYouFall()
+        {
+
+
+            bool toggleBtn = await DependencyService.Get<IToggleDidYouFall>().ToggleDidYouFallMainActivity();
+
+            if (toggleBtn) { btnActivateTxt = "Activate"; }
+            else { btnActivateTxt = "DEACTIVATE"; }
+
+
+            //await Navigation.PopAsync();
+
+        }
+
+
+
+
+        private string privateBtnActivateTxt;
+        public string btnActivateTxt
+        {
+            get { return privateBtnActivateTxt; }
+            set
+            {
+                privateBtnActivateTxt = value;
+                OnPropertyChanged(nameof(btnActivateTxt)); // Notify that there was a change on this property
+
+            }
+        }
+
+
+        protected bool SetProperty<T>(ref T backingStore, T value,
+          [CallerMemberName]string propertyName = "",
+          Action onChanged = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+                return false;
+
+            backingStore = value;
+            onChanged?.Invoke();
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            var changed = PropertyChanged;
+            if (changed == null)
+                return;
+
+            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
     }
 }
