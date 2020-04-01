@@ -46,9 +46,8 @@ namespace FallDetectionApp.Droid
         private bool readyForSession;
         private int defaultInterval;
         private int timerInterval;
-        private MainActivity mainActivity;
         private IToggleDidYouFall toggle;
-        private bool isActivated;
+        private bool inSession;
 
 
 
@@ -76,18 +75,20 @@ namespace FallDetectionApp.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
 
-            initializeComponents();
+
 
             iUiImplementation = new UiLocationHandler();
-            //iUiImplementation.setMainActivity(this);
+            iUiImplementation.setMainActivity(this);
+            toggle = DependencyService.Get<IToggleDidYouFall>();
+            initializeComponents();
             //iUiImplementation.setTimer(getTimer());
-            //iUiImplementation = DependencyService.Get<IUpdateGeo>() as UiLocationHandler;
+
             //Init our interface.
             //iUiImplementation.Init();
 
             LoadApplication(new App());
             iUiImplementation = DependencyService.Get<IUiHandler>() as UiLocationHandler;
-            toggle = DependencyService.Get<IToggleDidYouFall>();
+
 
 
 
@@ -132,9 +133,10 @@ namespace FallDetectionApp.Droid
 
             defaultInterval = 5000;
             createTimer(defaultInterval);
-            setReadyForSession(false);
-            savedLat = "";
-            savedLong = "";
+            setReadyForSession(true);
+            inSession = false;
+            //savedLat = "";
+            //savedLong = "";
             currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
             notMovedCounter = 0;
         }
@@ -150,6 +152,7 @@ namespace FallDetectionApp.Droid
         public void StopTimer()
         {
             myTimer.Stop();
+            myTimer.Dispose();
         }
 
 
@@ -178,25 +181,8 @@ namespace FallDetectionApp.Droid
             myTimer.Interval = interval;
             myTimer.Enabled = false;
 
-
         }
 
-        // Implement a call with the right signature for events going off
-
-        /*
-                private void myEvent(object sender, ElapsedEventArgs e)
-                {
-
-
-                    this.RunOnUiThread(() =>
-                        {
-                            Console.WriteLine("Timer: " + countSeconds.ToString() + " SECONDS");
-                        });
-
-
-
-
-                */
 
 
         protected override void OnResume()
@@ -218,7 +204,7 @@ namespace FallDetectionApp.Droid
 
             // Stop the location service:
             LocationHandler.StopLocationService();
-            //setReadyForSession(false);
+
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
@@ -271,10 +257,10 @@ namespace FallDetectionApp.Droid
 
 
 
-        // triggered from created loop started i HandleLocationChanged at the moment
+        // triggered from created loop started in HandleLocationChanged atm
 
-        // we wish to start this from IToggleDidYouFallMainActivity at the bottom of this MainActivity from btnActivate
-        //in GeoDataViewModel via dependency - can´t reach the variables in Mainactivity from there atm
+        // we wish to start this from IToggleDidYouFallMainActivity at the bottom of this MainActivity 
+        // via dependency - can´t change the variables readyForSession Mainactivity from there atm
 
         public void monitorSession(object sender, ElapsedEventArgs e)
         {
@@ -303,15 +289,10 @@ namespace FallDetectionApp.Droid
             RunOnUiThread(async () =>
             {
                 this.tempGeoPos = getCurrentGeoPos();
-                savedLat = "";
-                savedLong = "";
+
 
                 if (notMovedCounter == 0)
                 {
-
-                    savedLat = "";
-                    savedLong = "";
-
                     savedLat = tempGeoPos.Latitude;
                     savedLong = tempGeoPos.Longitude;
                     notMovedCounter++;
@@ -406,12 +387,15 @@ namespace FallDetectionApp.Droid
 
         public void setReadyForSession(bool enabled)
         {
-            readyForSession = enabled;
+            Console.WriteLine("ENABLED = " + enabled);
+            Console.WriteLine("IN SET READY FOR SESSION");
+            this.readyForSession = enabled;
+            Console.WriteLine("READY 4:::: = " + this.readyForSession + " AND " + getReadyForSession());
 
         }
         public bool getReadyForSession()
         {
-            return readyForSession;
+            return this.readyForSession;
 
         }
 
@@ -424,10 +408,29 @@ namespace FallDetectionApp.Droid
 
             DateTime dateTime = DateTime.Now.ToLocalTime();
             setGeoInstance(lati, longi, dateTime.ToString());
-            setReadyForSession(true);
-            //myTimer.Start();
+            Console.WriteLine("4 SESSIONNNN = " + this.getReadyForSession());
+
+
+            if (getReadyForSession())
+            {
+                Console.WriteLine("READYYYYY");
+                if (!inSession)
+                {
+                    Console.WriteLine("STAAARTING");
+                    inSession = true;
+                    myTimer.Start();
+                }
+            }
+            else
+            {
+                Console.WriteLine("STOOOOOPING");
+                myTimer.Stop();
+                myTimer.Dispose();
+                inSession = false;
+            }
 
         }
+
 
         public void HandleProviderDisabled(object sender, ProviderDisabledEventArgs e)
         {
@@ -456,22 +459,23 @@ namespace FallDetectionApp.Droid
 
             if (isActivated)
             {
-                createTimer(5000);
-                StartTimer();
+                Console.WriteLine("IS ACTIVATED");
+                //createTimer(5000);
+                //StartTimer();
+                setReadyForSession(true);
                 on = false;
 
             }
             else if (!isActivated)
             {
-                StopTimer();
+                Console.WriteLine("IS NOT ACTIVATED");
+                //StopTimer();
+                setReadyForSession(false);
                 on = true;
-
-
-
-
             }
             return on;
         }
+
     }
 
 }

@@ -11,8 +11,6 @@ using System.Timers;
 
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.UiLocationHandler))]
-
-
 namespace FallDetectionApp.Droid
 {
     public class UiLocationHandler : HomeViewModel, IUiHandler
@@ -24,6 +22,7 @@ namespace FallDetectionApp.Droid
         public UiLocationHandler()
         {
             DependencyService.Register<IUiHandler>();
+            // DependencyService.Register<IToggleDidYouFall>();
             currentGeoPos = new GeoLocation { Id = 555, Latitude = "no lat yet x", Longitude = "no long yet x", Info = "no info" };
 
         }
@@ -39,6 +38,18 @@ namespace FallDetectionApp.Droid
         {
             this.mainActivity = mainActivity;
         }
+
+        public MainActivity getMainActivity()
+        {
+            return this.mainActivity;
+        }
+
+        /*
+        public void sendToMainActivity(bool ready)
+        {
+            this.mainActivity.setReadyForSession(ready);
+        }
+        */
 
 
         public GeoLocation getCurrentGeoPos()
@@ -56,7 +67,28 @@ namespace FallDetectionApp.Droid
 
             return await Task.FromResult(currentGeoPos);
         }
+        /*
+        bool IToggleDidYouFall.ToggleDidYouFallMainActivity(bool isActivated)
 
+        {
+            var on = false;
+
+            if (isActivated)
+            {
+                //createTimer(5000);
+                //StartTimer();
+                sendToMainActivity(true);
+                on = false;
+
+            }
+            else if (!isActivated)
+            {
+                //StopTimer();
+                sendToMainActivity(true);
+                on = true;
+            }
+            return on;
+        }*/
     }
 }
 

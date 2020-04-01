@@ -12,7 +12,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using FallDetectionApp.Services;
-
+//[assembly: Xamarin.Forms.Dependency(typeof(FallDetectionApp.ViewModels.GeoDataViewModel))]
 namespace FallDetectionApp.ViewModels
 {
     public class GeoDataViewModel : BaseViewModel, INotifyPropertyChanged

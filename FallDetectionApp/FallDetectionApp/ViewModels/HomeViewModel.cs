@@ -9,7 +9,8 @@ using System.Runtime.CompilerServices;
 using System.ComponentModel;
 using System.Collections.Generic;
 using FallDetectionApp.Views;
-// [assembly: Dependency(typeof(FallDetectionApp.Droid.HomeViewModel))]
+
+//[assembly: Xamarin.Forms.Dependency(typeof(FallDetectionApp.ViewModels.HomeViewModel))]
 namespace FallDetectionApp.ViewModels
 {
     public class HomeViewModel : INotifyPropertyChanged, IGeoLocation
