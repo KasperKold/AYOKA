@@ -48,6 +48,7 @@ namespace FallDetectionApp.Droid
         private int timerInterval;
         private MainActivity mainActivity;
         private IToggleDidYouFall toggle;
+        private bool isActivated;
 
 
 
@@ -59,6 +60,7 @@ namespace FallDetectionApp.Droid
 
 
         private GeoLocation currentGeoPos;
+        private GeoLocation tempGeoPos;
         private UiLocationHandler iUiImplementation;
 
 
@@ -131,18 +133,25 @@ namespace FallDetectionApp.Droid
             defaultInterval = 5000;
             createTimer(defaultInterval);
             setReadyForSession(false);
-            //savedLat = " - ";
-            //savedLong = " - ";
+            savedLat = "";
+            savedLong = "";
             currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
             notMovedCounter = 0;
         }
 
 
 
-        public void toggleTimer(bool enable)
+
+        public void StartTimer()
         {
-            myTimer.Enabled = enable;
+            myTimer.Start();
         }
+
+        public void StopTimer()
+        {
+            myTimer.Stop();
+        }
+
 
         public void setTimerInterval(int inputInterval)
         {
@@ -158,15 +167,8 @@ namespace FallDetectionApp.Droid
 
         }
 
-        public Timer getTimer()
-        {
-            return myTimer;
 
-
-        }
-
-
-        public Timer createTimer(int interval)
+        public void createTimer(int interval)
         {
             // Create a timer
             myTimer = new Timer();
@@ -175,7 +177,8 @@ namespace FallDetectionApp.Droid
             myTimer.Elapsed += new ElapsedEventHandler(monitorSession);
             myTimer.Interval = interval;
             myTimer.Enabled = false;
-            return myTimer;
+
+
         }
 
         // Implement a call with the right signature for events going off
@@ -270,8 +273,8 @@ namespace FallDetectionApp.Droid
 
         // triggered from created loop started i HandleLocationChanged at the moment
 
-        // we wish to start this from IToggleDidYouFall at the bootom of this MainActivity from btnActivate
-        //in GeoDataPage via dependency - can´t reach the variables in Mainactivity from there atm
+        // we wish to start this from IToggleDidYouFallMainActivity at the bottom of this MainActivity from btnActivate
+        //in GeoDataViewModel via dependency - can´t reach the variables in Mainactivity from there atm
 
         public void monitorSession(object sender, ElapsedEventArgs e)
         {
@@ -292,16 +295,22 @@ namespace FallDetectionApp.Droid
             //string time_string = dateTime.ToString("yyyy-MM-dd");
 
             string date_string = dateTime.Date.ToString(); // just date
-            var tempGeoPos = getCurrentGeoPos();
+
 
             // Log.Debug(TAG, "Foreground updating");
 
             // these events are on a background thread, need to update on the UI thread
             RunOnUiThread(async () =>
             {
+                this.tempGeoPos = getCurrentGeoPos();
+                savedLat = "";
+                savedLong = "";
 
                 if (notMovedCounter == 0)
                 {
+
+                    savedLat = "";
+                    savedLong = "";
 
                     savedLat = tempGeoPos.Latitude;
                     savedLong = tempGeoPos.Longitude;
@@ -379,7 +388,6 @@ namespace FallDetectionApp.Droid
         public void saveToDb(GeoLocation currentGeo)
         {
             Console.WriteLine("SAVE to DB " + "\n");
-
             App.Database.SaveGeoLocationItemAsync(currentGeo);
         }
 
@@ -417,7 +425,7 @@ namespace FallDetectionApp.Droid
             DateTime dateTime = DateTime.Now.ToLocalTime();
             setGeoInstance(lati, longi, dateTime.ToString());
             setReadyForSession(true);
-            myTimer.Start();
+            //myTimer.Start();
 
         }
 
@@ -441,42 +449,28 @@ namespace FallDetectionApp.Droid
 
 
 
-        async Task<bool> IToggleDidYouFall.ToggleDidYouFallMainActivity()
+        bool IToggleDidYouFall.ToggleDidYouFallMainActivity(bool isActivated)
 
         {
+            var on = false;
 
-            bool enable = false;
-
-            if (enable)
+            if (isActivated)
             {
-                enable = false;
-            }
-            else
-            {
-                enable = true;
+                createTimer(5000);
+                StartTimer();
+                on = false;
 
             }
-            /*
-            if (myTimer == null)
+            else if (!isActivated)
             {
-                this.myTimer = createTimer(5000);
-                myTimer.Start();
+                StopTimer();
+                on = true;
+
+
+
 
             }
-            else if (myTimer != null && myTimer.Enabled)
-
-            {
-                //createTimer(defaultInterval);
-                myTimer.Stop();
-            }
-            else
-            {
-
-                myTimer.Start();
-            }
-            */
-
-            return await Task.FromResult(enable);
+            return on;
         }
     }
 

@@ -19,6 +19,7 @@ namespace FallDetectionApp.ViewModels
     {
         public ObservableCollection<GeoLocation> GeoItems { get; set; }
         public Command LoadItemsCommand { get; set; }
+        private bool isActivated;
 
 
 
@@ -28,8 +29,9 @@ namespace FallDetectionApp.ViewModels
             //Title = "Browse";
             GeoItems = new ObservableCollection<GeoLocation>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-            ToggleDidYouFall = new Command(async () => await toggleDidYouFall());
+            ToggleDidYouFall = new Command(async () => toggleDidYouFall());
             btnActivateTxt = "Activate";
+            isActivated = false;
         }
 
         public ICommand ToggleDidYouFall { get; }
@@ -60,14 +62,23 @@ namespace FallDetectionApp.ViewModels
             }
         }
 
-        public async Task toggleDidYouFall()
+        public async void toggleDidYouFall()
         {
+            if (isActivated)
+            {
+                isActivated = false;
+            }
+            else
+            {
+                isActivated = true;
+            }
 
-
-            bool toggleBtn = await DependencyService.Get<IToggleDidYouFall>().ToggleDidYouFallMainActivity();
+            bool toggleBtn = DependencyService.Get<IToggleDidYouFall>().ToggleDidYouFallMainActivity(isActivated);
 
             if (toggleBtn) { btnActivateTxt = "Activate"; }
             else { btnActivateTxt = "DEACTIVATE"; }
+
+
 
 
             //await Navigation.PopAsync();
