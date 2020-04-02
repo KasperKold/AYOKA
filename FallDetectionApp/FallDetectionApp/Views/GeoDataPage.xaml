@@ -57,11 +57,10 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Margin="20,0,0,0" Orientation="Vertical" >
-                            <Label Text="{Binding Id}" VerticalTextAlignment="Center"  TextColor="{StaticResource Primary}" FontSize="Medium" FontAttributes= "Bold" HorizontalOptions="StartAndExpand" />
+                            <Label Text="{Binding Id}" VerticalTextAlignment="Center" TextColor="{StaticResource Primary}" FontSize="Medium" FontAttributes= "Bold" HorizontalOptions="StartAndExpand" />
                             <StackLayout  Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                                <Label Text="{Binding Latitude} "  FontSize="Medium" FontAttributes= "Bold" d:Text="Latitude:" />
-                                <Label Text="         "  FontSize="Medium" FontAttributes= "Bold" d:Text="Latitude:" />
-                                <Label Text="{Binding Longitude}"  FontSize="Medium" FontAttributes= "Bold" d:Text="Longitude:" />
+                                <Label Margin="0,0,65,0" Text="{Binding Latitude}" FontSize="Medium" FontAttributes= "Bold" d:Text="Latitude:" />
+                                <Label Text="{Binding Longitude}" FontSize="Medium" FontAttributes= "Bold" d:Text="Longitude:" />
                             </StackLayout>
                             <Label Text="{Binding Info}" d:Text="GeoInfo" />
                             <Label Text="{Binding TimeDate}" d:Text="GeoTimeDate" />
