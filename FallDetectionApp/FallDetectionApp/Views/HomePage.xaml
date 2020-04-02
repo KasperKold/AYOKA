@@ -25,9 +25,9 @@
     <StackLayout>
 
 
-        <Label Text="Fall App" FontSize="Header" TextColor="{StaticResource Primary}" VerticalOptions="Start" HorizontalOptions="Center" />
+        <Label Text="Did You Fall App" FontSize="Header" TextColor="{StaticResource Primary}" VerticalOptions="Start" HorizontalOptions="Center" />
 
-        <Button Margin="0,10,0,0" Text="Save MockGeo to Db" x:Name="btnActivate" HorizontalOptions="Fill" VerticalOptions="Fill"
+        <Button Margin="0,10,0,0" Text="Save Mock Geo in Db" x:Name="btnActivate" HorizontalOptions="Fill" VerticalOptions="Fill"
                         Clicked="OnActivateBtnClicked"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
