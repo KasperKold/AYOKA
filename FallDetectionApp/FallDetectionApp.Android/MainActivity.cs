@@ -43,7 +43,7 @@ namespace FallDetectionApp.Droid
         private string savedLat;
         private string savedLong;
         private int notMovedCounter;
-        private bool readyForSession;
+        public bool readyForSession;
         private int defaultInterval;
         private int timerInterval;
         private IToggleDidYouFall toggle;
@@ -79,7 +79,8 @@ namespace FallDetectionApp.Droid
 
             iUiImplementation = new UiLocationHandler();
             iUiImplementation.setMainActivity(this);
-            toggle = DependencyService.Get<IToggleDidYouFall>();
+            //toggle = DependencyService.Get<IToggleDidYouFall>();
+
             initializeComponents();
             //iUiImplementation.setTimer(getTimer());
 
@@ -133,7 +134,7 @@ namespace FallDetectionApp.Droid
 
             defaultInterval = 5000;
             createTimer(defaultInterval);
-            setReadyForSession(true);
+            setReadyForSession(false);
             inSession = false;
             //savedLat = "";
             //savedLong = "";
@@ -411,7 +412,7 @@ namespace FallDetectionApp.Droid
             Console.WriteLine("4 SESSIONNNN = " + this.getReadyForSession());
 
 
-            if (getReadyForSession())
+            if (this.getReadyForSession())
             {
                 Console.WriteLine("READYYYYY");
                 if (!inSession)
@@ -463,6 +464,8 @@ namespace FallDetectionApp.Droid
                 //createTimer(5000);
                 //StartTimer();
                 setReadyForSession(true);
+                //readyForSession = true;
+
                 on = false;
 
             }
@@ -470,6 +473,7 @@ namespace FallDetectionApp.Droid
             {
                 Console.WriteLine("IS NOT ACTIVATED");
                 //StopTimer();
+                //readyForSession = true;
                 setReadyForSession(false);
                 on = true;
             }
