@@ -382,7 +382,7 @@ namespace FallDetectionApp.Droid
 
             DateTime dateTime = DateTime.Now.ToLocalTime();
             setGeoInstance(lati, longi, dateTime.ToString());
-
+            MessagingCenter.Send<Object>(this, "GeoMonitorReady");
 
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Activate", (sender) =>
             {
