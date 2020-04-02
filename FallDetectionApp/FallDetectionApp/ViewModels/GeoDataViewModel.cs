@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using FallDetectionApp.Services;
+
 [assembly: Xamarin.Forms.Dependency(typeof(FallDetectionApp.ViewModels.GeoDataViewModel))]
 namespace FallDetectionApp.ViewModels
 {
@@ -64,24 +65,20 @@ namespace FallDetectionApp.ViewModels
 
         public async void toggleDidYouFall()
         {
+
+
             if (isActivated)
             {
+                btnActivateTxt = "DEACTIVATE";
                 isActivated = false;
+                MessagingCenter.Send<GeoDataViewModel>(this, "Activate");
             }
             else
             {
+                btnActivateTxt = "Activate";
                 isActivated = true;
+                MessagingCenter.Send<GeoDataViewModel>(this, "Deactivate");
             }
-
-            bool toggleBtn = DependencyService.Get<IToggleDidYouFall>().ToggleDidYouFallMainActivity(isActivated);
-
-            if (toggleBtn) { btnActivateTxt = "Activate"; }
-            else { btnActivateTxt = "DEACTIVATE"; }
-
-
-
-
-            //await Navigation.PopAsync();
 
         }
 
@@ -126,5 +123,9 @@ namespace FallDetectionApp.ViewModels
         }
 
         #endregion
+
+
     }
+
+
 }
