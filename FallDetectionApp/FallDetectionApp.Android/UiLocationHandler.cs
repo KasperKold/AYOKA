@@ -9,6 +9,8 @@ using Android.Util;
 using FallDetectionApp.ViewModels;
 using System.Timers;
 
+// only used to see geo on homepage and firts try to save to db
+// will be deleted later
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.UiLocationHandler))]
 namespace FallDetectionApp.Droid
@@ -44,13 +46,6 @@ namespace FallDetectionApp.Droid
             return this.mainActivity;
         }
 
-        /*
-        public void sendToMainActivity(bool ready)
-        {
-            this.mainActivity.setReadyForSession(ready);
-        }
-        */
-
 
         public GeoLocation getCurrentGeoPos()
         {
@@ -67,28 +62,7 @@ namespace FallDetectionApp.Droid
 
             return await Task.FromResult(currentGeoPos);
         }
-        /*
-        bool IToggleDidYouFall.ToggleDidYouFallMainActivity(bool isActivated)
 
-        {
-            var on = false;
-
-            if (isActivated)
-            {
-                //createTimer(5000);
-                //StartTimer();
-                sendToMainActivity(true);
-                on = false;
-
-            }
-            else if (!isActivated)
-            {
-                //StopTimer();
-                sendToMainActivity(true);
-                on = true;
-            }
-            return on;
-        }*/
     }
 }
 

@@ -130,7 +130,7 @@ namespace FallDetectionApp.Droid
         }
 
 
-
+        // not used atm
         public void setTimerInterval(int inputInterval)
         {
             timerInterval = inputInterval;
@@ -139,6 +139,7 @@ namespace FallDetectionApp.Droid
             myTimer.Interval = timerInterval;
         }
 
+        // not used atm
         public int getTimerInterval()
         {
             return timerInterval;
@@ -232,7 +233,7 @@ namespace FallDetectionApp.Droid
 
 
 
-        // triggered fromprecreated Timer started in HandleLocationChanged atm
+        // triggered from precreated Timer started in HandleLocationChanged atm
 
 
 
@@ -278,8 +279,6 @@ namespace FallDetectionApp.Droid
                         txtPrevLat + space16 + txtPrevLong + txtNewRow +
                         savedLat + space16 + space11 + savedLong + txtNewRow +
                         txtCounter1plus + notMovedCounter;
-
-
 
                 }
                 else if (notMovedCounter >= 4)
@@ -359,20 +358,6 @@ namespace FallDetectionApp.Droid
             return currentGeoPos;
         }
 
-        public void setReadyForSession(bool enabled)
-        {
-            Console.WriteLine("ENABLED = " + enabled);
-            Console.WriteLine("IN SET READY FOR SESSION");
-            this.readyForSession = enabled;
-            Console.WriteLine("READY 4:::: = " + this.readyForSession + " AND " + getReadyForSession());
-
-        }
-        public bool getReadyForSession()
-        {
-            return this.readyForSession;
-
-        }
-
 
         public void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
@@ -382,27 +367,26 @@ namespace FallDetectionApp.Droid
 
             DateTime dateTime = DateTime.Now.ToLocalTime();
             setGeoInstance(lati, longi, dateTime.ToString());
+
+            // Send message - ready to monitor
             MessagingCenter.Send<Object>(this, "GeoMonitorReady");
 
+            // btnActivate
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Activate", (sender) =>
             {
 
-                Console.WriteLine("STAAARTING");
+                Console.WriteLine("STARTING Monitor");
                 inSession = true;
-                // myTimer.Enabled = true;
                 myTimer.Start();
             });
 
+            // btnActivate
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Deactivate", (sender) =>
             {
-                Console.WriteLine("STOOOOOPING");
+                Console.WriteLine("STOPPING Monitor");
                 myTimer.Stop();
-                // myTimer.Enabled = false;
                 inSession = false;
             });
-
-
-
         }
 
 
