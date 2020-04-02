@@ -25,6 +25,7 @@ namespace FallDetectionApp.Views
 
             BindingContext = new GeoDataViewModel();
 
+
         }
 
         protected override async void OnAppearing()
@@ -45,6 +46,8 @@ namespace FallDetectionApp.Views
             });
         }
 
+
+
         async void OnListItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             /*
@@ -57,7 +60,7 @@ namespace FallDetectionApp.Views
             }
             */
         }
-
+        /*
         async void SaveGeoLocationItem(object sender, EventArgs e)
         {
             var testGeo = new GeoLocation();
@@ -68,6 +71,7 @@ namespace FallDetectionApp.Views
             await App.Database.SaveGeoLocationItemAsync(testGeo);
             //await Navigation.PopAsync();
         }
+        */
 
         async void UpdateDataListView(object sender, EventArgs e)
         {

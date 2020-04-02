@@ -7,7 +7,7 @@ namespace FallDetectionApp.Services
 {
     public interface IToggleDidYouFall
     {
-        bool ToggleDidYouFallMainActivity(bool isActivated);
+        bool ToggleDidYouFallMainActivity();
 
     }
 }

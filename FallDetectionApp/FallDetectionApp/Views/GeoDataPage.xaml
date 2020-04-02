@@ -44,11 +44,11 @@
                TextColor="{StaticResource Primary}"
                VerticalOptions="CenterAndExpand" 
                HorizontalOptions="CenterAndExpand" />
-
+        <!--
         <Button Text="Save" Clicked="SaveGeoLocationItem" />
         <Label Text="         "   d:Text="Latitude:" />
-
-        <Button  x:Name="btnActivate" Text="{Binding btnActivateTxt}"  Command="{Binding ToggleDidYouFall}"  />
+         -->
+        <Button HeightRequest="150" x:Name="btnActivate" Text="{Binding btnActivateTxt}" Command="{Binding ToggleDidYouFall}"  />
 
         <!--x:Name="geoDataListView"       Command="{Binding OpenGeoDatabase}" IsRefreshing="{Binding IsBusy, Mode=OneWay}"  CachingStrategy="RecycleElement"  RefreshCommand="{Binding RefreshListView}"
                 IsPullToRefreshEnabled="true"-->
@@ -71,7 +71,7 @@
             </ListView.ItemTemplate>
 
         </ListView>
-        <Button Text="Refresh List" Clicked="UpdateDataListView" />
+        <Button Text="Refresh List" HeightRequest="150" Clicked="UpdateDataListView" />
     </StackLayout>
 
 

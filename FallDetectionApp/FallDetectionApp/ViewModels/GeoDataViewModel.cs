@@ -12,6 +12,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using FallDetectionApp.Services;
+using Xamarin.Essentials;
+using System.Threading;
 
 [assembly: Xamarin.Forms.Dependency(typeof(FallDetectionApp.ViewModels.GeoDataViewModel))]
 namespace FallDetectionApp.ViewModels
@@ -21,6 +23,7 @@ namespace FallDetectionApp.ViewModels
         public ObservableCollection<GeoLocation> GeoItems { get; set; }
         public Command LoadItemsCommand { get; set; }
         private bool isActivated;
+        private bool keepListeningForMessages;
 
 
 
@@ -29,10 +32,24 @@ namespace FallDetectionApp.ViewModels
 
             //Title = "Browse";
             GeoItems = new ObservableCollection<GeoLocation>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            //LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             ToggleDidYouFall = new Command(async () => toggleDidYouFall());
-            btnActivateTxt = "Activate";
+            btnActivateTxt = "Preparing Monitor";
             isActivated = false;
+            monitorReady = false;
+
+            MessagingCenter.Subscribe<Object>(this, "GeoMonitorReady", (sender) =>
+            {
+                Debug.WriteLine("Message received once");
+                monitorReady = true;
+                btnActivateTxt = "Activate";
+
+                MessagingCenter.Unsubscribe<Object>(this, "GeoMonitorReady");
+
+            });
+
+
+
         }
 
         public ICommand ToggleDidYouFall { get; }
@@ -63,21 +80,23 @@ namespace FallDetectionApp.ViewModels
             }
         }
 
-        public async void toggleDidYouFall()
+
+
+        public void toggleDidYouFall()
         {
 
-
-            if (isActivated)
+            if (isActivated && monitorReady)
             {
                 btnActivateTxt = "DEACTIVATE";
                 isActivated = false;
                 MessagingCenter.Send<GeoDataViewModel>(this, "Activate");
             }
-            else
+            else if (!isActivated && monitorReady)
             {
                 btnActivateTxt = "Activate";
                 isActivated = true;
                 MessagingCenter.Send<GeoDataViewModel>(this, "Deactivate");
+
             }
 
         }
@@ -97,7 +116,19 @@ namespace FallDetectionApp.ViewModels
             }
         }
 
+        private bool privateMonitorReady;
+        public bool monitorReady
+        {
+            get { return privateMonitorReady; }
+            set
+            {
+                privateMonitorReady = value;
+                OnPropertyChanged(nameof(monitorReady)); // Notify that there was a change on this property
 
+            }
+        }
+
+        /*
         protected bool SetProperty<T>(ref T backingStore, T value,
           [CallerMemberName]string propertyName = "",
           Action onChanged = null)
@@ -123,7 +154,7 @@ namespace FallDetectionApp.ViewModels
         }
 
         #endregion
-
+        */
 
     }
 
