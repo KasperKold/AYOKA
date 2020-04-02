@@ -85,13 +85,13 @@ namespace FallDetectionApp.ViewModels
             {
                 btnActivateTxt = "Activate";
                 isActivated = false;
-                MessagingCenter.Send<GeoDataViewModel>(this, "Activate");
+                MessagingCenter.Send<GeoDataViewModel>(this, "Deactivate");
             }
             else if (!isActivated && monitorReady)
             {
                 btnActivateTxt = "DEACTIVATE";
                 isActivated = true;
-                MessagingCenter.Send<GeoDataViewModel>(this, "Deactivate");
+                MessagingCenter.Send<GeoDataViewModel>(this, "Activate");
             }
         }
 
