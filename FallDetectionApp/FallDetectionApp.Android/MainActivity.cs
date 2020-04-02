@@ -37,8 +37,6 @@ namespace FallDetectionApp.Droid
         static readonly string[] REQUIRED_PERMISSIONS = { Manifest.Permission.AccessFineLocation };
 
 
-        //private int countSeconds;
-        //private Timer timer;
         private Timer myTimer;
         private string savedLat;
         private string savedLong;
@@ -46,21 +44,13 @@ namespace FallDetectionApp.Droid
         public bool readyForSession;
         private int defaultInterval;
         private int timerInterval;
-        private IToggleDidYouFall toggle;
-        private bool inSession;
 
-
-
-        // private string lati;
-        // private string longi;
-
-        //private string geoInfo;
         private string sessionStartDateTime;
 
 
         private GeoLocation currentGeoPos;
         private GeoLocation tempGeoPos;
-        private UiLocationHandler iUiImplementation;
+        private UiLocationHandler iUiImplementation;// will be removed
 
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -75,12 +65,12 @@ namespace FallDetectionApp.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
 
+            // will not be used later
             iUiImplementation = new UiLocationHandler();
             iUiImplementation.setMainActivity(this);
             iUiImplementation = DependencyService.Get<IUiHandler>() as UiLocationHandler;
 
             initializeComponents();
-
             LoadApplication(new App());
 
 
@@ -121,10 +111,6 @@ namespace FallDetectionApp.Droid
 
             defaultInterval = 5000;
             createTimer(defaultInterval);
-            setReadyForSession(false);
-            inSession = false;
-            //savedLat = "";
-            //savedLong = "";
             currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
             notMovedCounter = 0;
         }
@@ -235,7 +221,7 @@ namespace FallDetectionApp.Droid
 
         // triggered from precreated Timer started in HandleLocationChanged atm
 
-
+        //The Did You Fall monitoring:
 
         public void monitorSession(object sender, ElapsedEventArgs e)
         {
@@ -333,6 +319,7 @@ namespace FallDetectionApp.Droid
                 }
                 saveToDb(tempGeoPos);
                 iUiImplementation.setCurrentGeoPos(tempGeoPos);
+                MessagingCenter.Send<Object>(this, "latestGeo");
 
             });
         }
@@ -371,12 +358,12 @@ namespace FallDetectionApp.Droid
             // Send message - ready to monitor
             MessagingCenter.Send<Object>(this, "GeoMonitorReady");
 
+
             // btnActivate
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Activate", (sender) =>
             {
 
                 Console.WriteLine("STARTING Monitor");
-                inSession = true;
                 myTimer.Start();
             });
 
@@ -385,7 +372,6 @@ namespace FallDetectionApp.Droid
             {
                 Console.WriteLine("STOPPING Monitor");
                 myTimer.Stop();
-                inSession = false;
             });
         }
 

@@ -32,9 +32,9 @@ namespace FallDetectionApp.ViewModels
             GeoItems = new ObservableCollection<GeoLocation>();
             //LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             ToggleDidYouFall = new Command(async () => toggleDidYouFall());
-            btnActivateTxt = "Preparing Location\n     Service";
+            btnActivateTxt = "Preparing Location\n   Service";
             isActivated = false;
-            monitorReady = false; //Waiting for LocationService establish   -  message ready in HandleLocationChanged in MainActivityMessaginCenter
+            monitorReady = false; //Waiting for LocationService to establish   -  message ready in HandleLocationChanged in MainActivityMessaginCenter
 
             // from MainActivity HanleLocationChanged
             MessagingCenter.Subscribe<Object>(this, "GeoMonitorReady", (sender) =>
@@ -47,6 +47,7 @@ namespace FallDetectionApp.ViewModels
 
             });
         }
+
 
 
         // not used atm

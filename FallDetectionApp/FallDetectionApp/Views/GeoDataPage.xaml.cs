@@ -24,6 +24,7 @@ namespace FallDetectionApp.Views
             InitializeComponent();
 
             BindingContext = new GeoDataViewModel();
+            listenToRefreshList();
 
 
         }
@@ -72,6 +73,25 @@ namespace FallDetectionApp.Views
             //await Navigation.PopAsync();
         }
         */
+
+        public void listenToRefreshList()
+        {
+            MessagingCenter.Subscribe<Object>(this, "latestGeo", (sender) =>
+                {
+                    refreshList();
+                });
+
+        }
+
+
+
+        async public void refreshList()
+        {
+            geoItems.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
+            scrollToEndOfList(geoItems);
+
+        }
+
 
         async void UpdateDataListView(object sender, EventArgs e)
         {

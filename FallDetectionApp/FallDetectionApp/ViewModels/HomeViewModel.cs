@@ -9,30 +9,31 @@ using System.Runtime.CompilerServices;
 using System.ComponentModel;
 using System.Collections.Generic;
 using FallDetectionApp.Views;
+using System.Diagnostics;
 
 //[assembly: Xamarin.Forms.Dependency(typeof(FallDetectionApp.ViewModels.HomeViewModel))]
 namespace FallDetectionApp.ViewModels
 {
-    public class HomeViewModel : INotifyPropertyChanged, IGeoLocation
+    public class HomeViewModel : INotifyPropertyChanged
     {
         public HomeViewModel()
         {
             Title = "Home";
             OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://xamarin.com"));
-            GetGeoLocation = new Command(async () => await GetGeoLocationAsync());
+            //GetGeoLocation = new Command(async () => await GetGeoLocationAsync());
             OpenGeoDatabase = new Command(async () => { await Application.Current.MainPage.Navigation.PushModalAsync(new Views.GeoDataPage()); });
             // RefreshListView = new Command(async () => { await App.Database.GetGeoLocationItemsAsync(); });
-            // AddGeoLocationToDatabase = new Command(async () =>   
+            // AddGeoLocationToDatabase = new Command(async () =>
+            listenGeo();
 
         }
 
         public ICommand OpenWebCommand { get; }
-        public ICommand GetGeoLocation { get; }
+        //public ICommand GetGeoLocation { get; }
         public ICommand OpenGeoDatabase { get; }
         //public ICommand RefreshListView { get; }
         //public ICommand AddGeoLocationToDatabase { get; }
-        //public  UiLocationHandler handler => DependencyService.Get<UiLocationhandler>();
-        //DependencyService.Get<UiLocationhandler>()
+
 
 
 
@@ -134,10 +135,24 @@ namespace FallDetectionApp.ViewModels
             return true;
         }
 
+
+
+
+        public void listenGeo()
+        {
+
+            MessagingCenter.Subscribe<Object>(this, "latestGeo", (sender) =>
+                {
+
+                    GetGeoLocationAsync();
+
+                });
+
+        }
+
+
         public async Task<bool> GetGeoLocationAsync()
         {
-            //Console.WriteLine("Inside GetGeoLocationAsync" + "\n");
-
 
             var location = await DependencyService.Get<IUiHandler>().GeoUpdateAsync();
             //  Console.WriteLine("TESTING if instance of GeoLocation coming through: " + location.Latitude + "\n");
@@ -151,8 +166,6 @@ namespace FallDetectionApp.ViewModels
                 GeoInfo = location.Info;
                 CurrentTimeDate = location.TimeDate;
             }
-
-            //Altitude: {location.Altitude}"
 
             return await Task.FromResult(true);
         }
