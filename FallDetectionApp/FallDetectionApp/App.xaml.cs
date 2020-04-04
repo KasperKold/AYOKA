@@ -5,6 +5,7 @@ using Xamarin.Forms.Xaml;
 using FallDetectionApp.Services;
 using FallDetectionApp.Views;
 using FallDetectionApp.Data;
+using FallDetectionApp.ViewModels;
 
 namespace FallDetectionApp
 {
@@ -44,14 +45,19 @@ namespace FallDetectionApp
 
         protected override void OnStart()
         {
+            Application.Current.Properties["isVisited_state"] = "false";
+
         }
 
         protected override void OnSleep()
         {
+
+            Application.Current.SavePropertiesAsync();
         }
 
         protected override void OnResume()
         {
+
         }
     }
 }

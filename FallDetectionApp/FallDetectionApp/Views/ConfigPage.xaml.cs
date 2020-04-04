@@ -13,7 +13,7 @@ namespace FallDetectionApp.Views
         public ConfigPage()
         {
             InitializeComponent();
-            BindingContext = new ConfigViewModel(); 
+            BindingContext = new ConfigViewModel();
         }
 
         protected override async void OnAppearing()
@@ -22,6 +22,8 @@ namespace FallDetectionApp.Views
 
             listView.ItemsSource = await App.Database.GetItemsAsync();
         }
+
+
 
         async void OnItemAdded(object sender, EventArgs e)
         {

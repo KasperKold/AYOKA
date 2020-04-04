@@ -13,6 +13,7 @@ namespace FallDetectionApp.Views
         public MainPage()
         {
             InitializeComponent();
+
         }
     }
 }
