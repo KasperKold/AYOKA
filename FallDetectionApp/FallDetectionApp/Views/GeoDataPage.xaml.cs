@@ -24,6 +24,7 @@ namespace FallDetectionApp.Views
             InitializeComponent();
 
             BindingContext = new GeoDataViewModel();
+
             listenToRefreshList();
 
 

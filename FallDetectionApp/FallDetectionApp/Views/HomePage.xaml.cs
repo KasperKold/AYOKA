@@ -29,7 +29,7 @@ namespace FallDetectionApp.Views
             testGeo.Info = "from Activate Button Homepage";
 
             await App.Database.SaveGeoLocationItemAsync(testGeo);
-            //Console.WriteLine("HEEEEJ!");
+
             //await Navigation.PopAsync();
         }
 
