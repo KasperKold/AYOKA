@@ -20,12 +20,9 @@ namespace FallDetectionApp.ViewModels
 {
     public class GeoDataViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        public ObservableCollection<GeoLocation> GeoItems { get; set; }
-        public Command LoadItemsCommand { get; set; }
+        //public ObservableCollection<GeoLocation> GeoItems { get; set; }
+        //public Command LoadItemsCommand { get; set; }
         public ICommand ToggleDidYouFall { get; }
-
-
-
 
 
         public GeoDataViewModel()
@@ -34,56 +31,33 @@ namespace FallDetectionApp.ViewModels
             //GeoItems = new ObservableCollection<GeoLocation>();
             //LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
+            ToggleDidYouFall = new Command(async () => toggleDidYouFall());
+            initialize();
+        }
+
+
+        public void initialize()
+        {
             if (Application.Current.Properties.ContainsKey("isVisited_state"))
                 visited = Convert.ToBoolean(Application.Current.Properties["isVisited_state"]);
-            Debug.WriteLine("Visited: " + visited);
-            Debug.WriteLine("Visited Yalla: " + (Application.Current.Properties["isVisited_state"].ToString()));
-            ToggleDidYouFall = new Command(async () => toggleDidYouFall());
+            Debug.WriteLine("Visited variable: " + visited);
+            Debug.WriteLine("Visited direct from properties: " + (Application.Current.Properties["isVisited_state"].ToString()));
 
             if (!visited)
             {
                 setUp();
-
-
             }
             else
             {
                 checkAndSetPropertiesMonitor();
                 checkAndSetPropetiesBtnActivate();
-
             }
 
-
-
-
-
-
-            /*btnActivateTxt = "Preparing Location\n   Service";
-            isActivated = false;
-            monitorReady = false; //Waiting for LocationService to establish   -  message ready in HandleLocationChanged in MainActivityMessaginCenter
-
-            // from MainActivity HanleLocationChanged
-            MessagingCenter.Subscribe<Object>(this, "GeoMonitorReady", (sender) =>
-            {
-                Debug.WriteLine("Message received once");
-                monitorReady = true;
-                btnActivateTxt = "Activate";
-
-                Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
-                Application.Current.Properties["monitorReady_state"] = "true";
-                MessagingCenter.Unsubscribe<Object>(this, "GeoMonitorReady");
-
-            });
-            */
-
         }
-
 
         public void setUp()
 
         {
-
-
             btnActivateTxt = "Preparing Location\n   Service";
             isActivated = false;
             monitorReady = false; //Waiting for LocationService to establish   -  message ready in HandleLocationChanged in MainActivityMessaginCenter
@@ -101,21 +75,11 @@ namespace FallDetectionApp.ViewModels
                 Application.Current.Properties["isVisited_state"] = "true";
                 Application.Current.Properties["isActivated_state"] = isActivated;
                 MessagingCenter.Unsubscribe<Object>(this, "GeoMonitorReady");
-
-
-
-
             });
-
-
-
-
-
-
 
         }
 
-
+        /*
         // not used atm
         async Task ExecuteLoadItemsCommand()
         {
@@ -142,7 +106,7 @@ namespace FallDetectionApp.ViewModels
                 IsBusy = false;
             }
         }
-
+        */
 
         public void checkAndSetPropertiesMonitor()
         {
@@ -290,6 +254,4 @@ namespace FallDetectionApp.ViewModels
         */
 
     }
-
-
 }
