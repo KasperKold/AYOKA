@@ -39,9 +39,11 @@ namespace FallDetectionApp.ViewModels
         public void initialize()
         {
             if (Application.Current.Properties.ContainsKey("isVisited_state"))
+            {
                 visited = Convert.ToBoolean(Application.Current.Properties["isVisited_state"]);
-            Debug.WriteLine("Visited variable: " + visited);
-            Debug.WriteLine("Visited direct from properties: " + (Application.Current.Properties["isVisited_state"].ToString()));
+                Debug.WriteLine("Visited variable: " + visited);
+                Debug.WriteLine("Visited direct from properties: " + (Application.Current.Properties["isVisited_state"].ToString()));
+            }
 
             if (!visited)
             {

@@ -37,6 +37,16 @@
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White"/>
 
+        <Button Margin="0,10,0,0" Text="Test Call" x:Name="btnTestCall" HorizontalOptions="Fill" VerticalOptions="End"
+                        Command="{Binding OpenTestCall}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"/>
+
+        <Button Margin="0,10,0,0" Text="Test SMS" x:Name="btnTestSMS" HorizontalOptions="Fill" VerticalOptions="End"
+                        Command="{Binding OpenTestSMS}"
+                        BackgroundColor="{StaticResource Primary}"
+                        TextColor="White"/>
+
 
         <!--
         <Button Margin="0,10,0,0"  x:Name="btnReqLocation" Text="Get location"  HorizontalOptions="Fill" VerticalOptions="End"  

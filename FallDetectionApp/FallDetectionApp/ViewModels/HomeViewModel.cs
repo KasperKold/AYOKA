@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using FallDetectionApp.Views;
 using System.Diagnostics;
+using Plugin.Messaging;
 
 //[assembly: Xamarin.Forms.Dependency(typeof(FallDetectionApp.ViewModels.HomeViewModel))]
 namespace FallDetectionApp.ViewModels
@@ -20,8 +21,9 @@ namespace FallDetectionApp.ViewModels
         {
             Title = "Home";
             OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://xamarin.com"));
-            //GetGeoLocation = new Command(async () => await GetGeoLocationAsync());
             OpenGeoDatabase = new Command(async () => { await Application.Current.MainPage.Navigation.PushModalAsync(new Views.GeoDataPage()); });
+            OpenTestCall = new Command(async () => await MakeTestCall("+46733241061"));
+            OpenTestSMS = new Command(async () => await SendTestSMS("+46733241061", "Hello, testing 1-2-3"));  //"Hi, this is an automated text message from DidYouFallApp that tracks my movement. I might have fallen and potentially hurt myself. Please get in contact with me as soon as possible and make sure I am OK."
             // RefreshListView = new Command(async () => { await App.Database.GetGeoLocationItemsAsync(); });
             // AddGeoLocationToDatabase = new Command(async () =>
             listenGeo();
@@ -29,12 +31,35 @@ namespace FallDetectionApp.ViewModels
         }
 
         public ICommand OpenWebCommand { get; }
-        //public ICommand GetGeoLocation { get; }
         public ICommand OpenGeoDatabase { get; }
+        public ICommand OpenTestCall { get; }
+        public ICommand OpenTestSMS { get; }
         //public ICommand RefreshListView { get; }
         //public ICommand AddGeoLocationToDatabase { get; }
 
+        // Test Call function
+        public async Task<bool> MakeTestCall(string phoneNumber)
+        {
+            var phoneDialer = CrossMessaging.Current.PhoneDialer;
+            if (phoneDialer.CanMakePhoneCall)
+            {
+                phoneDialer.MakePhoneCall(phoneNumber);
+            }
 
+            return await Task.FromResult(true);
+        }
+
+        // Test SMS function
+        public async Task<bool> SendTestSMS(string phoneNumber, string text)
+        {
+            var smsMessenger = CrossMessaging.Current.SmsMessenger;
+            if (smsMessenger.CanSendSmsInBackground)
+            {
+                smsMessenger.SendSmsInBackground(phoneNumber, text);
+            }
+
+            return await Task.FromResult(true);
+        }
 
 
         private string privateCurrentLatitude;
