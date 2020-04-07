@@ -12,4 +12,14 @@
  <string
         name="notification_text"
         >notification_text</string>
+    <string
+        name="alert_greeting"
+        >Hi, </string>
+<string
+        name="alert_text"
+        >Are you ok? If button is not pressed in 30 seconds this device alarms your contacts!</string>
+       <string
+        name="alert_confirmation"
+        >Contacting help... </string>
+
 </resources>

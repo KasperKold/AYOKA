@@ -24,6 +24,8 @@ using FallDetectionApp.Views;
 using FallDetectionApp.ViewModels;
 using System.Security.Policy;
 using Plugin.Messaging;
+using Android.Content;
+using System.Linq.Expressions;
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
 namespace FallDetectionApp.Droid
@@ -47,12 +49,15 @@ namespace FallDetectionApp.Droid
 
 
         private Timer myTimer;
+        private Timer alertTimer;
         private string savedLat;
         private string savedLong;
         private int notMovedCounter;
         public bool readyForSession;
+        public bool alertBool;
         private int defaultInterval;
         private int timerInterval;
+        private int countSeconds;
 
         private string sessionStartDateTime;
 
@@ -404,7 +409,7 @@ namespace FallDetectionApp.Droid
                     txtCounter + notMovedCounter;
 
                     notMovedCounter = 0;
-
+                    didYouFallAlert();
                 }
                 else
                 {
@@ -435,6 +440,7 @@ namespace FallDetectionApp.Droid
                         txtPrevLat + space16 + txtPrevLong + txtNewRow +
                         savedLat + space16 + space11 + savedLong + txtNewRow +
                         txtCounter1minus + notMovedCounter;
+
                     }
                 }
                 saveToDb(tempGeoPos);
@@ -443,6 +449,77 @@ namespace FallDetectionApp.Droid
 
             });
         }
+
+
+        void alertContacts()
+        {
+            Console.Write("A L A R M I N G !");
+            Toast toastCounter = Toast.MakeText(this, " A L A R M I N G!", ToastLength.Long);
+            toastCounter.SetGravity(GravityFlags.FillHorizontal | GravityFlags.CenterHorizontal, 0, 0);
+            toastCounter.Show();
+
+        }
+
+        // called from monitorsession when geo locaction has not changed 
+        async void didYouFallAlert()
+        {
+
+            alertTimer = new Timer();
+
+            alertTimer.Elapsed += OnTimedEvent;
+            countSeconds = 10;
+            alertTimer.Interval = 1000;
+            alertTimer.Enabled = false;
+            alertTimer.Start();
+
+
+            alertBool = false;
+
+            // userdialog - dismissed from user or when alertContacts() is called -  alarming!
+            Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            AlertDialog alert = dialog.Create();
+            alert.SetTitle("Are u ok?");
+            alert.SetMessage("");
+            alert.SetButton("I AM OK!", (c, ev) =>
+            {
+                Toast toastOK = Toast.MakeText(this, "GOT IT! \nU R OK!", ToastLength.Long);
+                toastOK.SetGravity(GravityFlags.FillHorizontal | GravityFlags.CenterHorizontal, 0, 0);
+                toastOK.Show();
+                alertBool = true;
+            });
+            alert.Show();
+
+            //waiting before calling automatic alarm
+            await Task.Delay(10000); //wait for two milli seconds
+            if (!alertBool)
+            {
+                alertContacts();
+                alert.Dismiss(); //removing dialogue
+            }
+        }
+
+        // called from alertTimer counting down alertDialog
+        private void OnTimedEvent(object sender, ElapsedEventArgs e)
+        {
+            countSeconds--;
+            if (countSeconds < 0 || alertBool == true)
+            {
+                alertTimer.Stop();
+            }
+            else
+            {
+                this.RunOnUiThread(() =>
+                {
+                    //Console.WriteLine("Timer: " + countSeconds.ToString() + " SECONDS");
+                    Toast toastCounter = Toast.MakeText(this, countSeconds.ToString(), ToastLength.Long);
+                    toastCounter.SetGravity(GravityFlags.FillHorizontal | GravityFlags.CenterHorizontal, 0, 0);
+                    toastCounter.Show();
+
+                    //FindViewById<TextView>(Resource.Id.textView).Text = countSeconds.ToString();
+                });
+            }
+        }
+
 
 
 
