@@ -8,7 +8,7 @@ using Xamarin.Essentials;
 using FallDetectionApp.Models;
 
 namespace FallDetectionApp.Services
-{
+{/*
     public class AzureDataStore : IDataStore<Item>
     {
         HttpClient client;
@@ -81,4 +81,5 @@ namespace FallDetectionApp.Services
             return response.IsSuccessStatusCode;
         }
     }
+    */
 }

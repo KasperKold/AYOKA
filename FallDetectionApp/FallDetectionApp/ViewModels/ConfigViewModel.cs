@@ -9,11 +9,12 @@ using FallDetectionApp.Models;
 using FallDetectionApp.Views;
 using System.Windows.Input;
 
+// This semms not to be used at the moment
 namespace FallDetectionApp.ViewModels
 {
     public class ConfigViewModel : BaseViewModel
     {
-        public ObservableCollection<Item> Items { get; set; }
+        // public ObservableCollection<Item> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
         public ICommand CommandToConfigPage { get; private set; }
@@ -26,10 +27,10 @@ namespace FallDetectionApp.ViewModels
             });
 
             Title = "Browse";
-            Items = new ObservableCollection<Item>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            // Items = new ObservableCollection<Item>();
+            //  LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            
+
             //Old mockdatabase
             //MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
             //{
@@ -48,12 +49,14 @@ namespace FallDetectionApp.ViewModels
 
             try
             {
-                Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
+                //  Items.Clear();
+                // var items = await DataStore.GetItemsAsync(true);
+                /*
                 foreach (var item in items)
                 {
-                    Items.Add(item);
+                    //     Items.Add(item);
                 }
+                */
             }
             catch (Exception ex)
             {

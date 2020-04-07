@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using FallDetectionApp.Models;
 
 namespace FallDetectionApp.Services
-{
+{/*
     public class MockDataStore : IDataStore<Item>
     {
         readonly List<Item> items;
@@ -57,4 +57,5 @@ namespace FallDetectionApp.Services
             return await Task.FromResult(items);
         }
     }
+    */
 }
