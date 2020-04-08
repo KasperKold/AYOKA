@@ -17,7 +17,7 @@ namespace FallDetectionApp.Droid
 {
     public class UiLocationHandler : HomeViewModel, IUiHandler
     {
-        private readonly string TAG = "Log UiLocationHandler";
+        //private readonly string TAG = "Log UiLocationHandler";
         private GeoLocation currentGeoPos;
         private MainActivity mainActivity;
 

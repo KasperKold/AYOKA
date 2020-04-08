@@ -502,7 +502,10 @@ namespace FallDetectionApp.Droid
             Console.Write("A L A R M I N G !");
             alertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call shortly");
             await SmsToContact("Hello, this is a test of sending an sms to all contacts in my FallApp."); //Alexa: +46760996722, Peder: +46733241061
+            await Task.Delay(5000);
+            await CallContacts();
         }
+
         async void alertConfirmation(string title, string message)
         {
             AlertDialog.Builder alertConfirmBuilder = new AlertDialog.Builder(this);
