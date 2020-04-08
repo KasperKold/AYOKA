@@ -25,7 +25,7 @@ namespace FallDetectionApp.ViewModels
             OpenTestCall = new Command(async () => await MakeTestCall()); //Alexa: +46760996722, Peder: +46733241061 
             OpenTestSMS = new Command(async () => await SendSMSToContact("Hello, this is a test of sending an sms to all contacts in my FallApp."));
             //OpenTestSMS = new Command(async () => await SendTestSMS("+4530295867", "Hello, testing 1-2-3"));   //"Hi, this is an automated text message from DidYouFallApp that tracks my movement. I might have fallen and potentially hurt myself. Please get in contact with me as soon as possible and make sure I am OK."
-            
+
             // RefreshListView = new Command(async () => { await App.Database.GetGeoLocationItemsAsync(); });
             // AddGeoLocationToDatabase = new Command(async () =>
             listenGeo();
@@ -61,7 +61,7 @@ namespace FallDetectionApp.ViewModels
             {
                 Debug.WriteLine($"Something is wrong: {ex.Message}");
             }
-
+            /*
             // If permission has been granted, phone call commences
 
             List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
@@ -80,7 +80,7 @@ namespace FallDetectionApp.ViewModels
             {
                 Debug.Write(contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr);
             }
-
+            */
             return await Task.FromResult(true);
         }
 
@@ -107,7 +107,7 @@ namespace FallDetectionApp.ViewModels
             }
 
             // If permission has been granted, sms-messenging commences
-
+            /*
             List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
 
             for(int i = 0; i < contactsFromLocalDB.Count; i++)
@@ -124,7 +124,7 @@ namespace FallDetectionApp.ViewModels
             {
                 Debug.Write(contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr);
             }
-
+            */
             return await Task.FromResult(true);
         }
 

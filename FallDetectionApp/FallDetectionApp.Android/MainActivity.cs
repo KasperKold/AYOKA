@@ -27,6 +27,7 @@ using Plugin.Messaging;
 using Android.Content;
 using System.Linq.Expressions;
 using Xamarin.Essentials;
+using System.Collections.Generic;
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
 namespace FallDetectionApp.Droid
@@ -124,6 +125,9 @@ namespace FallDetectionApp.Droid
                 Log.Debug(TAG, "Have to request permission from the user. ");
                 RequestLocationPermission();
             }
+
+
+
 
 
             ////Check for phone call permission
@@ -267,6 +271,8 @@ namespace FallDetectionApp.Droid
             LocationHandler.StopLocationService();
 
         }
+
+
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
@@ -491,11 +497,11 @@ namespace FallDetectionApp.Droid
         }
 
 
-        void alertContacts()
+        async void alertContacts()
         {
             Console.Write("A L A R M I N G !");
-            alertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call.");
-
+            alertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call shortly");
+            await SmsToContact("Hello, this is a test of sending an sms to all contacts in my FallApp."); //Alexa: +46760996722, Peder: +46733241061
         }
         async void alertConfirmation(string title, string message)
         {
@@ -619,6 +625,109 @@ namespace FallDetectionApp.Droid
         {
             Log.Debug(TAG, "Location status changed, event raised");
         }
+
+
+
+
+        // Test Call function
+        public async Task<bool> CallContacts()
+        {
+            //Checking for permission.
+
+            /* try
+             {
+                 var permissions = await Permissions.CheckStatusAsync<Permissions.Phone>();
+                 if (permissions != PermissionStatus.Granted)
+                 {
+                     permissions = await Permissions.RequestAsync<Permissions.Phone>();
+                 }
+
+                 if (permissions != PermissionStatus.Granted)
+                 {
+                     Log.Verbose(TAG,  + "Permission to use native Phone function on the phone was denied.");
+                 }
+             }
+             catch (Exception ex)
+             {
+                 Log.Verbose(TAG,  + $"Something is wrong: {ex.Message}");
+             }
+             */
+
+            // If permission has been granted, phone call commences
+
+            List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
+
+            for (int i = 0; i < contactsFromLocalDB.Count; i++)
+            {
+                var phoneCall = CrossMessaging.Current.PhoneDialer;
+                if (phoneCall.CanMakePhoneCall && !(contactsFromLocalDB[i].PhoneNr == ""))
+                {
+
+
+                    phoneCall.MakePhoneCall(contactsFromLocalDB[i].PhoneNr);
+
+                }
+            }
+
+            // Debug.WriteLine("Testing to find contact numbers in database: ");
+            for (int i = 0; i < contactsFromLocalDB.Count; i++)
+            {
+                Log.Verbose(TAG, "Phone Contacts: " + contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr);
+            }
+
+            return await Task.FromResult(true);
+        }
+
+        // SMS function fetching contact from database
+        public async Task<bool> SmsToContact(string text)
+        {
+            /*
+            //Checking for permission.
+            try
+            {
+                var permissions = await Permissions.CheckStatusAsync<Permissions.Sms>();
+                if (permissions != PermissionStatus.Granted)
+                {
+                    permissions = await Permissions.RequestAsync<Permissions.Sms>();
+                }
+
+                if (permissions != PermissionStatus.Granted)
+                {
+                     Log.Verbose(TAG, + "Permission to use native SMS function on the phone was denied.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Verbose(TAG,  + $"Something is wrong: {ex.Message}");
+            }
+            */
+
+
+            // If permission has been granted, sms-messenging commences
+
+            List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
+
+            for (int i = 0; i < contactsFromLocalDB.Count; i++)
+            {
+                var smsMessenger = CrossMessaging.Current.SmsMessenger;
+                if (smsMessenger.CanSendSmsInBackground && !(contactsFromLocalDB[i].PhoneNr == ""))
+                {
+                    smsMessenger.SendSmsInBackground(contactsFromLocalDB[i].PhoneNr, text);
+                }
+            }
+
+            // Debug.WriteLine("Testing to find contact numbers in database: ");
+            for (int i = 0; i < contactsFromLocalDB.Count; i++)
+            {
+                Log.Verbose(TAG, "SMS Contacts:" + contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr); ;
+            }
+
+            return await Task.FromResult(true);
+        }
+
+
+
+
 
 
     }
