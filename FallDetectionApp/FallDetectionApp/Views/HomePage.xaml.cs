@@ -4,6 +4,8 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using FallDetectionApp.Models;
+using Xamarin.Essentials;
+using System.Diagnostics;
 
 namespace FallDetectionApp.Views
 {
@@ -28,14 +30,29 @@ namespace FallDetectionApp.Views
             testGeo.Longitude = "2222222";
             testGeo.Info = "from Activate Button Homepage";
 
-            await App.Database.SaveGeoLocationItemAsync(testGeo);
-
-            //await Navigation.PopAsync();
+            await App.Database.SaveGeoLocationItemAsync(testGeo);           
         }
 
-        //private async void btnDbPageClicked(object sender, EventArgs e)
-        //{
-        //    await Navigation.PushModalAsync(new NavigationPage(new ConfigPage()));
-        //}
+       private async void OnbtnTestSMS_Clicked(object sender, EventArgs e)
+        {
+            try
+            {
+                var permissions = await Permissions.CheckStatusAsync<Permissions.Sms>();
+                if(permissions != PermissionStatus.Granted)
+                {
+                    permissions = await Permissions.RequestAsync<Permissions.Sms>();
+                }
+
+                if(permissions != PermissionStatus.Granted)
+                {
+                    return;
+                }
+            } catch(Exception ex)
+            {
+                Debug.WriteLine($"Something is wrong: {ex.Message}");
+            }
+
+            
+        }
     }
 }

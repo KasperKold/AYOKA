@@ -22,8 +22,10 @@ namespace FallDetectionApp.ViewModels
             Title = "Home";
             OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://xamarin.com"));
             OpenGeoDatabase = new Command(async () => { await Application.Current.MainPage.Navigation.PushModalAsync(new Views.GeoDataPage()); });
-            OpenTestCall = new Command(async () => await MakeTestCall("+46733241061"));
-            OpenTestSMS = new Command(async () => await SendTestSMS("+46733241061", "Hello, testing 1-2-3"));  //"Hi, this is an automated text message from DidYouFallApp that tracks my movement. I might have fallen and potentially hurt myself. Please get in contact with me as soon as possible and make sure I am OK."
+            OpenTestCall = new Command(async () => await MakeTestCall()); //Alexa: +46760996722, Peder: +46733241061 
+            OpenTestSMS = new Command(async () => await SendSMSToContact("Hello, this is a test of sending an sms to all contacts in my FallApp."));
+            //OpenTestSMS = new Command(async () => await SendTestSMS("+4530295867", "Hello, testing 1-2-3"));   //"Hi, this is an automated text message from DidYouFallApp that tracks my movement. I might have fallen and potentially hurt myself. Please get in contact with me as soon as possible and make sure I am OK."
+            
             // RefreshListView = new Command(async () => { await App.Database.GetGeoLocationItemsAsync(); });
             // AddGeoLocationToDatabase = new Command(async () =>
             listenGeo();
@@ -38,24 +40,89 @@ namespace FallDetectionApp.ViewModels
         //public ICommand AddGeoLocationToDatabase { get; }
 
         // Test Call function
-        public async Task<bool> MakeTestCall(string phoneNumber)
+        public async Task<bool> MakeTestCall()
         {
-            var phoneDialer = CrossMessaging.Current.PhoneDialer;
-            if (phoneDialer.CanMakePhoneCall)
+            //Checking for permission.
+
+            try
             {
-                phoneDialer.MakePhoneCall(phoneNumber);
+                var permissions = await Permissions.CheckStatusAsync<Permissions.Phone>();
+                if (permissions != PermissionStatus.Granted)
+                {
+                    permissions = await Permissions.RequestAsync<Permissions.Phone>();
+                }
+
+                if (permissions != PermissionStatus.Granted)
+                {
+                    Debug.WriteLine("Permission to use native Phone function on the phone was denied.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Something is wrong: {ex.Message}");
+            }
+
+            // If permission has been granted, phone call commences
+
+            List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
+
+            for (int i = 0; i < contactsFromLocalDB.Count; i++)
+            {
+                var phoneCall = CrossMessaging.Current.PhoneDialer;
+                if (phoneCall.CanMakePhoneCall)
+                {
+                    phoneCall.MakePhoneCall(contactsFromLocalDB[i].PhoneNr);
+                }
+            }
+
+            Debug.WriteLine("Testing to find contact numbers in database: ");
+            for (int i = 0; i < contactsFromLocalDB.Count; i++)
+            {
+                Debug.Write(contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr);
             }
 
             return await Task.FromResult(true);
         }
 
-        // Test SMS function
-        public async Task<bool> SendTestSMS(string phoneNumber, string text)
+        // SMS function fetching contact from database
+        public async Task<bool> SendSMSToContact(string text)
         {
-            var smsMessenger = CrossMessaging.Current.SmsMessenger;
-            if (smsMessenger.CanSendSmsInBackground)
+            //Checking for permission.
+            try
             {
-                smsMessenger.SendSmsInBackground(phoneNumber, text);
+                var permissions = await Permissions.CheckStatusAsync<Permissions.Sms>();
+                if (permissions != PermissionStatus.Granted)
+                {
+                    permissions = await Permissions.RequestAsync<Permissions.Sms>();
+                }
+
+                if (permissions != PermissionStatus.Granted)
+                {
+                    Debug.WriteLine("Permission to use native SMS function on the phone was denied.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Something is wrong: {ex.Message}");
+            }
+
+            // If permission has been granted, sms-messenging commences
+
+            List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
+
+            for(int i = 0; i < contactsFromLocalDB.Count; i++)
+            {
+                var smsMessenger = CrossMessaging.Current.SmsMessenger;
+                if (smsMessenger.CanSendSmsInBackground)
+                {
+                    smsMessenger.SendSmsInBackground(contactsFromLocalDB[i].PhoneNr, text);
+                }
+            }
+
+            Debug.WriteLine("Testing to find contact numbers in database: ");
+            for(int i = 0; i < contactsFromLocalDB.Count; i++)
+            {
+                Debug.Write(contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr);
             }
 
             return await Task.FromResult(true);

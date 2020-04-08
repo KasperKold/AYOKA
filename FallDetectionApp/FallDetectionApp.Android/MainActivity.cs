@@ -38,14 +38,14 @@ namespace FallDetectionApp.Droid
         private readonly string TAG = "Log MainActivity";
         static readonly int RC_REQUEST_LOCATION_PERMISSION = 1000;
 
-        static readonly int RC_REQUEST_PHONECALL_PERMISSION = 1000;
-        static readonly int RC_REQUEST_PHONESMS_PERMISSION = 1000;
-        static readonly int RC_REQUEST_READPHONESTATE_PERMISSION = 1000;
+        //static readonly int RC_REQUEST_PHONECALL_PERMISSION = 1000;
+        //static readonly int RC_REQUEST_PHONESMS_PERMISSION = 1000;
+        //static readonly int RC_REQUEST_READPHONESTATE_PERMISSION = 1000;
 
         static readonly string[] REQUIRED_PERMISSIONS = { Manifest.Permission.AccessFineLocation };
-        static readonly string[] REQUIRED_PHONECALL_PERMISSIONS = { Manifest.Permission.CallPhone };
-        static readonly string[] REQUIRED_PHONESMS_PERMISSIONS = { Manifest.Permission.SendSms };
-        static readonly string[] REQUIRED_READPHONESTATE_PERMISSIONS = { Manifest.Permission.ReadPhoneState };
+        //static readonly string[] REQUIRED_PHONECALL_PERMISSIONS = { Manifest.Permission.CallPhone };
+        //static readonly string[] REQUIRED_PHONESMS_PERMISSIONS = { Manifest.Permission.SendSms };
+        //static readonly string[] REQUIRED_READPHONESTATE_PERMISSIONS = { Manifest.Permission.ReadPhoneState };
 
 
         private Timer myTimer;
@@ -119,39 +119,39 @@ namespace FallDetectionApp.Droid
             }
 
 
-            //Check for phone call permission
-            if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.CallPhone) == (int)Permission.Granted)
-            {
-                Log.Debug(TAG, "User already granted PhoneCall permission. ");
-            }
-            else
-            {
-                Log.Debug(TAG, "Have to request PhoneCall permission from the user. ");
-                RequestPhoneCallPermission();
-            }
+            ////Check for phone call permission
+            //if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.CallPhone) == (int)Permission.Granted)
+            //{
+            //    Log.Debug(TAG, "User already granted PhoneCall permission. ");
+            //}
+            //else
+            //{
+            //    Log.Debug(TAG, "Have to request PhoneCall permission from the user. ");
+            //    RequestPhoneCallPermission();
+            //}
 
-            //Check for sms permission
-            if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.SendSms) == (int)Permission.Granted)
-            {
-                Log.Debug(TAG, "User already granted SendSMS permission.");
-            }
-            else
-            {
-                Log.Debug(TAG, "Have to request SendSMS permission from the user. ");
-                RequestPhoneSMSPermission();
-            }
+            ////Check for sms permission
+            //if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.SendSms) == (int)Permission.Granted)
+            //{
+            //    Log.Debug(TAG, "User already granted SendSMS permission.");
+            //}
+            //else
+            //{
+            //    Log.Debug(TAG, "Have to request SendSMS permission from the user. ");
+            //    RequestPhoneSMSPermission();
+            //}
 
-            //Check for read phone state permission
+            ////Check for read phone state permission
 
-            if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.ReadPhoneState) == (int)Permission.Granted)
-            {
-                Log.Debug(TAG, "User already granted READPHONESTATE permission.");
-            }
-            else
-            {
-                Log.Debug(TAG, "Have to request READPHONESTATE permission from the user. ");
-                RequestReadPhoneStatePermission();
-            }
+            //if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.ReadPhoneState) == (int)Permission.Granted)
+            //{
+            //    Log.Debug(TAG, "User already granted READPHONESTATE permission.");
+            //}
+            //else
+            //{
+            //    Log.Debug(TAG, "Have to request READPHONESTATE permission from the user. ");
+            //    RequestReadPhoneStatePermission();
+            //}
 
 
 
@@ -276,71 +276,71 @@ namespace FallDetectionApp.Droid
             }
         }
 
-        void RequestPhoneCallPermission()
-        {
-            if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.CallPhone))
-            {
-                var layout = FindViewById(Android.Resource.Id.Content);
-                Snackbar.Make(layout,
-                              Resource.String.permission_location_rationale,
-                              Snackbar.LengthIndefinite)
-                        .SetAction(Resource.String.ok,
-                                   new Action<View>(delegate
-                                   {
-                                       ActivityCompat.RequestPermissions(this, REQUIRED_PHONECALL_PERMISSIONS,
-                                                                         RC_REQUEST_PHONECALL_PERMISSION);
-                                   })
-                                  ).Show();
-            }
-            else
-            {
-                ActivityCompat.RequestPermissions(this, REQUIRED_PHONECALL_PERMISSIONS, RC_REQUEST_PHONECALL_PERMISSION);
-            }
-        }
+        //void RequestPhoneCallPermission()
+        //{
+        //    if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.CallPhone))
+        //    {
+        //        var layout = FindViewById(Android.Resource.Id.Content);
+        //        Snackbar.Make(layout,
+        //                      Resource.String.permission_location_rationale,
+        //                      Snackbar.LengthIndefinite)
+        //                .SetAction(Resource.String.ok,
+        //                           new Action<View>(delegate
+        //                           {
+        //                               ActivityCompat.RequestPermissions(this, REQUIRED_PHONECALL_PERMISSIONS,
+        //                                                                 RC_REQUEST_PHONECALL_PERMISSION);
+        //                           })
+        //                          ).Show();
+        //    }
+        //    else
+        //    {
+        //        ActivityCompat.RequestPermissions(this, REQUIRED_PHONECALL_PERMISSIONS, RC_REQUEST_PHONECALL_PERMISSION);
+        //    }
+        //}
 
-        void RequestPhoneSMSPermission()
-        {
-            if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.SendSms))
-            {
-                var layout = FindViewById(Android.Resource.Id.Content);
-                Snackbar.Make(layout,
-                              Resource.String.permission_location_rationale,
-                              Snackbar.LengthIndefinite)
-                        .SetAction(Resource.String.ok,
-                                   new Action<View>(delegate
-                                   {
-                                       ActivityCompat.RequestPermissions(this, REQUIRED_PHONESMS_PERMISSIONS,
-                                                                         RC_REQUEST_PHONESMS_PERMISSION);
-                                   })
-                                  ).Show();
-            }
-            else
-            {
-                ActivityCompat.RequestPermissions(this, REQUIRED_PHONESMS_PERMISSIONS, RC_REQUEST_PHONESMS_PERMISSION);
-            }
-        }
+        //void RequestPhoneSMSPermission()
+        //{
+        //    if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.SendSms))
+        //    {
+        //        var layout = FindViewById(Android.Resource.Id.Content);
+        //        Snackbar.Make(layout,
+        //                      Resource.String.permission_location_rationale,
+        //                      Snackbar.LengthIndefinite)
+        //                .SetAction(Resource.String.ok,
+        //                           new Action<View>(delegate
+        //                           {
+        //                               ActivityCompat.RequestPermissions(this, REQUIRED_PHONESMS_PERMISSIONS,
+        //                                                                 RC_REQUEST_PHONESMS_PERMISSION);
+        //                           })
+        //                          ).Show();
+        //    }
+        //    else
+        //    {
+        //        ActivityCompat.RequestPermissions(this, REQUIRED_PHONESMS_PERMISSIONS, RC_REQUEST_PHONESMS_PERMISSION);
+        //    }
+        //}
 
-        void RequestReadPhoneStatePermission()
-        {
-            if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.ReadPhoneState))
-            {
-                var layout = FindViewById(Android.Resource.Id.Content);
-                Snackbar.Make(layout,
-                              Resource.String.permission_location_rationale,
-                              Snackbar.LengthIndefinite)
-                        .SetAction(Resource.String.ok,
-                                   new Action<View>(delegate
-                                   {
-                                       ActivityCompat.RequestPermissions(this, REQUIRED_READPHONESTATE_PERMISSIONS,
-                                                                         RC_REQUEST_READPHONESTATE_PERMISSION);
-                                   })
-                                  ).Show();
-            }
-            else
-            {
-                ActivityCompat.RequestPermissions(this, REQUIRED_READPHONESTATE_PERMISSIONS, RC_REQUEST_READPHONESTATE_PERMISSION);
-            }
-        }
+        //void RequestReadPhoneStatePermission()
+        //{
+        //    if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.ReadPhoneState))
+        //    {
+        //        var layout = FindViewById(Android.Resource.Id.Content);
+        //        Snackbar.Make(layout,
+        //                      Resource.String.permission_location_rationale,
+        //                      Snackbar.LengthIndefinite)
+        //                .SetAction(Resource.String.ok,
+        //                           new Action<View>(delegate
+        //                           {
+        //                               ActivityCompat.RequestPermissions(this, REQUIRED_READPHONESTATE_PERMISSIONS,
+        //                                                                 RC_REQUEST_READPHONESTATE_PERMISSION);
+        //                           })
+        //                          ).Show();
+        //    }
+        //    else
+        //    {
+        //        ActivityCompat.RequestPermissions(this, REQUIRED_READPHONESTATE_PERMISSIONS, RC_REQUEST_READPHONESTATE_PERMISSION);
+        //    }
+        //}
 
 
 

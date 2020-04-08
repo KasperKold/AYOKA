@@ -21,6 +21,7 @@ namespace FallDetectionApp.ViewModels
 
         public ConfigViewModel()
         {
+
             CommandToConfigPage = new Command(async () =>
             {
                 await Application.Current.MainPage.Navigation.PopAsync();
