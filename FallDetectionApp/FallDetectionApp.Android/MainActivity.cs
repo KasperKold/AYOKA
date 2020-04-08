@@ -26,6 +26,7 @@ using System.Security.Policy;
 using Plugin.Messaging;
 using Android.Content;
 using System.Linq.Expressions;
+using Xamarin.Essentials;
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
 namespace FallDetectionApp.Droid
@@ -48,18 +49,24 @@ namespace FallDetectionApp.Droid
         //static readonly string[] REQUIRED_READPHONESTATE_PERMISSIONS = { Manifest.Permission.ReadPhoneState };
 
 
-        private Timer myTimer;
-        private Timer alertTimer;
+
         private string savedLat;
         private string savedLong;
         private int notMovedCounter;
         public bool readyForSession;
-        public bool alertBool;
+
+
+        private Timer monitorTimer;
+        private Timer alertTimer;
         private int defaultInterval;
         private int timerInterval;
         private int countSeconds;
 
-        private string sessionStartDateTime;
+        //private string sessionStartDateTime;
+
+        private AlertDialog alert;
+        private AlertDialog.Builder dialog;
+        public bool alertBool;
 
 
         private GeoLocation currentGeoPos;
@@ -73,7 +80,7 @@ namespace FallDetectionApp.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
-            //Store our interface class.
+
 
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
@@ -162,16 +169,44 @@ namespace FallDetectionApp.Droid
                 Console.WriteLine("*AutoDial enabled*");
             }
 
+            //  from btnActivate
+            MessagingCenter.Subscribe<GeoDataViewModel>(this, "Activate", (sender) =>
+            {
+
+                Console.WriteLine("STARTING Monitor");
+                monitorTimer.Start();
+            });
+
+            // from btnActivate
+            MessagingCenter.Subscribe<GeoDataViewModel>(this, "Deactivate", (sender) =>
+            {
+                Console.WriteLine("STOPPING Monitor");
+                monitorTimer.Stop();
+            });
+
 
         }
 
         public void initializeComponents()
         {
 
-            defaultInterval = 5000;
-            createTimer(defaultInterval);
             currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
             notMovedCounter = 0;
+
+            // create alert Dialogue
+            dialog = new AlertDialog.Builder(this);
+            alert = dialog.Create();
+
+            // create monitorTimer
+            defaultInterval = 5000;
+            monitorTimer = new Timer();
+
+            // Tell the timer what to do when it elapses
+            monitorTimer.Elapsed += new ElapsedEventHandler(monitorSession);
+            monitorTimer.Interval = defaultInterval;
+            monitorTimer.Enabled = false;
+
+            setDeviceId();
         }
 
 
@@ -181,7 +216,7 @@ namespace FallDetectionApp.Droid
             timerInterval = inputInterval;
 
             // Set it to go off every n seconds 1s =10000
-            myTimer.Interval = timerInterval;
+            monitorTimer.Interval = timerInterval;
         }
 
         // not used atm
@@ -191,18 +226,23 @@ namespace FallDetectionApp.Droid
 
         }
 
-
-        public void createTimer(int interval)
+        public void setDeviceId()
         {
-            // Create a timer
-            myTimer = new Timer();
-
-            // Tell the timer what to do when it elapses
-            myTimer.Elapsed += new ElapsedEventHandler(monitorSession);
-            myTimer.Interval = interval;
-            myTimer.Enabled = false;
-
+            var deviceId = Preferences.Get("my_deviceId", string.Empty);
+            if (string.IsNullOrWhiteSpace(deviceId))
+            {
+                deviceId = System.Guid.NewGuid().ToString();
+                Preferences.Set("deviceId", deviceId);
+            }
         }
+
+        public string getDeviceId()
+        {
+            return Preferences.Get("deviceId", string.Empty);
+        }
+
+
+
 
 
 
@@ -344,7 +384,7 @@ namespace FallDetectionApp.Droid
 
 
 
-        // triggered from precreated Timer started in HandleLocationChanged atm
+        // triggered from precreated Timer started from messageCenter
 
         //The Did You Fall monitoring:
 
@@ -454,43 +494,51 @@ namespace FallDetectionApp.Droid
         void alertContacts()
         {
             Console.Write("A L A R M I N G !");
-            Toast toastCounter = Toast.MakeText(this, " A L A R M I N G!", ToastLength.Long);
-            toastCounter.SetGravity(GravityFlags.FillHorizontal | GravityFlags.CenterHorizontal, 0, 0);
-            toastCounter.Show();
+            alertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call.");
 
+        }
+        async void alertConfirmation(string title, string message)
+        {
+            AlertDialog.Builder alertConfirmBuilder = new AlertDialog.Builder(this);
+            AlertDialog alertConfirm = alertConfirmBuilder.Create();
+            alertConfirm.SetTitle(title);
+            alertConfirm.SetMessage(message);
+            alertConfirm.SetCancelable(false);
+            alertConfirm.Create();
+            alertConfirm.Show();
+            await Task.Delay(3500);
+            // After some action
+            alertConfirm.Dismiss();
         }
 
         // called from monitorsession when geo locaction has not changed 
         async void didYouFallAlert()
         {
 
+            // create alertTimer
             alertTimer = new Timer();
-
             alertTimer.Elapsed += OnTimedEvent;
             countSeconds = 10;
             alertTimer.Interval = 1000;
             alertTimer.Enabled = false;
             alertTimer.Start();
-
-
             alertBool = false;
 
             // userdialog - dismissed from user or when alertContacts() is called -  alarming!
-            Android.App.AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-            AlertDialog alert = dialog.Create();
-            alert.SetTitle("Are u ok?");
+
+            alert.SetTitle("Are You ok?");
             alert.SetMessage("");
-            alert.SetButton("I AM OK!", (c, ev) =>
+            alert.SetButton("I´M OK!", (c, ev) =>
             {
-                Toast toastOK = Toast.MakeText(this, "GOT IT! \nU R OK!", ToastLength.Long);
-                toastOK.SetGravity(GravityFlags.FillHorizontal | GravityFlags.CenterHorizontal, 0, 0);
-                toastOK.Show();
+                alertConfirmation("GOT IT!", "                      YOU ARE OK!");
                 alertBool = true;
+
             });
+
             alert.Show();
 
             //waiting before calling automatic alarm
-            await Task.Delay(10000); //wait for two milli seconds
+            await Task.Delay(10000); //wait for ten milli seconds
             if (!alertBool)
             {
                 alertContacts();
@@ -511,11 +559,7 @@ namespace FallDetectionApp.Droid
                 this.RunOnUiThread(() =>
                 {
                     //Console.WriteLine("Timer: " + countSeconds.ToString() + " SECONDS");
-                    Toast toastCounter = Toast.MakeText(this, countSeconds.ToString(), ToastLength.Long);
-                    toastCounter.SetGravity(GravityFlags.FillHorizontal | GravityFlags.CenterHorizontal, 0, 0);
-                    toastCounter.Show();
-
-                    //FindViewById<TextView>(Resource.Id.textView).Text = countSeconds.ToString();
+                    alert.SetMessage("\n            " + countSeconds.ToString() + " seconds to ALARM...");
                 });
             }
         }
@@ -525,7 +569,7 @@ namespace FallDetectionApp.Droid
 
         public void saveToDb(GeoLocation currentGeo)
         {
-            Console.WriteLine("SAVE to DB " + "\n");
+            Console.WriteLine("SAVING to Db " + "\n");
             App.Database.SaveGeoLocationItemAsync(currentGeo);
         }
 
@@ -535,6 +579,9 @@ namespace FallDetectionApp.Droid
             currentGeoPos.Latitude = lati;
             currentGeoPos.Longitude = longi;
             currentGeoPos.TimeDate = dateTime;
+            currentGeoPos.DeviceId = getDeviceId();
+            //Console.WriteLine("DEVICE ID: " + currentGeoPos.DeviceId);
+
         }
 
         public GeoLocation getCurrentGeoPos()
@@ -555,21 +602,6 @@ namespace FallDetectionApp.Droid
             // Send message - ready to monitor
             MessagingCenter.Send<Object>(this, "GeoMonitorReady");
 
-
-            // btnActivate
-            MessagingCenter.Subscribe<GeoDataViewModel>(this, "Activate", (sender) =>
-            {
-
-                Console.WriteLine("STARTING Monitor");
-                myTimer.Start();
-            });
-
-            // btnActivate
-            MessagingCenter.Subscribe<GeoDataViewModel>(this, "Deactivate", (sender) =>
-            {
-                Console.WriteLine("STOPPING Monitor");
-                myTimer.Stop();
-            });
         }
 
 

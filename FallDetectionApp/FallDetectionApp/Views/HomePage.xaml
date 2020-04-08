@@ -25,12 +25,14 @@
     <StackLayout>
 
 
-        <Label Text="Did You Fall ?" FontSize="Header" TextColor="{StaticResource Primary}" VerticalOptions="Start" HorizontalOptions="Center" />
-
+        <Label Text="Did You Fall ?" FontSize="22" TextColor="{StaticResource Primary}" VerticalOptions="Start" HorizontalOptions="Center" />
+        <!--
         <Button Margin="0,10,0,0" Text="Save Mock Geo in Db" x:Name="btnActivate" HorizontalOptions="Fill" VerticalOptions="Fill"
                         Clicked="OnActivateBtnClicked"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
+        -->
+
 
         <Button Margin="0,10,0,0" Text="Monitor Geo   ->   Save to Db" x:Name="btnDatabasePage" HorizontalOptions="Fill" VerticalOptions="End"
                         Command="{Binding OpenGeoDatabase}"

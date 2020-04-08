@@ -21,7 +21,7 @@ namespace FallDetectionApp.Views
             InitializeComponent();
             BindingContext = new HomeViewModel();
         }
-
+        /*
         private async void OnActivateBtnClicked(object sender, EventArgs e)
         {
             var testGeo = new GeoLocation();
@@ -32,27 +32,29 @@ namespace FallDetectionApp.Views
 
             await App.Database.SaveGeoLocationItemAsync(testGeo);           
         }
+        */
 
-       private async void OnbtnTestSMS_Clicked(object sender, EventArgs e)
+        private async void OnbtnTestSMS_Clicked(object sender, EventArgs e)
         {
             try
             {
                 var permissions = await Permissions.CheckStatusAsync<Permissions.Sms>();
-                if(permissions != PermissionStatus.Granted)
+                if (permissions != PermissionStatus.Granted)
                 {
                     permissions = await Permissions.RequestAsync<Permissions.Sms>();
                 }
 
-                if(permissions != PermissionStatus.Granted)
+                if (permissions != PermissionStatus.Granted)
                 {
                     return;
                 }
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Debug.WriteLine($"Something is wrong: {ex.Message}");
             }
 
-            
+
         }
     }
 }
