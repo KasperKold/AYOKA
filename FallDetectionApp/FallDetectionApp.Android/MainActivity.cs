@@ -250,6 +250,7 @@ namespace FallDetectionApp.Droid
 
 
 
+
         protected override void OnResume()
         {
             Log.Debug(TAG, "OnResume: Location app is moving into foreground");
@@ -515,7 +516,7 @@ namespace FallDetectionApp.Droid
             alertConfirm.SetCancelable(false);
             alertConfirm.Create();
             alertConfirm.Show();
-            await Task.Delay(3500);
+            await Task.Delay(4000);
             // After some action
             alertConfirm.Dismiss();
         }
@@ -547,7 +548,7 @@ namespace FallDetectionApp.Droid
             alert.Show();
 
             //waiting before calling automatic alarm
-            await Task.Delay(10000); //wait for ten milli seconds
+            await Task.Delay(10000); //wait for ten seconds
             if (!alertBool)
             {
                 alertContacts();
@@ -663,7 +664,9 @@ namespace FallDetectionApp.Droid
             for (int i = 0; i < contactsFromLocalDB.Count; i++)
             {
                 var phoneCall = CrossMessaging.Current.PhoneDialer;
-                if (phoneCall.CanMakePhoneCall && !(contactsFromLocalDB[i].PhoneNr == ""))
+                //&& !(contactsFromLocalDB[i].PhoneNr == "")
+
+                if (phoneCall.CanMakePhoneCall)
                 {
 
 
@@ -709,11 +712,11 @@ namespace FallDetectionApp.Droid
             // If permission has been granted, sms-messenging commences
 
             List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
-
+            //&& !(contactsFromLocalDB[i].PhoneNr == "")
             for (int i = 0; i < contactsFromLocalDB.Count; i++)
             {
                 var smsMessenger = CrossMessaging.Current.SmsMessenger;
-                if (smsMessenger.CanSendSmsInBackground && !(contactsFromLocalDB[i].PhoneNr == ""))
+                if (smsMessenger.CanSendSmsInBackground)
                 {
                     smsMessenger.SendSmsInBackground(contactsFromLocalDB[i].PhoneNr, text);
                 }
@@ -725,6 +728,14 @@ namespace FallDetectionApp.Droid
                 Log.Verbose(TAG, "SMS Contacts:" + contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr); ;
             }
 
+            return await Task.FromResult(true);
+        }
+
+
+
+        async Task<bool> getSessionGeo()
+        {
+            List<Models.GeoLocation> sessionGeoFromLocalDB = await App.Database.GetGeoLocationItemsAsync();
             return await Task.FromResult(true);
         }
 
