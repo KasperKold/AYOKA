@@ -69,7 +69,9 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
 
+
         </ListView>
+
         <!--
         <Button Text="Refresh List" HeightRequest="150" Clicked="UpdateDataListView" />
         -->

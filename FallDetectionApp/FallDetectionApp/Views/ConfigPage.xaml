@@ -9,6 +9,13 @@
     <ContentPage.BindingContext>
         <vm:GeoDataViewModel />
     </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="Accent">#96d1ff</Color>
+            <Color x:Key="LightTextColor">#999999</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="+" Clicked="OnItemAdded">
@@ -19,18 +26,40 @@
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
+    <StackLayout>
+        <Label Text="Contacts" FontSize="30" FontAttributes="Bold"  TextColor="{StaticResource Primary}" VerticalOptions="Start" HorizontalOptions="Center" />
 
-    <ListView x:Name="listView" Margin="20" ItemSelected="OnListItemSelected">
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                        <Label Text="{Binding Name}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                        <Label Text="{Binding PhoneNr}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                        <!--<Image Source="check.png" HorizontalOptions="End" IsVisible="{Binding Done}" /> -->
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-    </ListView>
+        <ListView x:Name="listView" Margin="20" ItemSelected="OnListItemSelected">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                            <Label Text="{Binding Name}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
+                            <Label Text="{Binding PhoneNr}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
+                            <!--<Image Source="check.png" HorizontalOptions="End" IsVisible="{Binding Done}" /> -->
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Label x:Name="lblSliderDialogue" Margin="20,0,20,0" TextColor="{StaticResource Primary}" FontAttributes="Bold"
+
+               Text="{Binding Source={x:Reference sliderDialogue },
+                              Path=Value,
+                              StringFormat='Duration alarm dialogue: {0:F0} sec'}"
+               HorizontalOptions="StartAndExpand"
+               VerticalOptions="CenterAndExpand" FontSize="22"  />
+        <Slider Margin="20,0,0,20" Maximum="60"  Minimum="0"  ThumbColor="{StaticResource Primary}" MinimumTrackColor="{StaticResource Primary}" MaximumTrackColor="DimGray" x:Name="sliderDialogue"/>
+
+
+        <Label x:Name="lblSliderThreshold" Margin="20,0,0,0" TextColor="{StaticResource Primary}" FontAttributes="Bold"
+               Text="{Binding Source={x:Reference sliderThreshold},
+                              Path=Value,
+                              StringFormat='Inactivity threshold: {0:F0} min'}"
+               HorizontalOptions="StartAndExpand"
+               VerticalOptions="CenterAndExpand" FontSize="22"  />
+        <Slider Margin="20,0,0,20"   Maximum="5" Minimum="1" ThumbColor="{StaticResource Primary}" MinimumTrackColor="DimGray" MaximumTrackColor="{StaticResource Primary}" x:Name="sliderThreshold"/>
+        <Button Margin="30,20,30,40" Text="Manage Message" Command="{Binding OpenWebCommand}" BackgroundColor="{StaticResource Primary}" FontSize="22" TextColor="White" />
+    </StackLayout>
 </ContentPage>

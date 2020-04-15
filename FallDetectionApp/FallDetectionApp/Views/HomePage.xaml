@@ -31,6 +31,8 @@
                         Clicked="OnActivateBtnClicked"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
+         
+         
         -->
 
 

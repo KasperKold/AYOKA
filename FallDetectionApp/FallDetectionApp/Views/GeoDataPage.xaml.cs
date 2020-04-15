@@ -35,6 +35,7 @@ namespace FallDetectionApp.Views
             base.OnAppearing();
 
 
+
             // geoDataListView.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
             geoItems.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
             scrollToEndOfList(geoItems);

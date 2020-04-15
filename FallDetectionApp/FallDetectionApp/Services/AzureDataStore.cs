@@ -9,43 +9,43 @@ using FallDetectionApp.Models;
 
 namespace FallDetectionApp.Services
 {/*
-    public class AzureDataStore : IDataStore<Item>
+    public class AzureDataStore : IDataStore<GeoLocation>
     {
         HttpClient client;
-        IEnumerable<Item> items;
+        IEnumerable<GeoLocation> items;
 
         public AzureDataStore()
         {
             client = new HttpClient();
             client.BaseAddress = new Uri($"{App.AzureBackendUrl}/");
 
-            items = new List<Item>();
+            items = new List<GeoLocation>();
         }
 
         bool IsConnected => Connectivity.NetworkAccess == NetworkAccess.Internet;
-        public async Task<IEnumerable<Item>> GetItemsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<GeoLocation>> GetItemsAsync(bool forceRefresh = false)
         {
             if (forceRefresh && IsConnected)
             {
                 var json = await client.GetStringAsync($"api/item");
-                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<Item>>(json));
+                items = await Task.Run(() => JsonConvert.DeserializeObject<IEnumerable<GeoLocation>>(json));
             }
 
             return items;
         }
 
-        public async Task<Item> GetItemAsync(string id)
+        public async Task<GeoLocation> GetItemAsync(string id)
         {
             if (id != null && IsConnected)
             {
                 var json = await client.GetStringAsync($"api/item/{id}");
-                return await Task.Run(() => JsonConvert.DeserializeObject<Item>(json));
+                return await Task.Run(() => JsonConvert.DeserializeObject<GeoLocation>(json));
             }
 
             return null;
         }
 
-        public async Task<bool> AddItemAsync(Item item)
+        public async Task<bool> AddItemAsync(GeoLocation item)
         {
             if (item == null || !IsConnected)
                 return false;
@@ -57,7 +57,7 @@ namespace FallDetectionApp.Services
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<bool> UpdateItemAsync(Item item)
+        public async Task<bool> UpdateItemAsync(GeoLocation item)
         {
             if (item == null || item.Id == null || !IsConnected)
                 return false;
@@ -80,6 +80,8 @@ namespace FallDetectionApp.Services
 
             return response.IsSuccessStatusCode;
         }
+
     }
     */
+
 }
