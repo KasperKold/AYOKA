@@ -512,8 +512,8 @@ namespace FallDetectionApp.Droid
         {
             Console.Write("A L A R M I N G !");
             alertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call shortly");
-            await SmsToContact("Hello, this is a test of sending an sms to all contacts in my FallApp."); //Alexa: +46760996722, Peder: +46733241061
-            await Task.Delay(5000);
+            //await SmsToContact("Hello, this is a test of sending an sms to all contacts in my FallApp."); //Alexa: +46760996722, Peder: +46733241061
+
             await CallContacts();
         }
 
@@ -562,8 +562,10 @@ namespace FallDetectionApp.Droid
             await Task.Delay(10000); //wait for ten seconds
             if (!alertBool)
             {
+
+                alert.Dismiss();     //removing dialogue
                 alertContacts();
-                alert.Dismiss(); //removing dialogue
+
             }
         }
 
@@ -647,6 +649,8 @@ namespace FallDetectionApp.Droid
         // Test Call function
         public async Task<bool> CallContacts()
         {
+            await TextToSpeech.SpeakAsync("Hello World");
+            await TextToSpeech.SpeakAsync("Detta är ett automatiskt meddelande");
             //Checking for permission.
 
             /* try
@@ -675,6 +679,9 @@ namespace FallDetectionApp.Droid
             for (int i = 0; i < contactsFromLocalDB.Count; i++)
             {
                 var phoneCall = CrossMessaging.Current.PhoneDialer;
+                // Debug.WriteLine("Testing to find contact numbers in database: ");
+                Log.Verbose(TAG, "Phone Contacts: " + contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr);
+
                 //&& !(contactsFromLocalDB[i].PhoneNr == "")
 
                 if (phoneCall.CanMakePhoneCall)
@@ -682,15 +689,21 @@ namespace FallDetectionApp.Droid
 
 
                     phoneCall.MakePhoneCall(contactsFromLocalDB[i].PhoneNr);
+                    for (int j = 0; i < 6; j++)
+                    {
+                        await TextToSpeech.SpeakAsync("Hello World         ");
+                        await TextToSpeech.SpeakAsync("This is an automatic emergency message from a mobile application. Your friend Peder needs help please get help to this location: Latitide: 55.8888 and Longitude: 13.4545 ");
+                    }
+                    await Task.Delay(20000);
+
+
 
                 }
+
             }
 
-            // Debug.WriteLine("Testing to find contact numbers in database: ");
-            for (int i = 0; i < contactsFromLocalDB.Count; i++)
-            {
-                Log.Verbose(TAG, "Phone Contacts: " + contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr);
-            }
+
+
 
             return await Task.FromResult(true);
         }
@@ -757,13 +770,13 @@ namespace FallDetectionApp.Droid
         {
             var deviceToCloud = new DeviceToCloud(deviceId, deviceKey, hostName);
 
-            while (true)
-            {
-                string msg;
-                msg = await deviceToCloud.SendFakeDeviceToCloudDataAsync();
-                System.Diagnostics.Debug.WriteLine("{0} > Sending message: {1}", DateTime.Now, msg);
-                await Task.Delay(3000);
-            }
+            // while (true)
+            // {
+            string msg;
+            msg = await deviceToCloud.SendFakeDeviceToCloudDataAsync();
+            System.Diagnostics.Debug.WriteLine("{0} > Sending message: {1}", DateTime.Now, msg);
+            //await Task.Delay(3000);
+            //}
 
         }
 
