@@ -108,5 +108,8 @@ namespace FallDetectionApp.Droid
                 Current.LocationService.StopSelf();
             }
         }
+
+
+
     }
 }

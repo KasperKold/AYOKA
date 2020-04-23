@@ -28,6 +28,8 @@ using Android.Content;
 using System.Linq.Expressions;
 using Xamarin.Essentials;
 using System.Collections.Generic;
+using Microsoft.Azure.Devices.Client;
+using FallDetectionApp.Droid.Services;
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
 namespace FallDetectionApp.Droid
@@ -73,6 +75,13 @@ namespace FallDetectionApp.Droid
         private GeoLocation currentGeoPos;
         private GeoLocation tempGeoPos;
         private UiLocationHandler iUiImplementation;// will be removed
+
+
+
+        static string deviceId = "PederTestDevice";
+        static string deviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
+        static string hostName = "IotFallApp.azure-devices.net";
+        // HostName=IotFallApp.azure-devices.net;DeviceId=PederTestDevice;SharedAccessKey=kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA=
 
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -176,7 +185,7 @@ namespace FallDetectionApp.Droid
             //  from btnActivate
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Activate", (sender) =>
             {
-
+                SendMessages();
                 Console.WriteLine("STARTING Monitor");
                 monitorTimer.Start();
             });
@@ -184,6 +193,7 @@ namespace FallDetectionApp.Droid
             // from btnActivate
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Deactivate", (sender) =>
             {
+                SendMessages();
                 Console.WriteLine("STOPPING Monitor");
                 monitorTimer.Stop();
             });
@@ -540,6 +550,7 @@ namespace FallDetectionApp.Droid
             alert.SetMessage("");
             alert.SetButton("I´M OK!", (c, ev) =>
             {
+
                 alertConfirmation("GOT IT!", "                      YOU ARE OK!");
                 alertBool = true;
 
@@ -737,6 +748,23 @@ namespace FallDetectionApp.Droid
         {
             List<Models.GeoLocation> sessionGeoFromLocalDB = await App.Database.GetGeoLocationItemsAsync();
             return await Task.FromResult(true);
+        }
+
+
+
+
+        async void SendMessages()
+        {
+            var deviceToCloud = new DeviceToCloud(deviceId, deviceKey, hostName);
+
+            while (true)
+            {
+                string msg;
+                msg = await deviceToCloud.SendFakeDeviceToCloudDataAsync();
+                System.Diagnostics.Debug.WriteLine("{0} > Sending message: {1}", DateTime.Now, msg);
+                await Task.Delay(3000);
+            }
+
         }
 
 
