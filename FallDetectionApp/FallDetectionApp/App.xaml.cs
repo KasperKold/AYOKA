@@ -46,7 +46,7 @@ namespace FallDetectionApp
             }
         }
 
-        async protected override void OnStart()
+        protected override void OnStart()
         {
             Debug.WriteLine(" App.xaml OnStart");
             Application.Current.Properties["isVisited_state"] = "false";

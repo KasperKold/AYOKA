@@ -34,7 +34,7 @@
 	<string>FallDetectionApp</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
-	<key>UIBackgroundModes</key>
+	<key>CFBundleLocalizations</key>
 	<array>
 		<string>location</string>
 	</array>

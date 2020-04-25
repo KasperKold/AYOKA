@@ -20,6 +20,7 @@ using Message = Microsoft.Azure.Devices.Client.Message;
 
 namespace FallDetectionApp.Droid.Services
 {
+    [Service]
     public class DeviceToCloud
     {
         private readonly string TAG = "Log DeviceToCloud";

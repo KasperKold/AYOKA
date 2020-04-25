@@ -6,9 +6,9 @@
  <string
         name="app_name"
         >Fall Detector</string>
- <string
-        name="permission_location_rationale"
-        >permission_location_rationale</string>
+    <string
+        name="permission_all_rationale"
+        >Monitor your Location\nCall your Contacts\nSend Sms to your Contacts\n Please press OK!</string>
  <string
         name="notification_text"
         >notification_text</string>
@@ -21,5 +21,4 @@
        <string
         name="alert_confirmation"
         >Contacting help... </string>
-
 </resources>

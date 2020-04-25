@@ -17,6 +17,7 @@
     <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
     <PackageReference Include="Xam.Plugins.Messaging" Version="5.2.0" />
     <PackageReference Include="Microsoft.Azure.Devices.Client" Version="1.25.0" />
+    <PackageReference Include="Plugin.Permissions" Version="6.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ViewModels\EmptyCSharpFile.cs" />

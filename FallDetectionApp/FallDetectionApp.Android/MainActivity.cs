@@ -2,34 +2,26 @@
 
 using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+
 using Android.OS;
 using Android.Support.V4.Content;
-using Xamarin.Forms.PlatformConfiguration;
+
 using Android;
 using Android.Util;
 using Android.Locations;
 using System.Timers;
-using Android.Support.Design.Widget;
 using Android.Support.V4.App;
 using FallDetectionApp.Models;
 using FallDetectionApp.Services;
 using Xamarin.Forms;
 using System.Threading.Tasks;
-using Android.Icu.Util;
-using View = Android.Views.View;
-using FallDetectionApp.Views;
 using FallDetectionApp.ViewModels;
-using System.Security.Policy;
 using Plugin.Messaging;
-using Android.Content;
-using System.Linq.Expressions;
 using Xamarin.Essentials;
 using System.Collections.Generic;
 using Microsoft.Azure.Devices.Client;
 using FallDetectionApp.Droid.Services;
+
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
 namespace FallDetectionApp.Droid
@@ -40,19 +32,12 @@ namespace FallDetectionApp.Droid
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         private readonly string TAG = "Log MainActivity";
-        static readonly int RC_REQUEST_LOCATION_PERMISSION = 1000;
 
-        //static readonly int RC_REQUEST_PHONECALL_PERMISSION = 1000;
-        //static readonly int RC_REQUEST_PHONESMS_PERMISSION = 1000;
-        //static readonly int RC_REQUEST_READPHONESTATE_PERMISSION = 1000;
+        //static readonly int RC_REQUEST_ALL_PERMISSION = 1004;
 
-        static readonly string[] REQUIRED_PERMISSIONS = { Manifest.Permission.AccessFineLocation };
-        //static readonly string[] REQUIRED_PHONECALL_PERMISSIONS = { Manifest.Permission.CallPhone };
-        //static readonly string[] REQUIRED_PHONESMS_PERMISSIONS = { Manifest.Permission.SendSms };
-        //static readonly string[] REQUIRED_READPHONESTATE_PERMISSIONS = { Manifest.Permission.ReadPhoneState };
+        //static readonly string[] REQUIRED_PERMISSIONS = { Manifest.Permission.AccessFineLocation, Manifest.Permission.CallPhone, Manifest.Permission.SendSms, Manifest.Permission.ReadPhoneState };
 
-
-
+        // public static Context Context;
         private string savedLat;
         private string savedLong;
         private int notMovedCounter;
@@ -65,7 +50,7 @@ namespace FallDetectionApp.Droid
         private int timerInterval;
         private int countSeconds;
 
-        //private string sessionStartDateTime;
+
 
         private AlertDialog alert;
         private AlertDialog.Builder dialog;
@@ -75,17 +60,22 @@ namespace FallDetectionApp.Droid
         private GeoLocation currentGeoPos;
         private GeoLocation tempGeoPos;
         private UiLocationHandler iUiImplementation;// will be removed
+        private PermissionService permissionService;
 
 
 
         static string deviceId = "PederTestDevice";
         static string deviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
         static string hostName = "IotFallApp.azure-devices.net";
+
+
         // HostName=IotFallApp.azure-devices.net;DeviceId=PederTestDevice;SharedAccessKey=kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA=
 
 
         protected override void OnCreate(Bundle savedInstanceState)
+
         {
+
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
@@ -100,9 +90,13 @@ namespace FallDetectionApp.Droid
             iUiImplementation = new UiLocationHandler();
             iUiImplementation.setMainActivity(this);
             iUiImplementation = DependencyService.Get<IUiHandler>() as UiLocationHandler;
+            permissionService = new PermissionService(this);
+
 
             initializeComponents();
             LoadApplication(new App());
+
+            permissionService.CheckBuildAndPermissions();
 
 
 
@@ -121,57 +115,8 @@ namespace FallDetectionApp.Droid
                 // notifies us of the changing status of a provider (ie GPS no longer available)
                 LocationHandler.Current.LocationService.StatusChanged += HandleStatusChanged;
             };
+
             Log.Debug(TAG, "OnCreate: Location app is coming to life.");
-
-            // Start the location service:
-            if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation) == (int)Permission.Granted)
-            {
-                Log.Debug(TAG, "User already has granted permission.");
-                LocationHandler.StartLocationService();
-            }
-            else
-            {
-                Log.Debug(TAG, "Have to request permission from the user. ");
-                RequestLocationPermission();
-            }
-
-
-
-
-
-            ////Check for phone call permission
-            //if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.CallPhone) == (int)Permission.Granted)
-            //{
-            //    Log.Debug(TAG, "User already granted PhoneCall permission. ");
-            //}
-            //else
-            //{
-            //    Log.Debug(TAG, "Have to request PhoneCall permission from the user. ");
-            //    RequestPhoneCallPermission();
-            //}
-
-            ////Check for sms permission
-            //if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.SendSms) == (int)Permission.Granted)
-            //{
-            //    Log.Debug(TAG, "User already granted SendSMS permission.");
-            //}
-            //else
-            //{
-            //    Log.Debug(TAG, "Have to request SendSMS permission from the user. ");
-            //    RequestPhoneSMSPermission();
-            //}
-
-            ////Check for read phone state permission
-
-            //if (ContextCompat.CheckSelfPermission(this, Manifest.Permission.ReadPhoneState) == (int)Permission.Granted)
-            //{
-            //    Log.Debug(TAG, "User already granted READPHONESTATE permission.");
-            //}
-            //else
-            //{
-            //    Log.Debug(TAG, "Have to request READPHONESTATE permission from the user. ");
-            //    RequestReadPhoneStatePermission();
-            //}
 
 
 
@@ -201,6 +146,7 @@ namespace FallDetectionApp.Droid
 
         }
 
+
         public void initializeComponents()
         {
 
@@ -222,6 +168,9 @@ namespace FallDetectionApp.Droid
 
             setDeviceId();
         }
+
+
+
 
 
         // not used atm
@@ -285,119 +234,38 @@ namespace FallDetectionApp.Droid
 
 
 
+
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
-            if (requestCode == RC_REQUEST_LOCATION_PERMISSION)
+
+            Log.Debug(TAG, "RC_CODE: " + requestCode);
+
+
+            // if granted then 0 else -1
+
+            if (grantResults[0] == Permission.Granted && grantResults[1] == Permission.Granted && grantResults[2] == Permission.Granted && grantResults[3] == Permission.Granted)
             {
-                if (grantResults.Length == 1 && grantResults[0] == Permission.Granted)
-                {
-                    Log.Debug(TAG, "User granted permission for location.");
-                    LocationHandler.StartLocationService();
+                Log.Debug(TAG, "User has granted all permissions.");
+                LocationHandler.StartLocationService();
+                Log.Debug(TAG, "LocationService Started");
 
-                }
-                else
-                {
-                    Log.Warn(TAG, "User did not grant permission for the location.");
+            }
+            else if (grantResults[0] == Permission.Granted)
+            {
+                Log.Debug(TAG, "Location permission granted");
+                LocationHandler.StartLocationService();
+                Log.Debug(TAG, "LocationService Started");
 
-                }
             }
             else
             {
-                base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-                Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
+                alertConfirmation("Permissions", "Some permissions NOT granted");
             }
-
-
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
-        void RequestLocationPermission()
-        {
-            if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.AccessFineLocation))
-            {
-                var layout = FindViewById(Android.Resource.Id.Content);
-                Snackbar.Make(layout,
-                              Resource.String.permission_location_rationale,
-                              Snackbar.LengthIndefinite)
-                        .SetAction(Resource.String.ok,
-                                   new Action<View>(delegate
-                                   {
-                                       ActivityCompat.RequestPermissions(this, REQUIRED_PERMISSIONS,
-                                                                         RC_REQUEST_LOCATION_PERMISSION);
-                                   })
-                                  ).Show();
-            }
-            else
-            {
-                ActivityCompat.RequestPermissions(this, REQUIRED_PERMISSIONS, RC_REQUEST_LOCATION_PERMISSION);
-            }
-        }
-
-        //void RequestPhoneCallPermission()
-        //{
-        //    if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.CallPhone))
-        //    {
-        //        var layout = FindViewById(Android.Resource.Id.Content);
-        //        Snackbar.Make(layout,
-        //                      Resource.String.permission_location_rationale,
-        //                      Snackbar.LengthIndefinite)
-        //                .SetAction(Resource.String.ok,
-        //                           new Action<View>(delegate
-        //                           {
-        //                               ActivityCompat.RequestPermissions(this, REQUIRED_PHONECALL_PERMISSIONS,
-        //                                                                 RC_REQUEST_PHONECALL_PERMISSION);
-        //                           })
-        //                          ).Show();
-        //    }
-        //    else
-        //    {
-        //        ActivityCompat.RequestPermissions(this, REQUIRED_PHONECALL_PERMISSIONS, RC_REQUEST_PHONECALL_PERMISSION);
-        //    }
-        //}
-
-        //void RequestPhoneSMSPermission()
-        //{
-        //    if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.SendSms))
-        //    {
-        //        var layout = FindViewById(Android.Resource.Id.Content);
-        //        Snackbar.Make(layout,
-        //                      Resource.String.permission_location_rationale,
-        //                      Snackbar.LengthIndefinite)
-        //                .SetAction(Resource.String.ok,
-        //                           new Action<View>(delegate
-        //                           {
-        //                               ActivityCompat.RequestPermissions(this, REQUIRED_PHONESMS_PERMISSIONS,
-        //                                                                 RC_REQUEST_PHONESMS_PERMISSION);
-        //                           })
-        //                          ).Show();
-        //    }
-        //    else
-        //    {
-        //        ActivityCompat.RequestPermissions(this, REQUIRED_PHONESMS_PERMISSIONS, RC_REQUEST_PHONESMS_PERMISSION);
-        //    }
-        //}
-
-        //void RequestReadPhoneStatePermission()
-        //{
-        //    if (ActivityCompat.ShouldShowRequestPermissionRationale(this, Manifest.Permission.ReadPhoneState))
-        //    {
-        //        var layout = FindViewById(Android.Resource.Id.Content);
-        //        Snackbar.Make(layout,
-        //                      Resource.String.permission_location_rationale,
-        //                      Snackbar.LengthIndefinite)
-        //                .SetAction(Resource.String.ok,
-        //                           new Action<View>(delegate
-        //                           {
-        //                               ActivityCompat.RequestPermissions(this, REQUIRED_READPHONESTATE_PERMISSIONS,
-        //                                                                 RC_REQUEST_READPHONESTATE_PERMISSION);
-        //                           })
-        //                          ).Show();
-        //    }
-        //    else
-        //    {
-        //        ActivityCompat.RequestPermissions(this, REQUIRED_READPHONESTATE_PERMISSIONS, RC_REQUEST_READPHONESTATE_PERMISSION);
-        //    }
-        //}
 
 
 
@@ -624,7 +492,6 @@ namespace FallDetectionApp.Droid
 
             // Send message - ready to monitor
             MessagingCenter.Send<Object>(this, "GeoMonitorReady");
-
         }
 
 
@@ -653,26 +520,7 @@ namespace FallDetectionApp.Droid
             await TextToSpeech.SpeakAsync("Detta är ett automatiskt meddelande");
             //Checking for permission.
 
-            /* try
-             {
-                 var permissions = await Permissions.CheckStatusAsync<Permissions.Phone>();
-                 if (permissions != PermissionStatus.Granted)
-                 {
-                     permissions = await Permissions.RequestAsync<Permissions.Phone>();
-                 }
 
-                 if (permissions != PermissionStatus.Granted)
-                 {
-                     Log.Verbose(TAG,  + "Permission to use native Phone function on the phone was denied.");
-                 }
-             }
-             catch (Exception ex)
-             {
-                 Log.Verbose(TAG,  + $"Something is wrong: {ex.Message}");
-             }
-             */
-
-            // If permission has been granted, phone call commences
 
             List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
 
@@ -686,8 +534,6 @@ namespace FallDetectionApp.Droid
 
                 if (phoneCall.CanMakePhoneCall)
                 {
-
-
                     phoneCall.MakePhoneCall(contactsFromLocalDB[i].PhoneNr);
                     for (int j = 0; i < 6; j++)
                     {
@@ -695,11 +541,7 @@ namespace FallDetectionApp.Droid
                         await TextToSpeech.SpeakAsync("This is an automatic emergency message from a mobile application. Your friend Peder needs help please get help to this location: Latitide: 55.8888 and Longitude: 13.4545 ");
                     }
                     await Task.Delay(20000);
-
-
-
                 }
-
             }
 
 
@@ -711,26 +553,6 @@ namespace FallDetectionApp.Droid
         // SMS function fetching contact from database
         public async Task<bool> SmsToContact(string text)
         {
-            /*
-            //Checking for permission.
-            try
-            {
-                var permissions = await Permissions.CheckStatusAsync<Permissions.Sms>();
-                if (permissions != PermissionStatus.Granted)
-                {
-                    permissions = await Permissions.RequestAsync<Permissions.Sms>();
-                }
-
-                if (permissions != PermissionStatus.Granted)
-                {
-                     Log.Verbose(TAG, + "Permission to use native SMS function on the phone was denied.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Verbose(TAG,  + $"Something is wrong: {ex.Message}");
-            }
-            */
 
 
             // If permission has been granted, sms-messenging commences

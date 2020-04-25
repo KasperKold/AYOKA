@@ -42,12 +42,12 @@
                         TextColor="White"/>
 
         <Button Margin="0,10,0,0" Text="Call permissions" x:Name="btnTestCall" HorizontalOptions="Fill" VerticalOptions="End"
-                        Command="{Binding OpenTestCall}"
+                        Command="{Binding CallPermission}"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White"/>
 
         <Button Margin="0,10,0,0" Text="SMS permissions" x:Name="btnTestSMS" HorizontalOptions="Fill" VerticalOptions="End"
-                        Command="{Binding OpenTestSMS}"
+                        Command="{Binding SMSPermission}"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White"/>
 
