@@ -34,27 +34,6 @@ namespace FallDetectionApp.Views
         }
         */
 
-        private async void OnbtnTestSMS_Clicked(object sender, EventArgs e)
-        {
-            try
-            {
-                var permissions = await Permissions.CheckStatusAsync<Permissions.Sms>();
-                if (permissions != PermissionStatus.Granted)
-                {
-                    permissions = await Permissions.RequestAsync<Permissions.Sms>();
-                }
 
-                if (permissions != PermissionStatus.Granted)
-                {
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Something is wrong: {ex.Message}");
-            }
-
-
-        }
     }
 }

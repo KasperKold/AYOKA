@@ -20,127 +20,20 @@ namespace FallDetectionApp.ViewModels
         public HomeViewModel()
         {
             Title = "Home";
-            OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://xamarin.com"));
+            //OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://xamarin.com"));
             OpenGeoDatabase = new Command(async () => { await Application.Current.MainPage.Navigation.PushModalAsync(new Views.GeoDataPage()); });
-            CallPermission = new Command(async () => await GetCallPermission()); //Alexa: +46760996722, Peder: +46733241061 
-            SMSPermission = new Command(async () => await GetSMSPermission());
-            //OpenTestSMS = new Command(async () => await SendTestSMS("+4530295867", "Hello, testing 1-2-3"));   //"Hi, this is an automated text message from DidYouFallApp that tracks my movement. I might have fallen and potentially hurt myself. Please get in contact with me as soon as possible and make sure I am OK."
 
-            // RefreshListView = new Command(async () => { await App.Database.GetGeoLocationItemsAsync(); });
-            // AddGeoLocationToDatabase = new Command(async () =>
             listenGeo();
-            //GetCallPermission();
-            // GetSMSPermission();
+
 
         }
 
         public ICommand OpenWebCommand { get; }
         public ICommand OpenGeoDatabase { get; }
-        public ICommand CallPermission { get; }
-        public ICommand SMSPermission { get; }
+
         //public ICommand RefreshListView { get; }
         //public ICommand AddGeoLocationToDatabase { get; }
 
-        // Test Call function
-        public async Task<bool> GetCallPermission()
-        {
-            //Checking for permission.
-            Debug.WriteLine("HOLAAAA 1");
-            try
-            {
-                var permissions = await Permissions.CheckStatusAsync<Permissions.Phone>();
-                if (permissions != PermissionStatus.Granted)
-                {
-                    permissions = await Permissions.RequestAsync<Permissions.Phone>();
-                }
-
-                if (permissions != PermissionStatus.Granted)
-                {
-                    Debug.WriteLine("Permission to use native Phone function on the phone was denied.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Something is wrong with Call Permission: {ex.Message}");
-            }
-            try
-            {
-                Debug.WriteLine("HOLAAAA 2");
-                var permissionsSMS = await Permissions.CheckStatusAsync<Permissions.Sms>();
-                if (permissionsSMS != PermissionStatus.Granted)
-                {
-                    permissionsSMS = await Permissions.RequestAsync<Permissions.Sms>();
-                }
-
-                if (permissionsSMS != PermissionStatus.Granted)
-                {
-                    Debug.WriteLine("Permission to use native SMS function on the phone was denied.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Something is wrong  with SMS Permisson : {ex.Message}");
-            }
-
-
-
-
-
-            return await Task.FromResult(true);
-        }
-
-        // SMS function fetching contact from database
-        public async Task<bool> GetSMSPermission()
-        {
-            //Checking for permission.
-            try
-            {
-                Debug.WriteLine("HOLAAAA 3");
-                var permissionsSMS = await Permissions.CheckStatusAsync<Permissions.Sms>();
-                if (permissionsSMS != PermissionStatus.Granted)
-                {
-                    permissionsSMS = await Permissions.RequestAsync<Permissions.Sms>();
-                }
-
-                if (permissionsSMS != PermissionStatus.Granted)
-                {
-                    Debug.WriteLine("Permission to use native SMS function on the phone was denied.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Something is wrong  with SMS Permisson : {ex.Message}");
-            }
-
-
-            return await Task.FromResult(true);
-        }
-        /*
-        public async Task<bool> GetPermissions(string text)
-        {
-            //Checking for permission.
-            try
-            {
-                var permissions = await Permissions.CheckStatusAsync<Permissions.Sms>();
-                if (permissions != PermissionStatus.Granted)
-                {
-                    permissions = await Permissions.RequestAsync<Permissions.Sms>();
-                }
-
-                if (permissions != PermissionStatus.Granted)
-                {
-                    Debug.WriteLine("Permission to use native SMS function on the phone was denied.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Something is wrong: {ex.Message}");
-            }
-
-
-            return await Task.FromResult(true);
-        }
-        */
 
 
         private string privateCurrentLatitude;
