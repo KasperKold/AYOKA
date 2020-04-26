@@ -5,7 +5,7 @@
         >ok</string>
  <string
         name="app_name"
-        >Fall Detector</string>
+        >Did You Fall App</string>
     <string
         name="permission_all_rationale"
         >Monitor your Location\nCall your Contacts\nSend Sms to your Contacts\n Please press OK!</string>
