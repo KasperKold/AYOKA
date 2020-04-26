@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FallDetectionApp.Services;
@@ -183,3 +183,4 @@ namespace FallDetectionApp.ViewModels
         #endregion
     }
 }
+*/

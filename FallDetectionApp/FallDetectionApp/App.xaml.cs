@@ -25,6 +25,8 @@ namespace FallDetectionApp
         public App()
         {
             InitializeComponent();
+
+            database = Database;
             /*
             if (UseMockDataStore)
                 DependencyService.Register<MockDataStore>();

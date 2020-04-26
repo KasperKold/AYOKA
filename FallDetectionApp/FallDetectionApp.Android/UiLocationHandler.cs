@@ -11,7 +11,7 @@ using System.Timers;
 
 // only used to see geo on homepage and firts try to save to db
 // will be deleted later
-
+/*
 [assembly: Dependency(typeof(FallDetectionApp.Droid.UiLocationHandler))]
 namespace FallDetectionApp.Droid
 {
@@ -65,4 +65,4 @@ namespace FallDetectionApp.Droid
 
     }
 }
-
+*/

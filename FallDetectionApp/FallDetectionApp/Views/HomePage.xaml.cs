@@ -1,4 +1,4 @@
-﻿using FallDetectionApp.ViewModels;
+﻿/*using FallDetectionApp.ViewModels;
 using System;
 using System.ComponentModel;
 using Xamarin.Forms;
@@ -26,3 +26,4 @@ namespace FallDetectionApp.Views
 
     }
 }
+*/

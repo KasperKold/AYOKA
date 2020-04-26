@@ -121,6 +121,8 @@ namespace FallDetectionApp.Droid.Services
 
         void RequestAllPermissions()
         {
+
+
             AlertDialog.Builder dialogPermissions = new AlertDialog.Builder(Xamarin.Essentials.Platform.CurrentActivity);
             AlertDialog alertPermissions = dialogPermissions.Create();
 
