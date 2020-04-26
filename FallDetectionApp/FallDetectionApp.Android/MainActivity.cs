@@ -33,11 +33,6 @@ namespace FallDetectionApp.Droid
     {
         private readonly string TAG = "Log MainActivity";
 
-        //static readonly int RC_REQUEST_ALL_PERMISSION = 1004;
-
-        //static readonly string[] REQUIRED_PERMISSIONS = { Manifest.Permission.AccessFineLocation, Manifest.Permission.CallPhone, Manifest.Permission.SendSms, Manifest.Permission.ReadPhoneState };
-
-        // public static Context Context;
         private string savedLat;
         private string savedLong;
         private int notMovedCounter;
