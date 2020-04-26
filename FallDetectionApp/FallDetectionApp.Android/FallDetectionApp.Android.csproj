@@ -79,7 +79,6 @@
     <Compile Include="Services\LocationServiceConnection.cs" />
     <Compile Include="Services\ServiceConnectedEventArgs.cs" />
     <Compile Include="LocationHandler.cs" />
-    <Compile Include="UiLocationHandler.cs" />
     <Compile Include="Services\DeviceToCloud.cs" />
     <Compile Include="Services\PermissionService.cs" />
     <Compile Include="MainActivity.cs" />
