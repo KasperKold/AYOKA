@@ -15,7 +15,7 @@
                 </OnPlatform>
             </NavigationPage.Icon>
             <x:Arguments>
-                <views:HomePage />
+                <views:GeoDataPage />
             </x:Arguments>
         </NavigationPage>
 

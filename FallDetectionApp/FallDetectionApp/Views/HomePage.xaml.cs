@@ -21,18 +21,7 @@ namespace FallDetectionApp.Views
             InitializeComponent();
             BindingContext = new HomeViewModel();
         }
-        /*
-        private async void OnActivateBtnClicked(object sender, EventArgs e)
-        {
-            var testGeo = new GeoLocation();
-            testGeo.Id = 123;
-            testGeo.Latitude = "1111111";
-            testGeo.Longitude = "2222222";
-            testGeo.Info = "from Activate Button Homepage";
 
-            await App.Database.SaveGeoLocationItemAsync(testGeo);           
-        }
-        */
 
 
     }

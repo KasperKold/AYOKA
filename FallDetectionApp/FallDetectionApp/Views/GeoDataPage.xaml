@@ -4,17 +4,10 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"
-
-             
              mc:Ignorable="d"
              x:Class="FallDetectionApp.Views.GeoDataPage">
 
     <!--xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"-->
-
-    <!--<ContentPage.BindingContext>
-        <vm:GeoDataViewModel />
-    </ContentPage.BindingContext>-->
-
     <!--<ContentPage.ToolbarItems>
         <ToolbarItem Text="+" Clicked="OnItemAdded">
             <ToolbarItem.IconImageSource>
@@ -39,17 +32,8 @@
     </ContentPage.BindingContext>
 
     <StackLayout>
-        <Label Text="GeoLocation database"
-               FontSize="Medium"
-               TextColor="{StaticResource Primary}"
-               VerticalOptions="CenterAndExpand" 
-               HorizontalOptions="CenterAndExpand" />
-        <!--
-        <Button Text="Save" Clicked="SaveGeoLocationItem" />
-        <Label Text="         "   d:Text="Latitude:" />
-         -->
-        <Button HeightRequest="150" x:Name="btnActivate" Text="{Binding btnActivateTxt}" Command="{Binding ToggleDidYouFall}"  />
-
+        <Label Text="Did You Fall ?" FontSize="58" FontAttributes="Bold"  TextColor="{StaticResource Primary}" VerticalOptions="Start" HorizontalOptions="Center" />
+        <Button Margin="0,10,0,0" HeightRequest="150" Text="{Binding btnActivateTxt}" x:Name="btnActivate" Command="{Binding ToggleDidYouFall}"  HorizontalOptions="Fill" VerticalOptions="End" BackgroundColor="{StaticResource Primary}" TextColor="White"/>
         <!--x:Name="geoDataListView"       Command="{Binding OpenGeoDatabase}" IsRefreshing="{Binding IsBusy, Mode=OneWay}"  CachingStrategy="RecycleElement"  RefreshCommand="{Binding RefreshListView}"
                 IsPullToRefreshEnabled="true"-->
         <ListView x:Name="geoItems" Margin="20" ItemSelected="OnListItemSelected" HasUnevenRows="True">
@@ -68,14 +52,6 @@
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
-
-
         </ListView>
-
-        <!--
-        <Button Text="Refresh List" HeightRequest="150" Clicked="UpdateDataListView" />
-        -->
     </StackLayout>
-
-
 </ContentPage>
