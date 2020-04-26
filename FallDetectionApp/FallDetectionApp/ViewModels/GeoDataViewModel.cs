@@ -15,7 +15,7 @@ using FallDetectionApp.Services;
 using Xamarin.Essentials;
 using System.Threading;
 
-[assembly: Xamarin.Forms.Dependency(typeof(FallDetectionApp.ViewModels.GeoDataViewModel))]
+//[assembly: Xamarin.Forms.Dependency(typeof(FallDetectionApp.ViewModels.GeoDataViewModel))]
 namespace FallDetectionApp.ViewModels
 {
     public class GeoDataViewModel : BaseViewModel, INotifyPropertyChanged
@@ -27,7 +27,8 @@ namespace FallDetectionApp.ViewModels
 
         public GeoDataViewModel()
         {
-            //Title = "Browse";
+            Title = "Home";
+
             //GeoItems = new ObservableCollection<GeoLocation>();
             //LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 

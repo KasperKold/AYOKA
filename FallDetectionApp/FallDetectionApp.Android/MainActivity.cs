@@ -56,6 +56,7 @@ namespace FallDetectionApp.Droid
         private GeoLocation tempGeoPos;
         private UiLocationHandler iUiImplementation;// will be removed
         private PermissionService permissionService;
+        private CallAndSms callAndSms;
 
 
 
@@ -86,6 +87,7 @@ namespace FallDetectionApp.Droid
             iUiImplementation.setMainActivity(this);
             iUiImplementation = DependencyService.Get<IUiHandler>() as UiLocationHandler;
             permissionService = new PermissionService(this);
+            callAndSms = new CallAndSms();
 
 
             initializeComponents();
@@ -374,10 +376,10 @@ namespace FallDetectionApp.Droid
         async void alertContacts()
         {
             Console.Write("A L A R M I N G !");
-            alertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call shortly");
-            //await SmsToContact("Hello, this is a test of sending an sms to all contacts in my FallApp."); //Alexa: +46760996722, Peder: +46733241061
-
-            await CallContacts();
+            alertConfirmation("A L A R M I N G !"
+, "Contacts will receive \nSMS & Phone call shortly");
+            await callAndSms.SmsToContact();
+            await callAndSms.CallContacts();
         }
 
         async void alertConfirmation(string title, string message)
@@ -505,72 +507,6 @@ namespace FallDetectionApp.Droid
             Log.Debug(TAG, "Location status changed, event raised");
         }
 
-
-
-
-        // Test Call function
-        public async Task<bool> CallContacts()
-        {
-            await TextToSpeech.SpeakAsync("Hello World");
-            await TextToSpeech.SpeakAsync("Detta är ett automatiskt meddelande");
-            //Checking for permission.
-
-
-
-            List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
-
-            for (int i = 0; i < contactsFromLocalDB.Count; i++)
-            {
-                var phoneCall = CrossMessaging.Current.PhoneDialer;
-                // Debug.WriteLine("Testing to find contact numbers in database: ");
-                Log.Verbose(TAG, "Phone Contacts: " + contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr);
-
-                //&& !(contactsFromLocalDB[i].PhoneNr == "")
-
-                if (phoneCall.CanMakePhoneCall)
-                {
-                    phoneCall.MakePhoneCall(contactsFromLocalDB[i].PhoneNr);
-                    for (int j = 0; i < 6; j++)
-                    {
-                        await TextToSpeech.SpeakAsync("Hello World         ");
-                        await TextToSpeech.SpeakAsync("This is an automatic emergency message from a mobile application. Your friend Peder needs help please get help to this location: Latitide: 55.8888 and Longitude: 13.4545 ");
-                    }
-                    await Task.Delay(20000);
-                }
-            }
-
-
-
-
-            return await Task.FromResult(true);
-        }
-
-        // SMS function fetching contact from database
-        public async Task<bool> SmsToContact(string text)
-        {
-
-
-            // If permission has been granted, sms-messenging commences
-
-            List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
-            //&& !(contactsFromLocalDB[i].PhoneNr == "")
-            for (int i = 0; i < contactsFromLocalDB.Count; i++)
-            {
-                var smsMessenger = CrossMessaging.Current.SmsMessenger;
-                if (smsMessenger.CanSendSmsInBackground)
-                {
-                    smsMessenger.SendSmsInBackground(contactsFromLocalDB[i].PhoneNr, text);
-                }
-            }
-
-            // Debug.WriteLine("Testing to find contact numbers in database: ");
-            for (int i = 0; i < contactsFromLocalDB.Count; i++)
-            {
-                Log.Verbose(TAG, "SMS Contacts:" + contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr); ;
-            }
-
-            return await Task.FromResult(true);
-        }
 
 
 
