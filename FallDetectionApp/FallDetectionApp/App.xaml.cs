@@ -25,7 +25,7 @@ namespace FallDetectionApp
         public App()
         {
             InitializeComponent();
-
+            Application.Current.Properties["isVisited_state"] = "false";
             database = Database;
             /*
             if (UseMockDataStore)
@@ -51,7 +51,7 @@ namespace FallDetectionApp
         protected override void OnStart()
         {
             Debug.WriteLine(" App.xaml OnStart");
-            Application.Current.Properties["isVisited_state"] = "false";
+
 
         }
 

@@ -34,7 +34,8 @@ namespace FallDetectionApp.Views
         {
             base.OnAppearing();
 
-
+            var vm = (GeoDataViewModel)BindingContext;
+            vm.initialize();
 
             // geoDataListView.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
             geoItems.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
@@ -63,18 +64,7 @@ namespace FallDetectionApp.Views
             }
             */
         }
-        /*
-        async void SaveGeoLocationItem(object sender, EventArgs e)
-        {
-            var testGeo = new GeoLocation();
-            testGeo.Id = 999;
-            testGeo.Latitude = "888888";
-            testGeo.Longitude = "7777777";
-            testGeo.Info = "from Save Button GeoDataPage";
-            await App.Database.SaveGeoLocationItemAsync(testGeo);
-            //await Navigation.PopAsync();
-        }
-        */
+
 
         public void listenToRefreshList()
         {
@@ -100,7 +90,7 @@ namespace FallDetectionApp.Views
             geoItems.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
             scrollToEndOfList(geoItems);
 
-            //geoDataListView.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
+
             //await Navigation.PopAsync();
         }
 

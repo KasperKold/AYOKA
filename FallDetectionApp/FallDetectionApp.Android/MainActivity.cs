@@ -5,13 +5,15 @@ using Android.OS;
 using Android.Util;
 using Android.Locations;
 using Xamarin.Forms;
+using Application = Xamarin.Forms.Application;
 using FallDetectionApp.ViewModels;
 using Plugin.Messaging;
 using Xamarin.Essentials;
 using System.Collections.Generic;
 using Microsoft.Azure.Devices.Client;
 using FallDetectionApp.Droid.Services;
-
+using Xamarin.Forms.PlatformConfiguration.AndroidSpecific.AppCompat;
+using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
 namespace FallDetectionApp.Droid
@@ -70,10 +72,6 @@ namespace FallDetectionApp.Droid
             Log.Debug(TAG, "OnCreate: Location app is coming to life.");
 
 
-
-            //messaging handling when to activate and deactivate geo monitoring -  subscribtion in Handlelocationchanged
-
-            //  from btnActivate
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Activate", (sender) =>
             {
                 //SendMessages();
@@ -106,6 +104,8 @@ namespace FallDetectionApp.Droid
 
         protected override void OnDestroy()
         {
+
+            //Application.Current.Properties["isVisited_state"] = "false";
             Log.Debug(TAG, "OnDestroy: Location app is becoming inactive");
             base.OnDestroy();
 
@@ -156,12 +156,8 @@ namespace FallDetectionApp.Droid
 
         public void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
-            var location = e.Location;
-            string lati = $"{location.Latitude}".Substring(0, 7);
-            string longi = $"{location.Longitude}".Substring(0, 7);
 
-            DateTime dateTime = DateTime.Now.ToLocalTime();
-            monitor.SetGeoInstance(lati, longi, dateTime.ToString());
+            monitor.SetGeoInstance(e);
 
             // Send message - ready to monitor
             MessagingCenter.Send<Object>(this, "GeoMonitorReady");

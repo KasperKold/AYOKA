@@ -49,27 +49,32 @@ namespace FallDetectionApp.ViewModels
             if (!visited)
             {
                 setUp();
+                int geoPeriod = 1;
+                int secToAlarm = 30;
+                Application.Current.Properties["geoPeriod_setting"] = geoPeriod.ToString();
+                Application.Current.Properties["secToAlarm_setting"] = secToAlarm.ToString();
+
             }
             else
             {
                 checkAndSetPropertiesMonitor();
-                checkAndSetPropetiesBtnActivate();
+                checkAndSetPropertiesBtnActivate();
             }
 
         }
 
-        public void setUp()
+        async public void setUp()
 
         {
             btnActivateTxt = "Preparing Location\n   Service";
             isActivated = false;
             monitorReady = false; //Waiting for LocationService to establish   -  message ready in HandleLocationChanged in MainActivityMessaginCenter
 
-            // from MainActivity HanleLocationChanged
+            // from MainActivity HandleLocationChanged
 
             MessagingCenter.Subscribe<Object>(this, "GeoMonitorReady", (sender) =>
             {
-                Debug.WriteLine("Message received once");
+                Debug.WriteLine("Message received from Location Manager");
                 monitorReady = true;
                 btnActivateTxt = "Activate";
 
@@ -80,36 +85,24 @@ namespace FallDetectionApp.ViewModels
                 MessagingCenter.Unsubscribe<Object>(this, "GeoMonitorReady");
             });
 
+
+            MessagingCenter.Subscribe<Object>(this, "InactivityDetected", (sender) =>
+            {
+                isActivated = false;
+                btnActivateTxt = "Activate";
+                checkAndSetPropertiesBtnActivate();
+
+            });
+
+
+            MessagingCenter.Subscribe<Object, string>(this, "SecToCheck", async (sender, arg) =>
+            {
+                btnActivateTxt = "DeActivate\nNext Check in " + arg + " Sec...";
+            });
+
         }
 
-        /*
-        // not used atm
-        async Task ExecuteLoadItemsCommand()
-        {
-            if (IsBusy)
-                return;
 
-            IsBusy = true;
-
-            try
-            {
-                GeoItems.Clear();
-                var items = await App.Database.GetGeoLocationItemsAsync();
-                foreach (var item in items)
-                {
-                    GeoItems.Add(item);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-        */
 
         public void checkAndSetPropertiesMonitor()
         {
@@ -123,7 +116,7 @@ namespace FallDetectionApp.ViewModels
         }
 
 
-        public void checkAndSetPropetiesBtnActivate()
+        public void checkAndSetPropertiesBtnActivate()
         {
 
             if (Application.Current.Properties.ContainsKey("isActivated_state"))
@@ -155,7 +148,10 @@ namespace FallDetectionApp.ViewModels
         }
 
 
-        // from btnActivate - Actvates the monitoring of session in HandleLocation Changed
+        //  demand to activate or deactivate from btnActivate
+        //  Checkin if monitor is ready and active
+        //  sets buttorn accordingly Actvates the monitoring of session in Mainactivity Messaging center
+
         public void toggleDidYouFall()
         {
 

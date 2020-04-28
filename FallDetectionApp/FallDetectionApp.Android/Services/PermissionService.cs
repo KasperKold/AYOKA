@@ -127,7 +127,7 @@ namespace FallDetectionApp.Droid.Services
             AlertDialog alertPermissions = dialogPermissions.Create();
 
             alertPermissions.SetTitle("This app need your permission to:");
-            alertPermissions.SetMessage("Monitor your Location\nCall your Contacts\nSend Sms to your Contacts\n Please press OK!");
+            alertPermissions.SetMessage("Monitor your Location\nCall your Contacts\nSend Sms your Contacts\nPlease press OK!");
 
             alertPermissions.SetButton("OK!", (c, ev) =>
             {
