@@ -37,11 +37,7 @@ namespace FallDetectionApp.Views
                 {
                     btnActivate.IsEnabled = false;
                 }
-
-
             });
-
-
         }
 
         protected override async void OnAppearing()

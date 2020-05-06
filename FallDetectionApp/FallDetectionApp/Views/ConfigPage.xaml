@@ -62,7 +62,7 @@
                VerticalOptions="Center" FontSize="17"  />
         <!--Value="{Binding Source={x:Reference sliderDialogue}}-->
 
-        <Slider x:Name="sliderThreshold" Margin="30,12,30,12" Maximum="5" Minimum="0"  ValueChanged="OnSliderValueChanged" ThumbColor="{StaticResource Primary}" MinimumTrackColor="{StaticResource Primary}" MaximumTrackColor="DimGray" />
+        <Slider x:Name="sliderThreshold" Margin="30,12,30,12" Maximum="5" Minimum="1"  ValueChanged="OnSliderValueChanged" ThumbColor="{StaticResource Primary}" MinimumTrackColor="{StaticResource Primary}" MaximumTrackColor="DimGray" />
 
         <Label x:Name="lblMessage" Margin="0,0,0,0" Padding="5,5" TextColor="White" BackgroundColor="{StaticResource Primary}"  HorizontalTextAlignment="Center" Text="Edit Alarm SMS/Digital Voice Message:" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="17" />
 

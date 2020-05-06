@@ -109,7 +109,7 @@ namespace FallDetectionApp.ViewModels
 
             MessagingCenter.Subscribe<Object, string>(this, "SecToCheck", async (sender, arg) =>
             {
-                btnActivateTxt = "DeActivate\n\nNext Check in " + arg + " Sec . . .";
+                btnActivateTxt = "DeActivate\n\nNext Check:\n" + arg;
             });
         }
 

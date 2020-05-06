@@ -43,30 +43,50 @@ namespace FallDetectionApp.Droid.Services
         }
 
 
-        string GetLittleMessage()
-        {
-            string testMessage = "Dolores";
 
-            return testMessage;
-        }
 
-        public Task<string> SendFakeDeviceToCloudDataAsync()
-        {
-            return SendDeviceToCloudDataAsync(GetLittleMessage());
-        }
 
-        async Task<string> SendDeviceToCloudDataAsync(string text)
+        public async Task<string> SendMessageToIotHubAsync(GeoLocation currentGeo)
         {
+            GeoLocation messageGeoLocation = currentGeo;
+            //messageGeoLocation.DeviceId="";
+            //messageGeoLocation.Id ="";
+            //messageGeoLocation.Latitude = "55.11111";
+            //messageGeoLocation.Longitude = "13.34353636";
+            //messageGeoLocation.TimeDate="";
+            //messageGeoLocation.Info="";
+
             var telemetryDataPoint = new
             {
                 messageId = messageId++,
-                deviceId = deviceId,
-                test = GetLittleMessage()
+                deviceId,
+                messageGeoLocation
             };
 
             var messageString = JsonConvert.SerializeObject(telemetryDataPoint);
             var message = new Message(System.Text.Encoding.ASCII.GetBytes(messageString));
-            Log.Verbose(TAG, "\nSENDING STRING DOLORES");
+            Log.Verbose(TAG, "\nSENDING MESSAGE TO IOT-HUB");
+            Log.Verbose(TAG, "Message: " + message.ContentType + "\nMessageString: " + messageString);
+
+            await deviceClient.SendEventAsync(message);
+
+            return messageString;
+        }
+
+        public async Task<string> SendTEXTMessageToIotHubAsync(string text)
+        {
+
+
+            var telemetryDataPoint = new
+            {
+                messageId = messageId++,
+                deviceId,
+                text
+            };
+
+            var messageString = JsonConvert.SerializeObject(telemetryDataPoint);
+            var message = new Message(System.Text.Encoding.ASCII.GetBytes(messageString));
+            Log.Verbose(TAG, "\nSENDING MESSAGE TO IOT-HUB");
             Log.Verbose(TAG, "Message: " + message.ContentType + "\nMessageString: " + messageString);
 
             await deviceClient.SendEventAsync(message);
@@ -75,37 +95,25 @@ namespace FallDetectionApp.Droid.Services
         }
 
 
+        /*
 
-
-        //var rand = new Random();
-
-        //var testGeo = new GeoLocation();
-        /* {
-             testGeo.Id = rand.Next(),
-             testGeo.Latitude = rand.NextDouble(),
-             testGeo.Longitude = rand.NextDouble(),
-             testGeo.TimeDate=rand.NextDouble(),
-             GyroY = rand.NextDouble(),
-             GyroZ = rand.NextDouble(),
-         };
-         */
-
-        async void ReceiveCloudToDeviceMessagesAsync()
-        {
-            Log.Verbose(TAG, "\nReceiving cloud to device messages from service");
-
-            while (true)
+            async void ReceiveCloudToDeviceMessagesAsync()
             {
-                var receivedMessage = await deviceClient.ReceiveAsync();
+                Log.Verbose(TAG, "\nReceiving cloud to device messages from service");
 
-                if (receivedMessage == null)
-                    continue;
+                while (true)
+                {
+                    var receivedMessage = await deviceClient.ReceiveAsync();
 
-                Log.Verbose(TAG, "Received message: {0}", Encoding.ASCII.GetString(receivedMessage.GetBytes()));
+                    if (receivedMessage == null)
+                        continue;
 
-                await deviceClient.CompleteAsync(receivedMessage);
+                    Log.Verbose(TAG, "Received message: {0}", Encoding.ASCII.GetString(receivedMessage.GetBytes()));
+
+                    await deviceClient.CompleteAsync(receivedMessage);
+                }
             }
-        }
+            */
 
 
 

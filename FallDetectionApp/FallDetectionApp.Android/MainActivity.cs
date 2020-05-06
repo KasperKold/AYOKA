@@ -32,10 +32,11 @@ namespace FallDetectionApp.Droid
         private CallAndSms callAndSms;
         private Monitor monitor;
         private ToastAndroid deliverToasts;
+        private DeviceToCloud deviceToCloud;
 
-        static string deviceId = "PederTestDevice";
-        static string deviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
-        static string hostName = "IotFallApp.azure-devices.net";
+        static string deviceId;
+        static string deviceKey;
+        static string hostName;
 
         // HostName=IotFallApp.azure-devices.net;DeviceId=PederTestDevice;SharedAccessKey=kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA=
 
@@ -50,11 +51,17 @@ namespace FallDetectionApp.Droid
             base.OnCreate(savedInstanceState);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+
             Forms.Init(this, savedInstanceState);
 
 
             deliverToasts = new ToastAndroid();
             deliverToasts = DependencyService.Get<IToast>() as ToastAndroid;
+
+            deviceId = "PederTestDevice";
+            deviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
+            hostName = "IotFallApp.azure-devices.net";
+            deviceToCloud = new DeviceToCloud(deviceId, deviceKey, hostName);
 
             permissionService = new PermissionService(this);
             callAndSms = new CallAndSms();
@@ -91,7 +98,7 @@ namespace FallDetectionApp.Droid
             // from btnActivate
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Deactivate", (sender) =>
             {
-                //SendMessages();
+                SendMessages();
                 Console.WriteLine("STOPPING Monitor");
                 monitor.StopMonitor();
             });
@@ -152,7 +159,7 @@ namespace FallDetectionApp.Droid
             else
             {
 
-                monitor.AlertConfirmation("Permissions", "Some permissions NOT granted");
+                monitor.AlertConfirmation("Permissions", "Some permissions NOT granted", 1500);
             }
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -165,7 +172,6 @@ namespace FallDetectionApp.Droid
 
         public void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
-
 
             monitor.SetGeoInstance(e);
 
@@ -193,14 +199,14 @@ namespace FallDetectionApp.Droid
 
         // sends message to IOT hub  via DeviceToCloud.cs- IN PROCESS!!
 
-        async void SendMessages()
+        public async void SendMessages()
         {
             var deviceToCloud = new DeviceToCloud(deviceId, deviceKey, hostName);
 
             // while (true)
             // {
             string msg;
-            msg = await deviceToCloud.SendFakeDeviceToCloudDataAsync();
+            msg = await deviceToCloud.SendTEXTMessageToIotHubAsync("Livet efter Corona");
             System.Diagnostics.Debug.WriteLine("{0} > Sending message: {1}", DateTime.Now, msg);
             //await Task.Delay(3000);
             //}

@@ -45,8 +45,6 @@ namespace FallDetectionApp.Droid
         private AlertDialog alert;
         private AlertDialog.Builder dialog;
 
-
-
         private GeoLocation currentGeoPos;
         private GeoLocation tempGeoPos;
 
@@ -180,7 +178,7 @@ namespace FallDetectionApp.Droid
 
         public void StartMonitor()
         {
-            sessionStart = true;
+            //sessionStart = true;
             setComparingGeo();
             this.tempGeoPos = GetCurrentGeoPos();
             SaveToDb(tempGeoPos);
@@ -215,7 +213,14 @@ namespace FallDetectionApp.Droid
 
         void CountDown(object sender, ElapsedEventArgs e)
         {
-            MessagingCenter.Send<Object, string>(this, "SecToCheck", countDownActivateBtn.ToString());
+
+
+            TimeSpan time = TimeSpan.FromSeconds(countDownActivateBtn);
+
+            //here backslash is must to tell that colon is
+            //not the part of format, it just a character that we want in output
+            string str = time.ToString(@"mm\:ss");
+            MessagingCenter.Send<Object, string>(this, "SecToCheck", str);
             countDownActivateBtn--;
         }
 
@@ -226,7 +231,6 @@ namespace FallDetectionApp.Droid
            {
                if (CheckInactivity())
                {
-
                    alertTimer.Start();
                    alertBool = true;
 
@@ -236,7 +240,7 @@ namespace FallDetectionApp.Droid
                    alert.SetButton("I´M OK!", (c, ev) =>
                    {
                        alertBool = false;
-                       AlertConfirmation("GOT IT!", "                      YOU ARE OK!");
+                       AlertConfirmation("GOT IT!", "                      YOU ARE OK!", 1500);
                    });
 
                    alert.Show();
@@ -261,6 +265,7 @@ namespace FallDetectionApp.Droid
             monitorTimer.Stop();
             guiTimer.Stop();
             MessagingCenter.Send<Object>(this, "InactivityDetected"); //setting button to "Activate
+            //mainActivity.SendMessages();
             //sessionStart = false;
         }
 
@@ -277,16 +282,14 @@ namespace FallDetectionApp.Droid
 
         public bool CheckInactivity()
         {
-
             bool inactivityDetected = false;
             this.tempGeoPos = GetCurrentGeoPos();
-
 
             // these events are on a background thread, need to update on the UI thread
 
             if (tempGeoPos.Latitude.Substring(0, 6).Equals(savedLat.Substring(0, 6)) && tempGeoPos.Longitude.Substring(0, 6).Equals(savedLong.Substring(0, 6)))
             {
-
+                tempGeoPos.Info = "INACTIVITY DETECTED";
                 inactivityDetected = true; //ALARM
             }
 
@@ -317,8 +320,9 @@ namespace FallDetectionApp.Droid
 
 
         // creating an alert that disspears after 4 sec
-        public async void AlertConfirmation(string title, string message)
+        public async void AlertConfirmation(string title, string message, int messageDuration)
         {
+            int duration = messageDuration;
             AlertDialog.Builder alertConfirmBuilder = new AlertDialog.Builder(Xamarin.Essentials.Platform.CurrentActivity);
             AlertDialog alertConfirm = alertConfirmBuilder.Create();
             alertConfirm.SetTitle(title);
@@ -326,7 +330,7 @@ namespace FallDetectionApp.Droid
             alertConfirm.SetCancelable(false);
             alertConfirm.Create();
             alertConfirm.Show();
-            await Task.Delay(2500);
+            await Task.Delay(messageDuration);
             alertConfirm.Dismiss();
         }
 
@@ -337,7 +341,7 @@ namespace FallDetectionApp.Droid
         async void AlertContacts()
         {
             Console.Write("A L A R M I N G !");
-            AlertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call shortly");
+            AlertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call shortly", 2500);
             await callAndSms.SmsToContact();
             await callAndSms.CallContacts();
         }
