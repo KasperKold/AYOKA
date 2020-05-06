@@ -20,11 +20,11 @@ namespace FallDetectionApp.Droid.Services
         private readonly string TAG = "Log PermissionService";
         private MainActivity mainActivity;
         // private Context currentContext;
-        private ResourceManager rm;
+        //private ResourceManager rm;
 
 
         static readonly int RC_REQUEST_ALL_PERMISSION = 1004;
-        static readonly string[] REQUIRED_PERMISSIONS = { Manifest.Permission.AccessFineLocation, Manifest.Permission.CallPhone, Manifest.Permission.SendSms, Manifest.Permission.ReadPhoneState };
+        //static readonly string[] REQUIRED_PERMISSIONS = { Manifest.Permission.AccessFineLocation, Manifest.Permission.CallPhone, Manifest.Permission.SendSms, Manifest.Permission.ReadPhoneState };
 
 
         public PermissionService(MainActivity mainActivity)

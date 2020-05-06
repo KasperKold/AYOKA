@@ -12,8 +12,10 @@ using Xamarin.Essentials;
 using System.Collections.Generic;
 using Microsoft.Azure.Devices.Client;
 using FallDetectionApp.Droid.Services;
+using FallDetectionApp.Services;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific.AppCompat;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
+using Android.Widget;
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
 namespace FallDetectionApp.Droid
@@ -29,6 +31,7 @@ namespace FallDetectionApp.Droid
         private PermissionService permissionService;
         private CallAndSms callAndSms;
         private Monitor monitor;
+        private ToastAndroid deliverToasts;
 
         static string deviceId = "PederTestDevice";
         static string deviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
@@ -43,14 +46,20 @@ namespace FallDetectionApp.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
+
             base.OnCreate(savedInstanceState);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Forms.Init(this, savedInstanceState);
 
+
+            deliverToasts = new ToastAndroid();
+            deliverToasts = DependencyService.Get<IToast>() as ToastAndroid;
+
             permissionService = new PermissionService(this);
             callAndSms = new CallAndSms();
             monitor = new Monitor(this, callAndSms);
+
             LoadApplication(new App());
             permissionService.CheckBuildAndPermissions();
 
@@ -156,6 +165,7 @@ namespace FallDetectionApp.Droid
 
         public void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
+
 
             monitor.SetGeoInstance(e);
 

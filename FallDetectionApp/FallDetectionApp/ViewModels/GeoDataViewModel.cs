@@ -20,25 +20,22 @@ namespace FallDetectionApp.ViewModels
 {
     public class GeoDataViewModel : BaseViewModel, INotifyPropertyChanged
     {
-        //public ObservableCollection<GeoLocation> GeoItems { get; set; }
-        //public Command LoadItemsCommand { get; set; }
-        public ICommand ToggleDidYouFall { get; }
+
+        public ICommand CmdToggleBtnActivate { get; }
 
 
         public GeoDataViewModel()
         {
             Title = "Home";
 
-            //GeoItems = new ObservableCollection<GeoLocation>();
-            //LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
-            ToggleDidYouFall = new Command(async () => toggleDidYouFall());
+            CmdToggleBtnActivate = new Command(async () => ToggleBtnActivate());
             initialize();
         }
 
 
         public void initialize()
         {
+            visited = false;
             if (Application.Current.Properties.ContainsKey("isVisited_state"))
             {
                 visited = Convert.ToBoolean(Application.Current.Properties["isVisited_state"]);
@@ -46,6 +43,7 @@ namespace FallDetectionApp.ViewModels
                 Debug.WriteLine("Visited direct from properties: " + (Application.Current.Properties["isVisited_state"].ToString()));
             }
 
+            //if app NOT coming from sleep (not visited befire) - set up
             if (!visited)
             {
                 setUp();
@@ -55,6 +53,7 @@ namespace FallDetectionApp.ViewModels
                 Application.Current.Properties["secToAlarm_setting"] = secToAlarm.ToString();
 
             }
+            //if app coming from sleep/resume
             else
             {
                 checkAndSetPropertiesMonitor();
@@ -66,40 +65,52 @@ namespace FallDetectionApp.ViewModels
         async public void setUp()
 
         {
-            btnActivateTxt = "Preparing Location\n   Service";
+            //disable btn
+            MessagingCenter.Send<Object, string>(this, "ableBtnActivate", "disable");
+            btnActivateTxt = "Finding your \n location...";
             isActivated = false;
             monitorReady = false; //Waiting for LocationService to establish   -  message ready in HandleLocationChanged in MainActivityMessaginCenter
 
-            // from MainActivity HandleLocationChanged
 
+
+            // from MainActivity HandleLocationChanged
             MessagingCenter.Subscribe<Object>(this, "GeoMonitorReady", (sender) =>
             {
                 Debug.WriteLine("Message received from Location Manager");
+
                 monitorReady = true;
+                // enable btn
+                MessagingCenter.Send<Object, string>(this, "ableBtnActivate", "enable");
                 btnActivateTxt = "Activate";
 
+                //saving to properties
                 Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["monitorReady_state"] = monitorReady.ToString();
                 Application.Current.Properties["isVisited_state"] = "true";
                 Application.Current.Properties["isActivated_state"] = isActivated;
+
+                // work done - unsubscribe
                 MessagingCenter.Unsubscribe<Object>(this, "GeoMonitorReady");
             });
 
 
             MessagingCenter.Subscribe<Object>(this, "InactivityDetected", (sender) =>
             {
+
                 isActivated = false;
                 btnActivateTxt = "Activate";
-                checkAndSetPropertiesBtnActivate();
+                Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
+                Application.Current.Properties["isActivated_state"] = isActivated;
+
+
 
             });
 
 
             MessagingCenter.Subscribe<Object, string>(this, "SecToCheck", async (sender, arg) =>
             {
-                btnActivateTxt = "DeActivate\nNext Check in " + arg + " Sec...";
+                btnActivateTxt = "DeActivate\n\nNext Check in " + arg + " Sec . . .";
             });
-
         }
 
 
@@ -111,7 +122,6 @@ namespace FallDetectionApp.ViewModels
             {
                 monitorReady = Convert.ToBoolean(Application.Current.Properties["monitorReady_state"].ToString());
                 Debug.WriteLine("monitorReady_state: " + Application.Current.Properties["monitorReady_state"].ToString());
-
             }
         }
 
@@ -123,36 +133,42 @@ namespace FallDetectionApp.ViewModels
             {
                 isActivated = Convert.ToBoolean(Application.Current.Properties["isActivated_state"].ToString());
                 Debug.WriteLine("isActivated_state: " + Application.Current.Properties["isActivated_state"].ToString());
-                if (isActivated)
+            }
+
+            if (isActivated)
+            {
+                btnActivateTxt = "DEACTIVATE";
+                Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
+                Application.Current.Properties["isActivated_state"] = isActivated;
+
+            }
+            else if (!isActivated)
+            {
+                if (!monitorReady)
                 {
-                    btnActivateTxt = "DEACTIVATE";
+
+                    btnActivateTxt = "Preparing Location\n   Service";
+                    Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
+                }
+                else
+                {
+
+                    btnActivateTxt = "Activate";
                     Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                     Application.Current.Properties["isActivated_state"] = isActivated;
+                }
 
-                }
-                else if (!isActivated)
-                {
-                    if (!monitorReady)
-                    {
-                        btnActivateTxt = "Preparing Location\n   Service";
-                        Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
-                    }
-                    else
-                    {
-                        btnActivateTxt = "Activate";
-                        Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
-                        Application.Current.Properties["isActivated_state"] = isActivated;
-                    }
-                }
             }
         }
 
 
         //  demand to activate or deactivate from btnActivate
         //  Checkin if monitor is ready and active
-        //  sets buttorn accordingly Actvates the monitoring of session in Mainactivity Messaging center
+        //  sets button accordingly
+        //  set the bool isActivated accrdingly
 
-        public void toggleDidYouFall()
+
+        public void ToggleBtnActivate()
         {
 
             if (isActivated && monitorReady)
@@ -170,6 +186,7 @@ namespace FallDetectionApp.ViewModels
                 Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
                 MessagingCenter.Send<GeoDataViewModel>(this, "Activate");
+
             }
         }
 

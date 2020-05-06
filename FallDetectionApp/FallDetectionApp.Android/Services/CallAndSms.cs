@@ -12,18 +12,18 @@ namespace FallDetectionApp.Droid.Services
     {
         private string smsMessageDefault = "THIS IS A TEST ONLY: Hi, this is an automatic message from a Mobile application. This user need your help. Please get help to this location: ";
         private string callMessageDefault1 = "THIS IS A TEST ONLY: Attention! This is an automatic emergency message from a mobile application. Your friend Tomas need your help. Please get help to this location: Latitide: 55.8888 and Longitude: 13.4545. Thank you! This message will be repeated ";
-        private string user;
+        //private string user;
         private readonly string TAG = "Log CallAndSms";
 
 
         public CallAndSms()
         {
-            initilatizeComponents();
+            initializeComponents();
         }
 
 
 
-        public void initilatizeComponents()
+        public void initializeComponents()
         {
 
 

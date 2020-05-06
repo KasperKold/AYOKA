@@ -57,6 +57,7 @@ namespace FallDetectionApp.Droid
             this.mainActivity = mainActivity;
             this.callAndSms = callAndSms;
             initializeComponents();
+            SetDeviceId();
 
 
         }
@@ -65,7 +66,7 @@ namespace FallDetectionApp.Droid
         public void initializeComponents()
         {
             currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
-            sessionStart = false;
+            //sessionStart = false;
 
             //geoPeriod = 1;
             //savedGeoPeriod = geoPeriod;
@@ -73,11 +74,6 @@ namespace FallDetectionApp.Droid
             //savedSecToAlarm = secToAlarm;
             //countDownActivateBtn = secToAlarm;
             //SavedCountDownActivateBtn = countDownActivateBtn;
-
-
-
-
-
 
 
 
@@ -93,19 +89,18 @@ namespace FallDetectionApp.Droid
             guiTimer.Enabled = false;
             guiTimer.Interval = 1000;
 
+            //  create alert Timer
+            alertTimer = new Timer();
+            alertTimer.Elapsed += OnTimedEvent;
+            alertTimer.Interval = 1000; //seconds
+            alertTimer.Enabled = false;
+
             // create monitorTimer
             monitorTimer = new Timer();
 
             // Tell the timer what to do when it elapses
             monitorTimer.Elapsed += new ElapsedEventHandler(Session);
             monitorTimer.Enabled = false;
-
-
-
-
-            SetDeviceId();
-
-
         }
 
 
@@ -126,16 +121,21 @@ namespace FallDetectionApp.Droid
             var location = e.Location;
 
             //parse for not to sensitive accuracy
-            string lati = $"{location.Latitude}".Substring(0, 7);
-            string longi = $"{location.Longitude}".Substring(0, 7);
+            string lati = $"{location.Latitude}";
+            string longi = $"{location.Longitude}";
 
             //get date
             DateTime dateTime = DateTime.Now.ToLocalTime();
-            string date_string = dateTime.Date.ToString(); // just date?
+            string date_string = dateTime.ToString();
+
             currentGeoPos.Latitude = lati;
             currentGeoPos.Longitude = longi;
             currentGeoPos.TimeDate = date_string;
-            currentGeoPos.DeviceId = GetDeviceId();
+            //currentGeoPos.DeviceId = new Guid(); //GetDeviceId();
+
+
+
+
 
         }
 
@@ -152,6 +152,8 @@ namespace FallDetectionApp.Droid
             {
                 deviceId = System.Guid.NewGuid().ToString();
                 Preferences.Set("deviceId", deviceId);
+
+                //Log.Debug(TAG, "DEVICE ID:" + deviceId);
             }
         }
 
@@ -159,6 +161,14 @@ namespace FallDetectionApp.Droid
         public string GetDeviceId()
         {
             return Preferences.Get("deviceId", string.Empty);
+        }
+
+        public void setComparingGeo()
+        {
+            savedLat = GetCurrentGeoPos().Latitude;
+            savedLong = GetCurrentGeoPos().Longitude;
+            Log.Debug(TAG, "COMPARING LONGITUDE : " + GetCurrentGeoPos().Longitude.ToString());
+
         }
 
 
@@ -170,15 +180,25 @@ namespace FallDetectionApp.Droid
 
         public void StartMonitor()
         {
+            sessionStart = true;
+            setComparingGeo();
+            this.tempGeoPos = GetCurrentGeoPos();
+            SaveToDb(tempGeoPos);
 
             Log.Debug(TAG, "SEC_TO_ALARM : " + Convert.ToInt32(Application.Current.Properties["secToAlarm_setting"]).ToString());
             Log.Debug(TAG, "GEO_PERIOD : " + Convert.ToInt32(Application.Current.Properties["geoPeriod_setting"]).ToString());
 
+            // for alarm dialogue countdown
             secToAlarm = Convert.ToInt32(Application.Current.Properties["secToAlarm_setting"]);
+            // to reset the above with
             savedSecToAlarm = secToAlarm;
+            // for btnActivate  countdown
             countDownActivateBtn = (60 * Convert.ToInt32(Application.Current.Properties["geoPeriod_setting"])); // right now seconds
+            // to reset the above with
             SavedCountDownActivateBtn = countDownActivateBtn;
+            // for geoPeriod interval in milliseconds
             geoPeriod = 1000 * (60 * Convert.ToInt32(Application.Current.Properties["geoPeriod_setting"]));
+            // to reset the above with
             savedGeoPeriod = geoPeriod;
 
             Log.Debug(TAG, "countDownActivateBtn: " + countDownActivateBtn);
@@ -186,14 +206,8 @@ namespace FallDetectionApp.Droid
             Log.Debug(TAG, "SecToAlarm variable: " + secToAlarm);
 
             monitorTimer.Interval = geoPeriod;
-            sessionStart = true;
-
-
             monitorTimer.Start();
             guiTimer.Start();
-            this.tempGeoPos = GetCurrentGeoPos();
-            SaveToDb(tempGeoPos);
-
 
         }
 
@@ -201,53 +215,53 @@ namespace FallDetectionApp.Droid
 
         void CountDown(object sender, ElapsedEventArgs e)
         {
-
             MessagingCenter.Send<Object, string>(this, "SecToCheck", countDownActivateBtn.ToString());
             countDownActivateBtn--;
-
-
         }
-
 
 
         async public void Session(object sender, ElapsedEventArgs e)
         {
             mainActivity.RunOnUiThread(async () =>
-            {
-                if (CheckInactivity())
-                {
-                    ;
-                    if (DidYouFallAlert()) // Alarm
-                    {
-                        StopMonitor();
-                        MessagingCenter.Send<Object>(this, "InactivityDetected"); //setting button to "Activate
-                        AlertContacts();
+           {
+               if (CheckInactivity())
+               {
 
-                    }
+                   alertTimer.Start();
+                   alertBool = true;
 
-                    // do domething....
+                   // user alarm dialogue 
+                   alert.SetTitle("Are You OK?");
+                   alert.SetMessage("\n            " + secToAlarm + " Seconds to ALARM ...");
+                   alert.SetButton("I´M OK!", (c, ev) =>
+                   {
+                       alertBool = false;
+                       AlertConfirmation("GOT IT!", "                      YOU ARE OK!");
+                   });
 
-                }
-
-
-            });
+                   alert.Show();
+                   //waiting before alarming
+                   await Task.Delay(1000 * savedSecToAlarm); //wait for X seconds
+                   if (!alertBool) //if  I´m ok button not pressed
+                   {
+                       alert.Dismiss();     //removing dialogue
+                   }
+                   else
+                   {
+                       StopMonitor();
+                       AlertContacts();
+                   }
+               }
+           });
 
         }
-
-
-        public void Alarm()
-        {
-
-
-        }
-
-
 
         public void StopMonitor()
         {
             monitorTimer.Stop();
             guiTimer.Stop();
-            sessionStart = false;
+            MessagingCenter.Send<Object>(this, "InactivityDetected"); //setting button to "Activate
+            //sessionStart = false;
         }
 
 
@@ -261,55 +275,23 @@ namespace FallDetectionApp.Droid
             }
         }
 
-
-
-        // triggered from pre-created Timer started from messageCenter in HandleLocationChanged in Mainactivity
-
-        //The Did You Fall monitoring:
-
         public bool CheckInactivity()
         {
 
             bool inactivityDetected = false;
-            string txtNewRow = "\n";
-            string txtPrevLat = "Previous Lat: ";
-            string txtPrevLong = "Previous Long: ";
-            string txtNotMoved = "DEVICE HAS NOT MOVED FOR" + geoPeriod + " SECONDS ! ! !\n";
-            string space16 = "                ";
-            string space11 = "          ";
-
+            this.tempGeoPos = GetCurrentGeoPos();
 
 
             // these events are on a background thread, need to update on the UI thread
 
-            this.tempGeoPos = GetCurrentGeoPos();
-
-            if (sessionStart) //if first time - no saved Lat or Long exists
+            if (tempGeoPos.Latitude.Substring(0, 6).Equals(savedLat.Substring(0, 6)) && tempGeoPos.Longitude.Substring(0, 6).Equals(savedLong.Substring(0, 6)))
             {
-                savedLat = tempGeoPos.Latitude;
-                savedLong = tempGeoPos.Longitude;
-
-                sessionStart = false;
-                //assigns info
-                tempGeoPos.Info = txtPrevLat + space16 + txtPrevLong + txtNewRow + savedLat + space16 + space11 + savedLong + txtNewRow;
-
-                inactivityDetected = false;
-
-
-            }
-            else if (tempGeoPos.Latitude.Equals(savedLat) && tempGeoPos.Longitude.Equals(savedLong))
-            {
-                savedLat = tempGeoPos.Latitude;
-                savedLong = tempGeoPos.Longitude;
-
-                tempGeoPos.Info =
-                txtPrevLat + space16 + txtPrevLong + txtNewRow +
-                savedLat + space16 + space11 + savedLong + txtNewRow;
-                //assigns info
-                tempGeoPos.Info = txtPrevLat + space16 + txtPrevLong + txtNewRow + savedLat + space16 + space11 + savedLong + txtNewRow;
 
                 inactivityDetected = true; //ALARM
             }
+
+            savedLat = tempGeoPos.Latitude;
+            savedLong = tempGeoPos.Longitude;
 
             SaveToDb(tempGeoPos);
             return inactivityDetected;
@@ -317,6 +299,21 @@ namespace FallDetectionApp.Droid
         }
 
 
+        // called from alertTimer counting down alertDialog
+        private void OnTimedEvent(object sender, ElapsedEventArgs e)
+        {
+            secToAlarm--;
+
+            if (secToAlarm < 0)
+            {
+                alertTimer.Stop();
+                secToAlarm = savedSecToAlarm;
+            }
+            else
+            {
+                alert.SetMessage("\n            " + secToAlarm + " Seconds to ALARM ...");
+            }
+        }
 
 
         // creating an alert that disspears after 4 sec
@@ -329,67 +326,13 @@ namespace FallDetectionApp.Droid
             alertConfirm.SetCancelable(false);
             alertConfirm.Create();
             alertConfirm.Show();
-            await Task.Delay(4000);
-            // After some action
+            await Task.Delay(2500);
             alertConfirm.Dismiss();
         }
 
 
 
-        public bool DidYouFallAlert()
-        {
 
-            // create alertTimer with OnTimedEvent with Alarm User Dialogue countdown
-
-            alertTimer = new Timer();
-            alertTimer.Elapsed += OnTimedEvent;
-
-            alertTimer.Interval = 1000; //seconds
-            alertTimer.Enabled = false;
-            alertTimer.Start();
-            alertBool = false;
-
-            // user alarm dialogue 
-            alert.SetTitle("Are You ok?");
-            alert.SetMessage("Device did not move for " + 60 * savedGeoPeriod + " Seconds...");
-            alert.SetButton("I´M OK!", (c, ev) =>
-            {
-                AlertConfirmation("GOT IT!", "                      YOU ARE OK!");
-                alertBool = false;
-            });
-
-            alert.Show();
-
-            //waiting before alarming
-            Task.Delay(1000 * savedSecToAlarm); //wait for X seconds
-            if (alertBool) //if  I´m ok button not pressed
-            {
-                alert.Dismiss();     //removing dialogue
-            }
-
-            return alertBool;
-
-        }
-
-        // called from alertTimer counting down alertDialog
-        private void OnTimedEvent(object sender, ElapsedEventArgs e)
-        {
-
-            secToAlarm--;
-            if (secToAlarm < 0 || alertBool == true)
-            {
-                alertTimer.Stop();
-                secToAlarm = savedSecToAlarm;
-            }
-            else
-            {
-                mainActivity.RunOnUiThread(() =>
-                {
-                    //Console.WriteLine("Timer: " + secToAlarm.ToString() + " SECONDS");
-                    alert.SetMessage("\n            " + secToAlarm.ToString() + " Seconds to ALARM...");
-                });
-            }
-        }
 
         async void AlertContacts()
         {
@@ -398,9 +341,5 @@ namespace FallDetectionApp.Droid
             await callAndSms.SmsToContact();
             await callAndSms.CallContacts();
         }
-
-
-
-
     }
 }

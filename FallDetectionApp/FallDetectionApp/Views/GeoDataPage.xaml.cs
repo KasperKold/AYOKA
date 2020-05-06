@@ -27,6 +27,20 @@ namespace FallDetectionApp.Views
 
             listenToRefreshList();
 
+            MessagingCenter.Subscribe<Object, string>(this, "ableBtnActivate", async (sender, arg) =>
+            {
+                if (arg == "enable")
+                {
+                    btnActivate.IsEnabled = true;
+                }
+                else if (arg == "disable")
+                {
+                    btnActivate.IsEnabled = false;
+                }
+
+
+            });
+
 
         }
 
@@ -37,7 +51,7 @@ namespace FallDetectionApp.Views
             var vm = (GeoDataViewModel)BindingContext;
             vm.initialize();
 
-            // geoDataListView.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
+
             geoItems.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
             scrollToEndOfList(geoItems);
         }
@@ -84,7 +98,7 @@ namespace FallDetectionApp.Views
 
         }
 
-
+        /*
         async void UpdateDataListView(object sender, EventArgs e)
         {
             geoItems.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
@@ -93,19 +107,13 @@ namespace FallDetectionApp.Views
 
             //await Navigation.PopAsync();
         }
+        */
 
         void scrollToEndOfList(ListView geoItems)
         {
             var v = geoItems.ItemsSource.Cast<object>().LastOrDefault();
             geoItems.ScrollTo(v, ScrollToPosition.End, true);
         }
-
-
-
-
-
-
-
 
     }
 }

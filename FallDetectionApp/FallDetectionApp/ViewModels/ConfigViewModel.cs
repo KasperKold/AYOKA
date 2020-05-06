@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
+using FallDetectionApp.Services;
+
 
 namespace FallDetectionApp.ViewModels
 {
@@ -19,6 +21,7 @@ namespace FallDetectionApp.ViewModels
         // public ObservableCollection<Item> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
         public ICommand CommandToConfigPage { get; private set; }
+
         // public ICommand CommandSaveSettings { get; }
 
 
@@ -33,7 +36,11 @@ namespace FallDetectionApp.ViewModels
                 await Application.Current.MainPage.Navigation.PopAsync();
             });
 
+
             Title = "Confguration";
+
+
+
             // Items = new ObservableCollection<Item>();
             //  LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
@@ -61,7 +68,7 @@ namespace FallDetectionApp.ViewModels
             }
         }
         */
-
+        /*
         private string privateSliderThreshold;
         public string SliderThreshold
         {
@@ -72,6 +79,8 @@ namespace FallDetectionApp.ViewModels
                 OnPropertyChanged(nameof(SliderThreshold)); // Notify that there was a change on this property
             }
         }
+        */
+
 
         //NOT USED ATM
         async Task ExecuteLoadItemsCommand()

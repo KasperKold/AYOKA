@@ -7,6 +7,7 @@
             xmlns:views="clr-namespace:FallDetectionApp.Views"
             x:Class="FallDetectionApp.Views.MainPage">
 
+
     <TabbedPage.Children>
         <NavigationPage Title="Home">
             <NavigationPage.Icon>

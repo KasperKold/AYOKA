@@ -84,6 +84,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Services\CallAndSms.cs" />
     <Compile Include="Monitor.cs" />
+    <Compile Include="Services\ToastAndroid.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

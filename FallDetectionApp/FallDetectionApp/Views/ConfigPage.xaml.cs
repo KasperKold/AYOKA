@@ -3,7 +3,10 @@ using Xamarin.Forms;
 using FallDetectionApp.Models;
 using FallDetectionApp.ViewModels;
 using System.Diagnostics;
+using FallDetectionApp.Services;
+using System.Threading.Tasks;
 
+[assembly: Xamarin.Forms.Dependency(typeof(FallDetectionApp.Views.ConfigPage))]
 namespace FallDetectionApp.Views
 
 {
@@ -16,13 +19,15 @@ namespace FallDetectionApp.Views
             InitializeComponent();
             BindingContext = new ConfigViewModel();
 
+            CheckIfActivated();
+
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
 
-            listView.ItemsSource = await App.Database.GetItemsAsync();
+            CheckIfActivated();
         }
 
 
@@ -45,6 +50,41 @@ namespace FallDetectionApp.Views
                 });
             }
         }
+
+
+
+
+
+        async void CheckIfActivated()
+        {
+
+            if (Application.Current.Properties.ContainsKey("isActivated_state") && Convert.ToBoolean(Application.Current.Properties["isActivated_state"].ToString()))
+            {
+
+                listView.ItemsSource = await App.Database.GetItemsAsync();
+                string message = "Please deactivate to adjust settings!";
+                DependencyService.Get<IToast>().ShortAlert(message);
+                sliderThreshold.IsEnabled = false;
+                sliderDialogue.IsEnabled = false;
+                lblTxtMessage.IsEnabled = false;
+                listView.IsEnabled = false;
+
+            }
+            else
+            {
+                listView.ItemsSource = await App.Database.GetItemsAsync();
+                sliderThreshold.IsEnabled = true;
+                sliderDialogue.IsEnabled = true;
+                lblTxtMessage.IsEnabled = true;
+                listView.IsEnabled = true;
+
+            }
+        }
+
+
+
+
+
 
 
         void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
@@ -70,6 +110,7 @@ namespace FallDetectionApp.Views
                 Application.Current.Properties["secToAlarm_setting"] = String.Format("{0:F0}", args.NewValue);
                 //+String.Format("{0:F0}", args.NewValue))
             }
+
         }
     }
 }
