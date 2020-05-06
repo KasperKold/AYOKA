@@ -82,35 +82,36 @@ namespace FallDetectionApp.ViewModels
         */
 
 
-        //NOT USED ATM
-        async Task ExecuteLoadItemsCommand()
-        {
-            if (IsBusy)
-                return;
+        /*
+         async Task ExecuteLoadItemsCommand()
+         {
+             if (IsBusy)
+                 return;
 
-            IsBusy = true;
+             IsBusy = true;
 
-            try
-            {
-                //  Items.Clear();
-                // var items = await DataStore.GetItemsAsync(true);
-                /*
-                foreach (var item in items)
-                {
-                    //     Items.Add(item);
-                }
-                */
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
+             try
+             {
+                 //  Items.Clear();
+                 // var items = await DataStore.GetItemsAsync(true);
+                 /*
+                 foreach (var item in items)
+                 {
+                     //     Items.Add(item);
+                 }
 
+             }
+             catch (Exception ex)
+             {
+                 Debug.WriteLine(ex);
+             }
+             finally
+             {
+                 IsBusy = false;
+             }
+         }
+
+     */
 
         protected bool SetProperty<T>(ref T backingStore, T value,
             [CallerMemberName]string propertyName = "",

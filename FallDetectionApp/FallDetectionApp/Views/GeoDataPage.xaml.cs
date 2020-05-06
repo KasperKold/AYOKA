@@ -64,7 +64,7 @@ namespace FallDetectionApp.Views
 
         async void OnListItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            /*
+
             if (e.SelectedItem != null)
             {
                 await Navigation.PushAsync(new GeoDataPage
@@ -72,8 +72,9 @@ namespace FallDetectionApp.Views
                     BindingContext = e.SelectedItem as GeoLocation
                 });
             }
-            */
+
         }
+
 
 
         public void listenToRefreshList()

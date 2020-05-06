@@ -19,7 +19,7 @@ namespace FallDetectionApp.Views
             InitializeComponent();
             BindingContext = new ConfigViewModel();
 
-            CheckIfActivated();
+            // CheckIfActivated();
 
         }
 
@@ -27,7 +27,7 @@ namespace FallDetectionApp.Views
         {
             base.OnAppearing();
 
-            CheckIfActivated();
+            //CheckIfActivated();
         }
 
 
@@ -54,7 +54,7 @@ namespace FallDetectionApp.Views
 
 
 
-
+        /*
         async void CheckIfActivated()
         {
 
@@ -82,7 +82,7 @@ namespace FallDetectionApp.Views
         }
 
 
-
+    */
 
 
 
@@ -94,21 +94,17 @@ namespace FallDetectionApp.Views
 
             { //sliderThreshold.Value)
                 String.Format("The Slider value is {0}", args.NewValue);
-                Debug.WriteLine("Slider Threshold:" + String.Format("{0:F0}", args.NewValue));
+                // Debug.WriteLine("Slider Threshold:" + String.Format("{0:F0}", args.NewValue));
                 Application.Current.Properties["geoPeriod_setting"] = String.Format("{0:F0}", args.NewValue);
 
-                // var vm = (ConfigViewModel)BindingContext;
-                // vm.SliderThreshold=
-                //lblSliderDialogue.Text = String.Format("XXX = {0:X2}", (int)args.NewValue);
-                //string test = Convert.ToString(sliderThreshold.Value);
 
             }
             else if (sender == sliderDialogue)
             {
-                // (Math.Round(sliderDialogue.Value)).ToString()
-                Debug.WriteLine("Slider Dialogue:" + String.Format("{0:F0}", args.NewValue));
+
+                // Debug.WriteLine("Slider Dialogue:" + String.Format("{0:F0}", args.NewValue));
                 Application.Current.Properties["secToAlarm_setting"] = String.Format("{0:F0}", args.NewValue);
-                //+String.Format("{0:F0}", args.NewValue))
+
             }
 
         }

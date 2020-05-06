@@ -228,35 +228,35 @@ namespace FallDetectionApp.Droid
         async public void Session(object sender, ElapsedEventArgs e)
         {
             mainActivity.RunOnUiThread(async () =>
-           {
-               if (CheckInactivity())
-               {
-                   alertTimer.Start();
-                   alertBool = true;
+          {
+              if (CheckInactivity())
+              {
+                  alertTimer.Start();
+                  alertBool = true;
 
-                   // user alarm dialogue 
-                   alert.SetTitle("Are You OK?");
-                   alert.SetMessage("\n            " + secToAlarm + " Seconds to ALARM ...");
-                   alert.SetButton("I´M OK!", (c, ev) =>
-                   {
-                       alertBool = false;
-                       AlertConfirmation("GOT IT!", "                      YOU ARE OK!", 1500);
-                   });
+                  // user alarm dialogue 
+                  alert.SetTitle("Are You OK?");
+                  alert.SetMessage("\n            " + secToAlarm + " Seconds to ALARM ...");
+                  alert.SetButton("I´M OK!", (c, ev) =>
+                  {
+                      alertBool = false;
+                      AlertConfirmation("GOT IT!", "                      YOU ARE OK!", 1500);
+                  });
 
-                   alert.Show();
-                   //waiting before alarming
-                   await Task.Delay(1000 * savedSecToAlarm); //wait for X seconds
-                   if (!alertBool) //if  I´m ok button not pressed
-                   {
-                       alert.Dismiss();     //removing dialogue
-                   }
-                   else
-                   {
-                       StopMonitor();
-                       AlertContacts();
-                   }
-               }
-           });
+                  alert.Show();
+                  //waiting before alarming
+                  await Task.Delay(1000 * savedSecToAlarm); //wait for X seconds
+                  if (!alertBool) //if  I´m ok button not pressed
+                  {
+                      alert.Dismiss();     //removing dialogue
+                  }
+                  else
+                  {
+                      StopMonitor();
+                      AlertContacts();
+                  }
+              }
+          });
 
         }
 

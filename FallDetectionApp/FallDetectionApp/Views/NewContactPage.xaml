@@ -1,14 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="FallDetectionApp.Views.NewContactPage" Title="New contact">
-    <StackLayout Margin="20" VerticalOptions="StartAndExpand">
-        <Label Text="Name" />
-        <Entry Text="{Binding Name}" />
-        <Label Text="PhoneNr" />
-        <Entry Text="{Binding PhoneNr}" />
-        <!--<Label Text="Done" />-->
-        <!--<Switch IsToggled="{Binding Done}" />-->
-        <Button Text="Save" Clicked="OnSaveClicked" />
-        <Button Text="Delete" Clicked="OnDeleteClicked" />
-        <Button Text="Cancel" Clicked="OnCancelClicked" />
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="Accent">#96d1ff</Color>
+            <Color x:Key="LightTextColor">#999999</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout VerticalOptions="StartAndExpand">
+        <Label  BackgroundColor="{StaticResource Primary}" HorizontalTextAlignment="Center"  />
+
+        <StackLayout Margin="20" VerticalOptions="StartAndExpand">
+
+            <Label Text="Name" />
+            <Entry Text="{Binding Name}" />
+            <Label Text="PhoneNr" />
+            <Entry Text="{Binding PhoneNr}" />
+            <!--<Label Text="Done" />-->
+            <!--<Switch IsToggled="{Binding Done}" />-->
+            <Button Margin="0,20,0,0" Text="Save" Clicked="OnSaveClicked" TextColor="White" BackgroundColor="{StaticResource Primary}" />
+            <Button Margin="0,20,0,0" Text="Delete" Clicked="OnDeleteClicked" TextColor="White" BackgroundColor="{StaticResource Primary}" />
+            <Button Margin="0,20,0,0" Text="Cancel" Clicked="OnCancelClicked" TextColor="White" BackgroundColor="{StaticResource Primary}"  />
+        </StackLayout>
     </StackLayout>
 </ContentPage>

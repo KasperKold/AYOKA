@@ -7,23 +7,23 @@
             xmlns:views="clr-namespace:FallDetectionApp.Views"
             x:Class="FallDetectionApp.Views.MainPage">
 
-
+    <!--Title="Home"-->
     <TabbedPage.Children>
-        <NavigationPage Title="Home">
+        <NavigationPage >
             <NavigationPage.Icon>
                 <OnPlatform x:TypeArguments="FileImageSource">
-                    <On Platform="iOS" Value="tab_feed.png"/>
+                    <On Platform="Android" Value="home.png"/>
                 </OnPlatform>
             </NavigationPage.Icon>
             <x:Arguments>
                 <views:GeoDataPage />
             </x:Arguments>
         </NavigationPage>
-
-        <NavigationPage Title="Configuration">
+        <!--Title="Configuration"-->
+        <NavigationPage >
             <NavigationPage.Icon>
                 <OnPlatform x:TypeArguments="FileImageSource">
-                    <On Platform="iOS" Value="tab_about.png"/>
+                    <On Platform="Android" Value="settings.png"/>
                 </OnPlatform>
             </NavigationPage.Icon>
             <x:Arguments>

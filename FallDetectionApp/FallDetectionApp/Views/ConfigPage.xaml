@@ -4,11 +4,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="FallDetectionApp.Views.ConfigPage"
              xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"
-             Title="">
+            >
+    <!-- Title="Configurations"-->
 
     <ContentPage.BindingContext>
         <vm:ConfigViewModel />
     </ContentPage.BindingContext>
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="Primary">#2196F3</Color>
@@ -21,13 +23,13 @@
         <ToolbarItem Text="+" Clicked="OnItemAdded">
             <ToolbarItem.IconImageSource>
                 <OnPlatform x:TypeArguments="ImageSource">
-                    <On Platform="Android, UWP" Value="plus.png" />
+                    <On Platform="Android" Value="plus.png" />
                 </OnPlatform>
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <StackLayout>
-        <Label Text="Contacts" FontSize="30" FontAttributes="Bold"  TextColor="{StaticResource Primary}" VerticalOptions="Start" HorizontalOptions="Center" />
+        <Label Text="Contacts" FontSize="23" FontAttributes="Bold"  TextColor="White" BackgroundColor="{StaticResource Primary}" HorizontalTextAlignment="Center"  />
 
         <ListView x:Name="listView" Margin="20" ItemSelected="OnListItemSelected">
             <ListView.ItemTemplate>
@@ -52,7 +54,7 @@
                HorizontalOptions="FillAndExpand"
                VerticalOptions="CenterAndExpand" FontSize="17"  />
 
-        <Slider x:Name="sliderDialogue" Margin="30,12,30,12" Maximum="60"  Minimum="10" ValueChanged="OnSliderValueChanged" ThumbColor="{StaticResource Primary}" MinimumTrackColor="{StaticResource Primary}" MaximumTrackColor="DimGray" />
+        <Slider x:Name="sliderDialogue" Margin="30,12,30,12" Maximum="60"  Minimum="10" ValueChanged="OnSliderValueChanged" ThumbColor="SeaGreen" MinimumTrackColor="{StaticResource Primary}" MaximumTrackColor="DimGray" />
 
         <Label x:Name="lblSliderThreshold" Margin="0,0,0,0" Padding="5,5"  TextColor="White" BackgroundColor="{StaticResource Primary}" HorizontalTextAlignment="Center" 
                Text="{ Binding Source={x:Reference sliderThreshold},
@@ -62,16 +64,16 @@
                VerticalOptions="Center" FontSize="17"  />
         <!--Value="{Binding Source={x:Reference sliderDialogue}}-->
 
-        <Slider x:Name="sliderThreshold" Margin="30,12,30,12" Maximum="5" Minimum="1"  ValueChanged="OnSliderValueChanged" ThumbColor="{StaticResource Primary}" MinimumTrackColor="{StaticResource Primary}" MaximumTrackColor="DimGray" />
+        <Slider x:Name="sliderThreshold"  Margin="30,12,30,12" Maximum="5" Minimum="1"  ValueChanged="OnSliderValueChanged" ThumbColor="SeaGreen" MinimumTrackColor="{StaticResource Primary}" MaximumTrackColor="DimGray" />
 
-        <Label x:Name="lblMessage" Margin="0,0,0,0" Padding="5,5" TextColor="White" BackgroundColor="{StaticResource Primary}"  HorizontalTextAlignment="Center" Text="Edit Alarm SMS/Digital Voice Message:" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="17" />
+        <Label x:Name="lblMessage" Margin="0,0,0,0" Padding="5,5" TextColor="White" BackgroundColor="{StaticResource Primary}"  HorizontalTextAlignment="Center" Text="SMS / Digital Voice Message:" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="17" />
 
 
         <Editor  x:Name="lblTxtMessage" Margin="20,0,20,0"  Text= "Hi, this is an automatic message and I need your help."  MaxLength="200" HeightRequest="140" FontSize="15" IsSpellCheckEnabled="true" Keyboard="Text" TextColor="{StaticResource Primary}"
                HorizontalOptions="StartAndExpand"
                VerticalOptions="CenterAndExpand"   />
 
-        <Button Margin="30,20,30,40" Text="SAVE" Command="{Binding CommandSaveTxtMessage}" BackgroundColor="{StaticResource Primary}" FontSize="22" TextColor="White" />
+        <!--<Button Margin="30,20,30,40" Text="SAVE (for next time)" Command="{Binding CommandSaveTxtMessage}" BackgroundColor="{StaticResource Primary}" FontSize="22" TextColor="White" /> -->
 
     </StackLayout>
 </ContentPage>

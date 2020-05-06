@@ -146,7 +146,13 @@ namespace FallDetectionApp.Droid
                 Log.Debug(TAG, "User has granted all permissions.");
                 LocationHandler.StartLocationService();
                 Log.Debug(TAG, "LocationService Started");
-                monitor.SetAutodial();
+                //monitor.SetAutodial();
+                CrossMessaging.Current.Settings().Phone.AutoDial = true;
+
+                if (CrossMessaging.Current.Settings().Phone.AutoDial == true)
+                {
+                    Console.WriteLine("*AutoDial enabled*");
+                }
 
             }
             else if (grantResults[0] == Permission.Granted)
@@ -206,7 +212,7 @@ namespace FallDetectionApp.Droid
             // while (true)
             // {
             string msg;
-            msg = await deviceToCloud.SendTEXTMessageToIotHubAsync("Livet efter Corona");
+            msg = await deviceToCloud.SendTEXTMessageToIotHubAsync("Hoppsan vilken dag!");
             System.Diagnostics.Debug.WriteLine("{0} > Sending message: {1}", DateTime.Now, msg);
             //await Task.Delay(3000);
             //}
