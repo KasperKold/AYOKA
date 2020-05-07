@@ -84,7 +84,7 @@ namespace FallDetectionApp.Droid
 
         public void initializeComponents()
         {
-            sessionId = "initiating session";
+
             currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
             sessionGeoLocation = new List<GeoLocation>();
 
@@ -297,7 +297,7 @@ namespace FallDetectionApp.Droid
             monitorTimer.Stop();
             guiTimer.Stop();
             MessagingCenter.Send<Object>(this, "InactivityDetected"); //setting button to "Activate
-                                                                      // SendMessages();
+            SendMessages();
             await App.Database.DeleteAllGeoLocationItemAsync();
         }
 
