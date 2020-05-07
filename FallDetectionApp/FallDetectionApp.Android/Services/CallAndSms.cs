@@ -3,22 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.Util;
+using Java.Nio.Channels;
 using Plugin.Messaging;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace FallDetectionApp.Droid.Services
 {
     public class CallAndSms
     {
-        private string smsMessageDefault = "THIS IS A TEST ONLY: Hi, this is an automatic message from a Mobile application. This user need your help. Please get help to this location: ";
-        private string callMessageDefault1 = "THIS IS A TEST ONLY: Attention! This is an automatic emergency message from a mobile application. Your friend Tomas need your help. Please get help to this location: Latitide: 55.8888 and Longitude: 13.4545. Thank you! This message will be repeated ";
-        //private string user;
+
+        //private string callMessageDefault1 = "THIS IS A TEST ONLY: Attention! This is an automatic emergency message from a mobile application. Your friend Tomas need your help. Please get help to this location: Latitide: 55.8888 and Longitude: 13.4545. Thank you! This message will be repeated ";
+        private string configPageAlarmMessage;
+        private string alarmMyLocationIs = " My location is: ";
+        private string alarmWordLongitude = " Longitude: ";
+        private string alarmWordLatitude = " Latitude: ";
+        private string alarmMessageDateTime = " Date and time is: ";
+        private string alarmMessageEnd = " This is an automatic message from a Mobile application. This user need your help. Please get help to this location. ";
+        private string alarmRepeat = "This message will be repeated once more. ";
         private readonly string TAG = "Log CallAndSms";
+        private Monitor monitor;
 
 
         public CallAndSms()
         {
             initializeComponents();
+
+            MessagingCenter.Subscribe<Object, string>(this, "alarmMessage", async (sender, arg) =>
+            {
+                configPageAlarmMessage = arg;
+            });
         }
 
 
@@ -28,6 +42,12 @@ namespace FallDetectionApp.Droid.Services
 
 
 
+        }
+
+
+        public void setMonitor(Monitor monitor)
+        {
+            this.monitor = monitor;
         }
 
         /*
@@ -53,6 +73,11 @@ namespace FallDetectionApp.Droid.Services
         public async Task<bool> CallContacts()
 
         {
+            //gather message
+            var alarmMessage = assembleMessage();
+
+
+
             // speech settings - no or go?
             var locales = await TextToSpeech.GetLocalesAsync();
 
@@ -68,8 +93,8 @@ namespace FallDetectionApp.Droid.Services
 
             // test - this is better sound
 
-            await TextToSpeech.SpeakAsync("Hello World! Nice weather today! I love Peder", settings);
-            await TextToSpeech.SpeakAsync("This is an automatic message!", settings);
+            // await TextToSpeech.SpeakAsync("Hello World! Nice weather today! I love Peder", settings);
+            //await TextToSpeech.SpeakAsync("This is an automatic message!", settings);
             //Checking for permission.
 
             List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
@@ -77,7 +102,7 @@ namespace FallDetectionApp.Droid.Services
             for (int i = 0; i < contactsFromLocalDB.Count; i++)
             {
                 var phoneCall = CrossMessaging.Current.PhoneDialer;
-                // Debug.WriteLine("Testing to find contact numbers in database: ");
+
                 Log.Verbose(TAG, "Phone Contacts: " + contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr);
 
                 //&& !(contactsFromLocalDB[i].PhoneNr == "")
@@ -86,12 +111,12 @@ namespace FallDetectionApp.Droid.Services
                 {
 
                     phoneCall.MakePhoneCall(contactsFromLocalDB[i].PhoneNr);
-                    for (int j = 6; j < 0; j--)
-                    {
-                        // not so good sound
-                        await TextToSpeech.SpeakAsync(callMessageDefault1 + j + " more times", settings);
-                    }
-                    await Task.Delay(20000);
+
+                    await Task.Delay(5000);
+
+                    await TextToSpeech.SpeakAsync(alarmMessage);
+
+                    await Task.Delay(5000);
                 }
             }
 
@@ -99,11 +124,19 @@ namespace FallDetectionApp.Droid.Services
         }
 
 
+        public string assembleMessage()
+        {
+            var location = monitor.GetCurrentGeoPos();
+            string message = configPageAlarmMessage + alarmMyLocationIs + alarmWordLongitude + location.Longitude + alarmWordLatitude
+                  + location.Latitude + alarmMessageDateTime + location.TimeDate + alarmMessageEnd;
+            return message + alarmRepeat + message;
+        }
 
 
         public async Task<bool> SmsToContact()
         {
 
+            var alarmMessage = assembleMessage();
 
             // If permission has been granted, sms-messenging commences
 
@@ -114,7 +147,7 @@ namespace FallDetectionApp.Droid.Services
                 var smsMessenger = Plugin.Messaging.CrossMessaging.Current.SmsMessenger;
                 if (smsMessenger.CanSendSmsInBackground)
                 {
-                    smsMessenger.SendSmsInBackground(contactsFromLocalDB[i].PhoneNr, smsMessageDefault);
+                    smsMessenger.SendSmsInBackground(contactsFromLocalDB[i].PhoneNr, alarmMessage + alarmMessage);
                 }
             }
 
@@ -126,12 +159,6 @@ namespace FallDetectionApp.Droid.Services
 
             return await Task.FromResult(true);
         }
-
-
-
-
-
-
 
     }
 }

@@ -52,7 +52,10 @@ namespace FallDetectionApp.Views
                 });
             }
         }
-
+        void EditorCompleted(object sender, EventArgs e)
+        {
+            ConfigViewModel.Instance.textAlarmMessage = ((Editor)sender).Text; // sender is cast to an Editor to enable reading the `Text` property of the view.
+        }
 
 
 

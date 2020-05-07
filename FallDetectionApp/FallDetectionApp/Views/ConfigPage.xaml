@@ -69,7 +69,7 @@
         <Label x:Name="lblMessage" Margin="0,0,0,0" Padding="5,5" TextColor="White" BackgroundColor="{StaticResource Primary}"  HorizontalTextAlignment="Center" Text="SMS / Digital Voice Message:" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="17" />
 
 
-        <Editor  x:Name="lblTxtMessage" Margin="20,0,20,0"  Text= "Hi, this is an automatic message and I need your help."  MaxLength="200" HeightRequest="140" FontSize="15" IsSpellCheckEnabled="true" Keyboard="Text" TextColor="{StaticResource Primary}"
+        <Editor  x:Name="lblTxtMessage" Margin="20,0,20,0"  Text= "{Binding textAlarmMessage}" Completed="EditorCompleted"   MaxLength="200" HeightRequest="140" FontSize="15" IsSpellCheckEnabled="true" Keyboard="Text" TextColor="{StaticResource Primary}"
                HorizontalOptions="StartAndExpand"
                VerticalOptions="CenterAndExpand"   />
 

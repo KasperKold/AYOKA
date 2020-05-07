@@ -84,7 +84,7 @@ namespace FallDetectionApp.Droid
 
         public void initializeComponents()
         {
-
+            callAndSms.setMonitor(this);
             currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
             sessionGeoLocation = new List<GeoLocation>();
 
@@ -285,7 +285,10 @@ namespace FallDetectionApp.Droid
                   {
                       StopMonitor();
                       alert.Dismiss();
-                      AlertContacts();
+                      Console.Write("A L A R M I N G !");
+                      AlertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call shortly", 2500);
+                      await callAndSms.SmsToContact();
+                      await callAndSms.CallContacts();
                   }
               }
           });
@@ -317,8 +320,6 @@ namespace FallDetectionApp.Droid
         {
             bool inactivityDetected = false;
             this.tempGeoPos = GetCurrentGeoPos();
-
-            // these events are on a background thread, need to update on the UI thread
 
             if (tempGeoPos.Latitude.Substring(0, 6).Equals(savedLat.Substring(0, 6)) && tempGeoPos.Longitude.Substring(0, 6).Equals(savedLong.Substring(0, 6)))
             {
@@ -366,20 +367,6 @@ namespace FallDetectionApp.Droid
             await Task.Delay(messageDuration);
             alertConfirm.Dismiss();
         }
-
-
-
-
-
-        async void AlertContacts()
-        {
-            Console.Write("A L A R M I N G !");
-            AlertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call shortly", 2500);
-            await callAndSms.SmsToContact();
-            await callAndSms.CallContacts();
-        }
-
-
 
 
 

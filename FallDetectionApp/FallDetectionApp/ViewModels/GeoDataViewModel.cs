@@ -67,7 +67,7 @@ namespace FallDetectionApp.ViewModels
         {
             //disable btn
             MessagingCenter.Send<Object, string>(this, "ableBtnActivate", "disable");
-            btnActivateTxt = "Finding your \n location...";
+            btnActivateTxt = "Finding your \n location ...";
             isActivated = false;
             monitorReady = false; //Waiting for LocationService to establish   -  message ready in HandleLocationChanged in MainActivityMessaginCenter
 
@@ -157,7 +157,6 @@ namespace FallDetectionApp.ViewModels
                     Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                     Application.Current.Properties["isActivated_state"] = isActivated;
                 }
-
             }
         }
 
@@ -186,6 +185,7 @@ namespace FallDetectionApp.ViewModels
                 Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
                 MessagingCenter.Send<GeoDataViewModel>(this, "Activate");
+                MessagingCenter.Send<Object, string>(this, "alarmMessage", ConfigViewModel.Instance.textAlarmMessage);
 
             }
         }
@@ -238,36 +238,5 @@ namespace FallDetectionApp.ViewModels
 
             }
         }
-
-        // inherited from BaseView?
-
-        /*
-        protected bool SetProperty<T>(ref T backingStore, T value,
-          [CallerMemberName]string propertyName = "",
-          Action onChanged = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return false;
-
-            backingStore = value;
-            onChanged?.Invoke();
-            OnPropertyChanged(propertyName);
-            return true;
-        }
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var changed = PropertyChanged;
-            if (changed == null)
-                return;
-
-            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-        */
-
     }
 }
