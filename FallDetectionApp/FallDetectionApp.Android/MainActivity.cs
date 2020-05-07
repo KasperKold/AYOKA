@@ -34,9 +34,6 @@ namespace FallDetectionApp.Droid
 
         private DeviceToCloud deviceToCloud;
 
-        static string deviceId;
-        static string deviceKey;
-        static string hostName;
 
         // HostName=IotFallApp.azure-devices.net;DeviceId=PederTestDevice;SharedAccessKey=kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA=
 
@@ -54,14 +51,6 @@ namespace FallDetectionApp.Droid
 
             Forms.Init(this, savedInstanceState);
 
-
-
-            /*
-            deviceId = "PederTestDevice";
-            deviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
-            hostName = "IotFallApp.azure-devices.net";
-            deviceToCloud = new DeviceToCloud(deviceId, deviceKey, hostName);
-            */
             permissionService = new PermissionService(this);
             callAndSms = new CallAndSms();
             monitor = new Monitor(this, callAndSms);
@@ -89,7 +78,7 @@ namespace FallDetectionApp.Droid
 
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Activate", (sender) =>
             {
-                //SendMessages();
+
                 Console.WriteLine("STARTING Monitor");
                 monitor.StartMonitor();
             });
@@ -97,7 +86,7 @@ namespace FallDetectionApp.Droid
             // from btnActivate
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Deactivate", (sender) =>
             {
-                //SendMessages();
+
                 Console.WriteLine("STOPPING Monitor");
                 monitor.StopMonitor();
             });
@@ -200,22 +189,5 @@ namespace FallDetectionApp.Droid
         {
             Log.Debug(TAG, "Location status changed, event raised");
         }
-
-
-        // sends message to IOT hub  via DeviceToCloud.cs- IN PROCESS!!
-        /*  
-          public async void SendMessages()
-          {
-
-
-              // while (true)
-              // {
-              string msg;
-              msg = await deviceToCloud.SendTEXTMessageToIotHubAsync("Hoppsan vilken dag!");
-              System.Diagnostics.Debug.WriteLine("{0} > Sending message: {1}", DateTime.Now, msg);
-              //await Task.Delay(3000);
-              //}
-          }
-          */
     }
 }

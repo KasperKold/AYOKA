@@ -99,6 +99,11 @@ namespace FallDetectionApp.Data
             return Database.DeleteAsync(item);
         }
 
+
+        public Task<int> DeleteAllGeoLocationItemAsync()
+        {
+            return Database.ExecuteAsync("DELETE FROM GeoLocation");
+        }
     }
 }
 

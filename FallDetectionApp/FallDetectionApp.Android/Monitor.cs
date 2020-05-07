@@ -19,7 +19,7 @@ using Xamarin.Forms;
 using static Android.Provider.Settings;
 using Application = Xamarin.Forms.Application;
 
-[assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
+
 namespace FallDetectionApp.Droid
 {
     public class Monitor
@@ -76,7 +76,7 @@ namespace FallDetectionApp.Droid
             this.callAndSms = callAndSms;
             initializeComponents();
             SetDeviceId();
-            SetSessionId();
+
 
 
         }
@@ -84,6 +84,7 @@ namespace FallDetectionApp.Droid
 
         public void initializeComponents()
         {
+            sessionId = "initiating session";
             currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
             sessionGeoLocation = new List<GeoLocation>();
 
@@ -148,7 +149,7 @@ namespace FallDetectionApp.Droid
             currentGeoPos.TimeDate = date_string;
             currentGeoPos.DeviceId = GetDeviceId();
             currentGeoPos.SessionId = GetSessionId();
-            //currentGeoPos.SessionId=
+
 
         }
 
@@ -181,15 +182,8 @@ namespace FallDetectionApp.Droid
 
         public void SetSessionId()
         {
-            sessionId = Preferences.Get("sessionId", string.Empty);
 
-            if (string.IsNullOrWhiteSpace(sessionId))
-            {
-                sessionId = Guid.NewGuid().ToString();
-
-                Preferences.Set("sessionId", sessionId);
-
-            }
+            sessionId = Guid.NewGuid().ToString();
             Log.Debug(TAG, "SESSION ID:" + sessionId);
         }
 
@@ -210,6 +204,7 @@ namespace FallDetectionApp.Droid
         public void StartMonitor()
         {
             //setting up
+            SetSessionId();
             setComparingGeo(); // to compare with
             this.tempGeoPos = GetCurrentGeoPos();
             SaveToDb(tempGeoPos); // initial save and sent to GUI/db
@@ -297,25 +292,27 @@ namespace FallDetectionApp.Droid
 
         }
 
-        public void StopMonitor()
+        async public void StopMonitor()
         {
             monitorTimer.Stop();
             guiTimer.Stop();
             MessagingCenter.Send<Object>(this, "InactivityDetected"); //setting button to "Activate
-            SendMessages();
+                                                                      // SendMessages();
+            await App.Database.DeleteAllGeoLocationItemAsync();
         }
 
+        /*
+                public void SetAutodial()
+                {
+                    CrossMessaging.Current.Settings().Phone.AutoDial = true;
 
-        public void SetAutodial()
-        {
-            CrossMessaging.Current.Settings().Phone.AutoDial = true;
+                    if (CrossMessaging.Current.Settings().Phone.AutoDial == true)
+                    {
+                        Console.WriteLine("*AutoDial enabled*");
+                    }
+                }
 
-            if (CrossMessaging.Current.Settings().Phone.AutoDial == true)
-            {
-                Console.WriteLine("*AutoDial enabled*");
-            }
-        }
-
+            */
         public bool CheckInactivity()
         {
             bool inactivityDetected = false;
@@ -389,14 +386,11 @@ namespace FallDetectionApp.Droid
         public async void SendMessages()
         {
 
-
-            // while (true)
-            // {
             string msg;
             msg = await deviceToCloud.SendListToIotHubAsync();
             System.Diagnostics.Debug.WriteLine("{0} > Sending message[FROM MONITOR]: {1}", DateTime.Now, msg);
-            //await Task.Delay(3000);
-            //}
+
+
         }
     }
 }

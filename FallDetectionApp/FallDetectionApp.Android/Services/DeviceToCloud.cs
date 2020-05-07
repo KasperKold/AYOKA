@@ -125,6 +125,8 @@ namespace FallDetectionApp.Droid.Services
             Log.Verbose(TAG, "Message: " + message.ContentType + "\nMessageString: " + messageString);
 
             await deviceClient.SendEventAsync(message);
+            session.Clear();
+            telemetrysToSend.Clear();
             return messageString;
         }
 
