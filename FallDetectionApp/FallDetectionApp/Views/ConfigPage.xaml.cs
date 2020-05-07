@@ -6,7 +6,6 @@ using System.Diagnostics;
 using FallDetectionApp.Services;
 using System.Threading.Tasks;
 
-[assembly: Xamarin.Forms.Dependency(typeof(FallDetectionApp.Views.ConfigPage))]
 namespace FallDetectionApp.Views
 
 {

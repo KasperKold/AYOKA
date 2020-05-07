@@ -17,7 +17,7 @@ using Xamarin.Forms.PlatformConfiguration.AndroidSpecific.AppCompat;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Android.Widget;
 
-[assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
+
 namespace FallDetectionApp.Droid
 {
 
@@ -31,7 +31,7 @@ namespace FallDetectionApp.Droid
         private PermissionService permissionService;
         private CallAndSms callAndSms;
         private Monitor monitor;
-        private ToastAndroid deliverToasts;
+
         private DeviceToCloud deviceToCloud;
 
         static string deviceId;
@@ -55,8 +55,7 @@ namespace FallDetectionApp.Droid
             Forms.Init(this, savedInstanceState);
 
 
-            deliverToasts = new ToastAndroid();
-            deliverToasts = DependencyService.Get<IToast>() as ToastAndroid;
+
             /*
             deviceId = "PederTestDevice";
             deviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
