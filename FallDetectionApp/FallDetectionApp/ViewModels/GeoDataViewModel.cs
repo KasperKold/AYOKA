@@ -47,8 +47,8 @@ namespace FallDetectionApp.ViewModels
             if (!visited)
             {
                 setUp();
-                int geoPeriod = 1;
-                int secToAlarm = 30;
+                double geoPeriod = 1;
+                double secToAlarm = 30;
                 Application.Current.Properties["geoPeriod_setting"] = geoPeriod.ToString();
                 Application.Current.Properties["secToAlarm_setting"] = secToAlarm.ToString();
 

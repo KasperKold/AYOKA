@@ -28,6 +28,8 @@ namespace FallDetectionApp.Views
         {
             base.OnAppearing();
             listView.ItemsSource = await App.Database.GetItemsAsync();
+            sliderThreshold.Value = Convert.ToDouble(Application.Current.Properties["geoPeriod_setting"]);
+            sliderDialogue.Value = Convert.ToDouble(Application.Current.Properties["secToAlarm_setting"]);
             //CheckIfActivated();
         }
 
