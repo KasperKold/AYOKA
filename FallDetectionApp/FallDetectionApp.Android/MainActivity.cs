@@ -207,7 +207,7 @@ namespace FallDetectionApp.Droid
 
         public async void SendMessages()
         {
-            var deviceToCloud = new DeviceToCloud(deviceId, deviceKey, hostName);
+
 
             // while (true)
             // {

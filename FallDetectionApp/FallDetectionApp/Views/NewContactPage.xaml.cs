@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using FallDetectionApp.Models;
+using System.Diagnostics;
 
 namespace FallDetectionApp.Views
 {
@@ -16,6 +17,8 @@ namespace FallDetectionApp.Views
             var contactItem = (Contact)BindingContext;
             await App.Database.SaveItemAsync(contactItem);
             await Navigation.PopAsync();
+            Debug.WriteLine("ON SAVE CLICKED:" + contactItem.Name + " " + contactItem.PhoneNr);
+
         }
 
         async void OnDeleteClicked(object sender, EventArgs e)

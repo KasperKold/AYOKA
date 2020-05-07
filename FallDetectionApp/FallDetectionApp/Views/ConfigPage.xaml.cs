@@ -18,6 +18,7 @@ namespace FallDetectionApp.Views
         {
             InitializeComponent();
             BindingContext = new ConfigViewModel();
+            // listView.ItemsSource = await App.Database.GetItemsAsync();
 
             // CheckIfActivated();
 
@@ -26,7 +27,7 @@ namespace FallDetectionApp.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
+            listView.ItemsSource = await App.Database.GetItemsAsync();
             //CheckIfActivated();
         }
 

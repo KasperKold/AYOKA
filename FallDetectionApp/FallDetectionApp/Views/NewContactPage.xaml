@@ -7,7 +7,7 @@
             <Color x:Key="LightTextColor">#999999</Color>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <StackLayout VerticalOptions="StartAndExpand">
+    <StackLayout >
         <Label  BackgroundColor="{StaticResource Primary}" HorizontalTextAlignment="Center"  />
 
         <StackLayout Margin="20" VerticalOptions="StartAndExpand">

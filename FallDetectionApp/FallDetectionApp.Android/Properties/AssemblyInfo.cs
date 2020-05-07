@@ -34,3 +34,7 @@ using Android.App;
 [assembly: UsesPermission(Android.Manifest.Permission.WriteExternalStorage)]
 [assembly: UsesPermission(Android.Manifest.Permission.SendSms)]
 [assembly: UsesPermission(Android.Manifest.Permission.ReceiveSms)]
+[assembly: UsesPermission(Android.Manifest.Permission.CallPhone)]
+[assembly: UsesPermission(Android.Manifest.Permission.ReadPhoneState)]
+
+
