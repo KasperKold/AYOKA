@@ -19,7 +19,7 @@ namespace FallDetectionApp.Droid.Services
 
         private readonly string TAG = "Log PermissionService";
         private MainActivity mainActivity;
-        // private Context currentContext;
+        //private Context currentContext;
         //private ResourceManager rm;
 
 
@@ -33,9 +33,6 @@ namespace FallDetectionApp.Droid.Services
 
 
         }
-
-
-
 
 
 
@@ -122,7 +119,6 @@ namespace FallDetectionApp.Droid.Services
         void RequestAllPermissions()
         {
 
-
             AlertDialog.Builder dialogPermissions = new AlertDialog.Builder(Xamarin.Essentials.Platform.CurrentActivity);
             AlertDialog alertPermissions = dialogPermissions.Create();
 
@@ -138,46 +134,5 @@ namespace FallDetectionApp.Droid.Services
             alertPermissions.Show();
             // above nethod  ActivityCompat.RequestPermissions() end up in Mainactivity onRequestPermsisonresult where geomonitoring is started.
         }
-
-
-
-
-
-
-        /*
-
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
-        {
-
-            Log.Debug(TAG, "RC_COOOOOOOOOOOOOODE: " + requestCode);
-
-
-            // if granted then 0 else -1
-
-            if (grantResults[0] == Permission.Granted && grantResults[1] == Permission.Granted && grantResults[2] == Permission.Granted && grantResults[3] == Permission.Granted)
-            {
-                Log.Debug(TAG, "User has granted all permissions.");
-                LocationHandler.StartLocationService();
-                Log.Debug(TAG, "LocationService Started");
-
-            }
-            else if (grantResults[0] == Permission.Granted)
-            {
-                Log.Debug(TAG, "Location permission granted");
-                LocationHandler.StartLocationService();
-                Log.Debug(TAG, "LocationService Started");
-
-            }
-            else
-            {
-
-                AlertPermissionInformation("Permissions", "Some permissions NOT granted");
-            }
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-        */
-
-
     }
 }

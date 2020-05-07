@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Android.App;
@@ -95,27 +96,63 @@ namespace FallDetectionApp.Droid.Services
         }
 
 
-        /*
 
-            async void ReceiveCloudToDeviceMessagesAsync()
+
+        public async Task<string> SendListToIotHubAsync()
+        {
+            List<GeoLocation> session = new List<GeoLocation>(await App.Database.GetGeoLocationItemsAsync());
+
+            var telemetrysToSend = new List<TelemetryDataPoint>();
+            // Enumerable.Empty<object>().Select(o => definition).ToList()
+            for (int i = 0; i < session.Count; i++)
             {
-                Log.Verbose(TAG, "\nReceiving cloud to device messages from service");
 
-                while (true)
-                {
-                    var receivedMessage = await deviceClient.ReceiveAsync();
+                TelemetryDataPoint tmdp = new TelemetryDataPoint();
 
-                    if (receivedMessage == null)
-                        continue;
+                tmdp.longitude = session[i].Longitude;
+                tmdp.latitude = session[i].Latitude;
+                tmdp.date_time = session[i].TimeDate;
+                tmdp.sessionId = session[i].SessionId;
+                tmdp.deviceId = session[i].DeviceId;
 
-                    Log.Verbose(TAG, "Received message: {0}", Encoding.ASCII.GetString(receivedMessage.GetBytes()));
 
-                    await deviceClient.CompleteAsync(receivedMessage);
-                }
+                telemetrysToSend.Add(tmdp);
+
             }
-            */
+            var messageString = JsonConvert.SerializeObject(telemetrysToSend);
+            var message = new Message(System.Text.Encoding.ASCII.GetBytes(messageString));
+            Log.Verbose(TAG, "\nSENDING MESSAGE TO IOT-HUB");
+            Log.Verbose(TAG, "Message: " + message.ContentType + "\nMessageString: " + messageString);
 
+            await deviceClient.SendEventAsync(message);
+            return messageString;
+        }
 
 
     }
+
+
+    /*
+
+        async void ReceiveCloudToDeviceMessagesAsync()
+        {
+            Log.Verbose(TAG, "\nReceiving cloud to device messages from service");
+
+            while (true)
+            {
+                var receivedMessage = await deviceClient.ReceiveAsync();
+
+                if (receivedMessage == null)
+                    continue;
+
+                Log.Verbose(TAG, "Received message: {0}", Encoding.ASCII.GetString(receivedMessage.GetBytes()));
+
+                await deviceClient.CompleteAsync(receivedMessage);
+            }
+        }
+        */
+
+
+
 }
+

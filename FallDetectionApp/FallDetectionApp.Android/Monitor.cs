@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Timers;
 using Android.App;
+using Android.Content;
 using Android.Locations;
+using Android.Telephony;
 using Android.Util;
 using FallDetectionApp.Droid.Services;
 using FallDetectionApp.Models;
@@ -13,6 +16,7 @@ using FallDetectionApp.ViewModels;
 using Plugin.Messaging;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using static Android.Provider.Settings;
 using Application = Xamarin.Forms.Application;
 
 [assembly: Dependency(typeof(FallDetectionApp.Droid.MainActivity))]
@@ -34,12 +38,22 @@ namespace FallDetectionApp.Droid
         private Timer monitorTimer;
         private Timer alertTimer;
 
+        private DeviceToCloud deviceToCloud;
+        static string iotHubDeviceId;
+        static string iotHubDeviceKey;
+        static string iotHubHostName;
+
+        private string sessionId;
+        private string deviceId;
+
         private int geoPeriod;
         private int savedGeoPeriod;
         private int secToAlarm;
         private int savedSecToAlarm;
         private int countDownActivateBtn;
-        private int SavedCountDownActivateBtn;
+        private int savedCountDownActivateBtn;
+
+
         public bool alertBool;
 
         private AlertDialog alert;
@@ -49,6 +63,12 @@ namespace FallDetectionApp.Droid
         private GeoLocation tempGeoPos;
 
 
+        List<GeoLocation> sessionGeoLocation;
+
+
+
+
+
 
         public Monitor(MainActivity mainActivity, CallAndSms callAndSms)
         {
@@ -56,6 +76,7 @@ namespace FallDetectionApp.Droid
             this.callAndSms = callAndSms;
             initializeComponents();
             SetDeviceId();
+            SetSessionId();
 
 
         }
@@ -64,16 +85,7 @@ namespace FallDetectionApp.Droid
         public void initializeComponents()
         {
             currentGeoPos = new GeoLocation { Latitude = "no lat yet", Longitude = "no long yet" };
-            //sessionStart = false;
-
-            //geoPeriod = 1;
-            //savedGeoPeriod = geoPeriod;
-            //secToAlarm = 10;
-            //savedSecToAlarm = secToAlarm;
-            //countDownActivateBtn = secToAlarm;
-            //SavedCountDownActivateBtn = countDownActivateBtn;
-
-
+            sessionGeoLocation = new List<GeoLocation>();
 
             // create alert Dialogue
             dialog = new AlertDialog.Builder(Xamarin.Essentials.Platform.CurrentActivity);
@@ -99,16 +111,21 @@ namespace FallDetectionApp.Droid
             // Tell the timer what to do when it elapses
             monitorTimer.Elapsed += new ElapsedEventHandler(Session);
             monitorTimer.Enabled = false;
+
+            iotHubDeviceId = "PederTestDevice";
+            iotHubDeviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
+            iotHubHostName = "IotFallApp.azure-devices.net";
+            deviceToCloud = new DeviceToCloud(iotHubDeviceId, iotHubDeviceKey, iotHubHostName);
         }
 
 
 
         public void SaveToDb(GeoLocation currentGeo)
         {
-            Console.WriteLine("SAVING to Db and SENDING message" + "\n");
+            Console.WriteLine("SAVING to Db and SENDING message for GUI update" + "\n");
             App.Database.SaveGeoLocationItemAsync(currentGeo);
             MessagingCenter.Send<Object>(this, "latestGeo");
-            countDownActivateBtn = SavedCountDownActivateBtn;
+            countDownActivateBtn = savedCountDownActivateBtn;
 
         }
 
@@ -129,11 +146,9 @@ namespace FallDetectionApp.Droid
             currentGeoPos.Latitude = lati;
             currentGeoPos.Longitude = longi;
             currentGeoPos.TimeDate = date_string;
-            //currentGeoPos.DeviceId = new Guid(); //GetDeviceId();
-
-
-
-
+            currentGeoPos.DeviceId = GetDeviceId();
+            currentGeoPos.SessionId = GetSessionId();
+            //currentGeoPos.SessionId=
 
         }
 
@@ -145,57 +160,78 @@ namespace FallDetectionApp.Droid
 
         public void SetDeviceId()
         {
-            var deviceId = Preferences.Get("my_deviceId", string.Empty);
+            deviceId = Preferences.Get("deviceId", string.Empty);
+            //my_
             if (string.IsNullOrWhiteSpace(deviceId))
             {
-                deviceId = System.Guid.NewGuid().ToString();
+                //deviceId = Guid.NewGuid().ToString();
+                deviceId = Secure.GetString(mainActivity.ContentResolver, Secure.AndroidId);
                 Preferences.Set("deviceId", deviceId);
 
-                //Log.Debug(TAG, "DEVICE ID:" + deviceId);
             }
+            Log.Debug(TAG, "DEVICE ID:" + deviceId);
         }
 
 
         public string GetDeviceId()
         {
-            return Preferences.Get("deviceId", string.Empty);
+            return deviceId;
+        }
+
+
+        public void SetSessionId()
+        {
+            sessionId = Preferences.Get("sessionId", string.Empty);
+
+            if (string.IsNullOrWhiteSpace(sessionId))
+            {
+                sessionId = Guid.NewGuid().ToString();
+
+                Preferences.Set("sessionId", sessionId);
+
+            }
+            Log.Debug(TAG, "SESSION ID:" + sessionId);
+        }
+
+        public string GetSessionId()
+        {
+            return sessionId;
         }
 
         public void setComparingGeo()
         {
             savedLat = GetCurrentGeoPos().Latitude;
             savedLong = GetCurrentGeoPos().Longitude;
-            Log.Debug(TAG, "COMPARING LONGITUDE : " + GetCurrentGeoPos().Longitude.ToString());
+            //Log.Debug(TAG, "COMPARING LONGITUDE : " + GetCurrentGeoPos().Longitude.ToString());
 
         }
 
-
-
-        public int GetGeoPeriod()
-        {
-            return geoPeriod;
-        }
 
         public void StartMonitor()
         {
-            //sessionStart = true;
-            setComparingGeo();
+            //setting up
+            setComparingGeo(); // to compare with
             this.tempGeoPos = GetCurrentGeoPos();
-            SaveToDb(tempGeoPos);
+            SaveToDb(tempGeoPos); // initial save and sent to GUI/db
 
             Log.Debug(TAG, "SEC_TO_ALARM : " + Convert.ToInt32(Application.Current.Properties["secToAlarm_setting"]).ToString());
             Log.Debug(TAG, "GEO_PERIOD : " + Convert.ToInt32(Application.Current.Properties["geoPeriod_setting"]).ToString());
 
             // for alarm dialogue countdown
             secToAlarm = Convert.ToInt32(Application.Current.Properties["secToAlarm_setting"]);
+
             // to reset the above with
             savedSecToAlarm = secToAlarm;
+
             // for btnActivate  countdown
             countDownActivateBtn = (60 * Convert.ToInt32(Application.Current.Properties["geoPeriod_setting"])); // right now seconds
+
             // to reset the above with
-            SavedCountDownActivateBtn = countDownActivateBtn;
+            savedCountDownActivateBtn = countDownActivateBtn;
+
             // for geoPeriod interval in milliseconds
             geoPeriod = 1000 * (60 * Convert.ToInt32(Application.Current.Properties["geoPeriod_setting"]));
+
             // to reset the above with
             savedGeoPeriod = geoPeriod;
 
@@ -204,6 +240,8 @@ namespace FallDetectionApp.Droid
             Log.Debug(TAG, "SecToAlarm variable: " + secToAlarm);
 
             monitorTimer.Interval = geoPeriod;
+
+            // start
             monitorTimer.Start();
             guiTimer.Start();
 
@@ -216,10 +254,8 @@ namespace FallDetectionApp.Droid
 
 
             TimeSpan time = TimeSpan.FromSeconds(countDownActivateBtn);
-
-            //here backslash is must to tell that colon is
-            //not the part of format, it just a character that we want in output
             string str = time.ToString(@"mm\:ss");
+
             MessagingCenter.Send<Object, string>(this, "SecToCheck", str);
             countDownActivateBtn--;
         }
@@ -253,6 +289,7 @@ namespace FallDetectionApp.Droid
                   else
                   {
                       StopMonitor();
+                      alert.Dismiss();
                       AlertContacts();
                   }
               }
@@ -265,8 +302,7 @@ namespace FallDetectionApp.Droid
             monitorTimer.Stop();
             guiTimer.Stop();
             MessagingCenter.Send<Object>(this, "InactivityDetected"); //setting button to "Activate
-            //mainActivity.SendMessages();
-            //sessionStart = false;
+            SendMessages();
         }
 
 
@@ -344,6 +380,23 @@ namespace FallDetectionApp.Droid
             AlertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call shortly", 2500);
             await callAndSms.SmsToContact();
             await callAndSms.CallContacts();
+        }
+
+
+
+
+
+        public async void SendMessages()
+        {
+
+
+            // while (true)
+            // {
+            string msg;
+            msg = await deviceToCloud.SendListToIotHubAsync();
+            System.Diagnostics.Debug.WriteLine("{0} > Sending message[FROM MONITOR]: {1}", DateTime.Now, msg);
+            //await Task.Delay(3000);
+            //}
         }
     }
 }

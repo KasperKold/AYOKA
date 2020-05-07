@@ -57,12 +57,12 @@ namespace FallDetectionApp.Droid
 
             deliverToasts = new ToastAndroid();
             deliverToasts = DependencyService.Get<IToast>() as ToastAndroid;
-
+            /*
             deviceId = "PederTestDevice";
             deviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
             hostName = "IotFallApp.azure-devices.net";
             deviceToCloud = new DeviceToCloud(deviceId, deviceKey, hostName);
-
+            */
             permissionService = new PermissionService(this);
             callAndSms = new CallAndSms();
             monitor = new Monitor(this, callAndSms);
@@ -98,7 +98,7 @@ namespace FallDetectionApp.Droid
             // from btnActivate
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Deactivate", (sender) =>
             {
-                SendMessages();
+                //SendMessages();
                 Console.WriteLine("STOPPING Monitor");
                 monitor.StopMonitor();
             });
@@ -204,18 +204,19 @@ namespace FallDetectionApp.Droid
 
 
         // sends message to IOT hub  via DeviceToCloud.cs- IN PROCESS!!
+        /*  
+          public async void SendMessages()
+          {
 
-        public async void SendMessages()
-        {
 
-
-            // while (true)
-            // {
-            string msg;
-            msg = await deviceToCloud.SendTEXTMessageToIotHubAsync("Hoppsan vilken dag!");
-            System.Diagnostics.Debug.WriteLine("{0} > Sending message: {1}", DateTime.Now, msg);
-            //await Task.Delay(3000);
-            //}
-        }
+              // while (true)
+              // {
+              string msg;
+              msg = await deviceToCloud.SendTEXTMessageToIotHubAsync("Hoppsan vilken dag!");
+              System.Diagnostics.Debug.WriteLine("{0} > Sending message: {1}", DateTime.Now, msg);
+              //await Task.Delay(3000);
+              //}
+          }
+          */
     }
 }
