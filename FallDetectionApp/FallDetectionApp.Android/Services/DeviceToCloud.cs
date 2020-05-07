@@ -73,7 +73,7 @@ namespace FallDetectionApp.Droid.Services
             return messageString;
         }
 
-        public async Task<string> SendTEXTMessageToIotHubAsync(string text)
+        public async Task<string> SendTEXTMessageToIotHubAsync(string test)
         {
 
 
@@ -81,7 +81,7 @@ namespace FallDetectionApp.Droid.Services
             {
                 messageId = messageId++,
                 deviceId,
-                text
+                test
             };
 
             var messageString = JsonConvert.SerializeObject(telemetryDataPoint);
