@@ -15,12 +15,12 @@ namespace FallDetectionApp.Droid.Services
 
         //private string callMessageDefault1 = "THIS IS A TEST ONLY: Attention! This is an automatic emergency message from a mobile application. Your friend Tomas need your help. Please get help to this location: Latitide: 55.8888 and Longitude: 13.4545. Thank you! This message will be repeated ";
         private string configPageAlarmMessage;
-        private string alarmMyLocationIs = " My location is: ";
-        private string alarmWordLongitude = " Longitude: ";
-        private string alarmWordLatitude = " Latitude: ";
-        private string alarmMessageDateTime = " Date and time is: ";
-        private string alarmMessageEnd = " This is an automatic message from a Mobile application. This user need your help. Please get help to this location. ";
-        private string alarmRepeat = "This message will be repeated once more. ";
+        private string alarmMyLocationIs = "\nMy location: ";
+        private string alarmWordLongitude = "\nLongitude: ";
+        private string alarmWordLatitude = " \nLatitude: ";
+        private string alarmMessageDateTime = "\nDate and time is: ";
+        private string alarmMessageEnd = "\nThis is an automatic message from a Mobile application. This user need your help. Please get help to this location. ";
+        private string alarmRepeat = "\nThis message will be repeated once more.\n";
         private readonly string TAG = "Log CallAndSms";
         private Monitor monitor;
 
