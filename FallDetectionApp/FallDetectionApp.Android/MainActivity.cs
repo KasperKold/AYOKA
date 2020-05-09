@@ -16,7 +16,8 @@ using FallDetectionApp.Services;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific.AppCompat;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Android.Widget;
-
+using Android.Telephony;
+using Android.Content;
 
 namespace FallDetectionApp.Droid
 {
@@ -31,6 +32,7 @@ namespace FallDetectionApp.Droid
         private PermissionService permissionService;
         private CallAndSms callAndSms;
         private Monitor monitor;
+
 
         private DeviceToCloud deviceToCloud;
 
@@ -53,7 +55,13 @@ namespace FallDetectionApp.Droid
 
             permissionService = new PermissionService(this);
             callAndSms = new CallAndSms();
+            callAndSms.setMainActivity(this);
             monitor = new Monitor(this, callAndSms);
+
+            //phoneCallStateListener = new PhoneCallStateListener();
+            //phoneCallStateListener.setMainActivity(this);
+            TelephonyManager telephonyManager = (TelephonyManager)GetSystemService(Context.TelephonyService);
+            telephonyManager.Listen(callAndSms, PhoneStateListenerFlags.CallState);
 
             LoadApplication(new App());
             permissionService.CheckBuildAndPermissions();
@@ -174,7 +182,6 @@ namespace FallDetectionApp.Droid
         }
 
 
-
         public void HandleProviderDisabled(object sender, ProviderDisabledEventArgs e)
         {
             Log.Debug(TAG, "Location provider disabled event raised");
@@ -189,5 +196,16 @@ namespace FallDetectionApp.Droid
         {
             Log.Debug(TAG, "Location status changed, event raised");
         }
+
+        public void UpdateCallState(CallState state, string incomingNumber)
+        {
+            // numberLabel.Text = ...
+        }
+
     }
 }
+
+
+
+
+

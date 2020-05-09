@@ -109,8 +109,8 @@ namespace FallDetectionApp.Droid.Services
 
                 TelemetryDataPoint tmdp = new TelemetryDataPoint();
 
-                tmdp.longitude = session[i].Longitude;
                 tmdp.latitude = session[i].Latitude;
+                tmdp.longitude = session[i].Longitude;
                 tmdp.date_time = session[i].TimeDate;
                 tmdp.sessionId = session[i].SessionId;
                 tmdp.deviceId = session[i].DeviceId;

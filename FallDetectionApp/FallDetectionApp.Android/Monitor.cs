@@ -320,8 +320,9 @@ namespace FallDetectionApp.Droid
         {
             bool inactivityDetected = false;
             this.tempGeoPos = GetCurrentGeoPos();
+            tempGeoPos.Info = "";
 
-            if (tempGeoPos.Latitude.Substring(0, 6).Equals(savedLat.Substring(0, 6)) && tempGeoPos.Longitude.Substring(0, 6).Equals(savedLong.Substring(0, 6)))
+            if (tempGeoPos.Latitude.Substring(0, 5).Equals(savedLat.Substring(0, 5)) && tempGeoPos.Longitude.Substring(0, 5).Equals(savedLong.Substring(0, 5)))
             {
                 tempGeoPos.Info = "INACTIVITY DETECTED";
                 inactivityDetected = true; //ALARM

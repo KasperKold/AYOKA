@@ -185,7 +185,7 @@ namespace FallDetectionApp.ViewModels
                 Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
                 MessagingCenter.Send<GeoDataViewModel>(this, "Activate");
-                MessagingCenter.Send<Object, string>(this, "alarmMessage", ConfigViewModel.Instance.textAlarmMessage);
+
 
             }
         }

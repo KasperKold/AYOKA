@@ -31,7 +31,17 @@ namespace FallDetectionApp.ViewModels
         {
             _instance = this;
             // CommandSaveSettings = new Command(async () => await UpdateGuiWithSavedSettings());
-            textAlarmMessage = "Hi, this is an automatic message and I need your help.";
+            if (Application.Current.Properties.ContainsKey("userAlarmMessage"))
+            {
+                textAlarmMessage = Application.Current.Properties["userAlarmMessage"].ToString();
+
+            }
+            else
+            {
+                textAlarmMessage = "Hi, this is an automatic message and I need your help.";
+                Application.Current.Properties["userAlarmMessage"] = textAlarmMessage;
+            }
+
             CommandToConfigPage = new Command(async () =>
             {
                 await Application.Current.MainPage.Navigation.PopAsync();
