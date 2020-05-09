@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
-using FallDetectionApp.Services;
+
 using Xamarin.Essentials;
 using System.Threading;
 
@@ -185,8 +185,6 @@ namespace FallDetectionApp.ViewModels
                 Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
                 MessagingCenter.Send<GeoDataViewModel>(this, "Activate");
-
-
             }
         }
 
@@ -211,7 +209,6 @@ namespace FallDetectionApp.ViewModels
             {
                 privateMonitorReady = value;
                 OnPropertyChanged(nameof(monitorReady)); // Notify that there was a change on this property
-
             }
         }
 

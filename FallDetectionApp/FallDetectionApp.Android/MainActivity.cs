@@ -12,7 +12,7 @@ using Xamarin.Essentials;
 using System.Collections.Generic;
 using Microsoft.Azure.Devices.Client;
 using FallDetectionApp.Droid.Services;
-using FallDetectionApp.Services;
+
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific.AppCompat;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using Android.Widget;

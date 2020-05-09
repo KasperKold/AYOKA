@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
 using FallDetectionApp.Models;
-using FallDetectionApp.Services;
+
 
 namespace FallDetectionApp.ViewModels
 {

@@ -2,7 +2,7 @@
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using FallDetectionApp.Services;
+
 using FallDetectionApp.Views;
 using FallDetectionApp.Data;
 using FallDetectionApp.Models;
