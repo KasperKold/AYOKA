@@ -5,9 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-
 using FallDetectionApp.Models;
-using FallDetectionApp.Services;
 using FallDetectionApp.ViewModels;
 
 using Xamarin.Forms;
