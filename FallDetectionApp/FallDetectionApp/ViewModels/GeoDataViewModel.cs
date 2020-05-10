@@ -40,15 +40,15 @@ namespace FallDetectionApp.ViewModels
             {
                 visited = Convert.ToBoolean(Application.Current.Properties["isVisited_state"]);
                 Debug.WriteLine("Visited variable: " + visited);
-                Debug.WriteLine("Visited direct from properties: " + (Application.Current.Properties["isVisited_state"].ToString()));
+                Debug.WriteLine("isVisited_state from properties: " + (Application.Current.Properties["isVisited_state"].ToString()));
             }
 
             //if app NOT coming from sleep (not visited befire) - set up
             if (!visited)
             {
                 setUp();
-                double geoPeriod = 1;
-                double secToAlarm = 30;
+                double geoPeriod = 1;   //making this default
+                double secToAlarm = 30; //making this default
                 Application.Current.Properties["geoPeriod_setting"] = geoPeriod.ToString();
                 Application.Current.Properties["secToAlarm_setting"] = secToAlarm.ToString();
 
@@ -73,7 +73,7 @@ namespace FallDetectionApp.ViewModels
 
 
 
-            // from MainActivity HandleLocationChanged
+            // from MainActivity- enables and sets text on btnActivate when Locationservice is ready
             MessagingCenter.Subscribe<Object>(this, "GeoMonitorReady", (sender) =>
             {
                 Debug.WriteLine("Message received from Location Manager");
@@ -101,8 +101,6 @@ namespace FallDetectionApp.ViewModels
                 btnActivateTxt = "Activate";
                 Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
-
-
 
             });
 

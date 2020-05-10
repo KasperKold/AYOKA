@@ -16,22 +16,17 @@ namespace FallDetectionApp.Droid.Services
 {
     public class PermissionService : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-
+        static readonly int RC_REQUEST_ALL_PERMISSION = 1004;
         private readonly string TAG = "Log PermissionService";
         private MainActivity mainActivity;
-        //private Context currentContext;
-        //private ResourceManager rm;
 
 
-        static readonly int RC_REQUEST_ALL_PERMISSION = 1004;
-        //static readonly string[] REQUIRED_PERMISSIONS = { Manifest.Permission.AccessFineLocation, Manifest.Permission.CallPhone, Manifest.Permission.SendSms, Manifest.Permission.ReadPhoneState };
+
 
 
         public PermissionService(MainActivity mainActivity)
         {
             this.mainActivity = mainActivity;
-
-
         }
 
 
@@ -132,7 +127,7 @@ namespace FallDetectionApp.Droid.Services
                 RC_REQUEST_ALL_PERMISSION);
             });
             alertPermissions.Show();
-            // above nethod  ActivityCompat.RequestPermissions() end up in Mainactivity onRequestPermsisonresult where geomonitoring is started.
+            // above Method  ActivityCompat.RequestPermissions() ends up in Mainactivity onRequestPermsisonresult where Geomonitoring is started.
         }
     }
 }

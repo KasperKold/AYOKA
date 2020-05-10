@@ -7,17 +7,14 @@ using Android.Telephony;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using Java.Nio.Channels;
 using Plugin.Messaging;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using Uri = Android.Net.Uri;
+
 namespace FallDetectionApp.Droid.Services
 {
     public class CallAndSms : PhoneStateListener
     {
-
-        //private string callMessageDefault1 = "THIS IS A TEST ONLY: Attention! This is an automatic emergency message from a mobile application. Your friend Tomas need your help. Please get help to this location: Latitide: 55.8888 and Longitude: 13.4545. Thank you! This message will be repeated ";
         private string configPageAlarmMessage;
         private string alarmMyLocationIs = "\nMy location: ";
         private string alarmWordLongitude = "\nLongitude: ";
@@ -30,8 +27,9 @@ namespace FallDetectionApp.Droid.Services
         private MainActivity mainActivity;
         private bool isPhoneCalling = false;
 
-        public CallAndSms()
+        public CallAndSms(MainActivity mainActivity)
         {
+            this.mainActivity = mainActivity;
             initializeComponents();
 
         }
@@ -50,13 +48,6 @@ namespace FallDetectionApp.Droid.Services
             this.monitor = monitor;
         }
 
-
-
-
-        public void setMainActivity(MainActivity mainActivity)
-        {
-            this.mainActivity = mainActivity;
-        }
 
         /*
                 public async Task SpeakNow()
@@ -114,13 +105,7 @@ namespace FallDetectionApp.Droid.Services
 
                 if (phoneCall.CanMakePhoneCall && contactsFromLocalDB[i].PhoneNr != "")
                 {
-
-                    // Intent callIntent = new Intent(Intent.ActionCall);
-                    //callIntent.SetData(Uri.Parse(contactsFromLocalDB[i].PhoneNr));
-                    //mainActivity.StartActivity(callIntent);
                     phoneCall.MakePhoneCall(contactsFromLocalDB[i].PhoneNr);
-
-
                 }
                 else
                 {
@@ -129,7 +114,6 @@ namespace FallDetectionApp.Droid.Services
                     errorToast.Show();
                 }
             }
-
             return await Task.FromResult(true);
         }
 
@@ -152,7 +136,7 @@ namespace FallDetectionApp.Droid.Services
             // If permission has been granted, sms-messenging commences
 
             List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
-            //&& !(contactsFromLocalDB[i].PhoneNr == "")
+
             for (int i = 0; i < contactsFromLocalDB.Count; i++)
             {
                 var smsMessenger = Plugin.Messaging.CrossMessaging.Current.SmsMessenger;

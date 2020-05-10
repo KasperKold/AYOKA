@@ -70,7 +70,6 @@ namespace FallDetectionApp.Views
                     BindingContext = e.SelectedItem as GeoLocation
                 });
             }
-
         }
 
 
@@ -81,7 +80,6 @@ namespace FallDetectionApp.Views
                 {
                     refreshList();
                 });
-
         }
 
 
@@ -93,23 +91,11 @@ namespace FallDetectionApp.Views
 
         }
 
-        /*
-        async void UpdateDataListView(object sender, EventArgs e)
-        {
-            geoItems.ItemsSource = await App.Database.GetGeoLocationItemsAsync();
-            scrollToEndOfList(geoItems);
-
-
-            //await Navigation.PopAsync();
-        }
-        */
-
         void scrollToEndOfList(ListView geoItems)
         {
             var v = geoItems.ItemsSource.Cast<object>().LastOrDefault();
             geoItems.ScrollTo(v, ScrollToPosition.End, true);
         }
-
     }
 }
 

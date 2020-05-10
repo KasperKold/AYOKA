@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Runtime.Remoting.Messaging;
 using System.Threading.Tasks;
 using System.Timers;
 using Android.App;
-using Android.Content;
 using Android.Locations;
-using Android.Telephony;
 using Android.Util;
 using FallDetectionApp.Droid.Services;
 using FallDetectionApp.Models;
-using FallDetectionApp.ViewModels;
-using Plugin.Messaging;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using static Android.Provider.Settings;
@@ -53,7 +46,6 @@ namespace FallDetectionApp.Droid
         private int countDownActivateBtn;
         private int savedCountDownActivateBtn;
 
-
         public bool alertBool;
 
         private AlertDialog alert;
@@ -62,11 +54,7 @@ namespace FallDetectionApp.Droid
         private GeoLocation currentGeoPos;
         private GeoLocation tempGeoPos;
 
-
         List<GeoLocation> sessionGeoLocation;
-
-
-
 
 
 
@@ -76,9 +64,7 @@ namespace FallDetectionApp.Droid
             this.callAndSms = callAndSms;
             initializeComponents();
             SetDeviceId();
-
-
-
+            SetSessionId();
         }
 
 
@@ -113,6 +99,7 @@ namespace FallDetectionApp.Droid
             monitorTimer.Elapsed += new ElapsedEventHandler(Session);
             monitorTimer.Enabled = false;
 
+            //iotHub
             iotHubDeviceId = "PederTestDevice";
             iotHubDeviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
             iotHubHostName = "IotFallApp.azure-devices.net";
@@ -136,7 +123,7 @@ namespace FallDetectionApp.Droid
 
             var location = e.Location;
 
-            //parse for not to sensitive accuracy
+
             string lati = $"{location.Latitude}";
             string longi = $"{location.Longitude}";
 
@@ -162,7 +149,7 @@ namespace FallDetectionApp.Droid
         public void SetDeviceId()
         {
             deviceId = Preferences.Get("deviceId", string.Empty);
-            //my_
+
             if (string.IsNullOrWhiteSpace(deviceId))
             {
                 //deviceId = Guid.NewGuid().ToString();
@@ -182,7 +169,6 @@ namespace FallDetectionApp.Droid
 
         public void SetSessionId()
         {
-
             sessionId = Guid.NewGuid().ToString();
             Log.Debug(TAG, "SESSION ID:" + sessionId);
         }
@@ -300,22 +286,12 @@ namespace FallDetectionApp.Droid
             monitorTimer.Stop();
             guiTimer.Stop();
             MessagingCenter.Send<Object>(this, "InactivityDetected"); //setting button to "Activate
-            SendMessages();
+            SendMessages(); // sending to iotHub
             await App.Database.DeleteAllGeoLocationItemAsync();
         }
 
-        /*
-                public void SetAutodial()
-                {
-                    CrossMessaging.Current.Settings().Phone.AutoDial = true;
 
-                    if (CrossMessaging.Current.Settings().Phone.AutoDial == true)
-                    {
-                        Console.WriteLine("*AutoDial enabled*");
-                    }
-                }
 
-            */
         public bool CheckInactivity()
         {
             bool inactivityDetected = false;
@@ -377,8 +353,6 @@ namespace FallDetectionApp.Droid
             string msg;
             msg = await deviceToCloud.SendListToIotHubAsync();
             System.Diagnostics.Debug.WriteLine("{0} > Sending message[FROM MONITOR]: {1}", DateTime.Now, msg);
-
-
         }
     }
 }

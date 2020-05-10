@@ -14,7 +14,7 @@ namespace FallDetectionApp.Models
         public string TimeDate { get; set; }
         public string DeviceId { get; set; }
         public string SessionId { get; set; }
-        //public string SessionId { get; set; }
+
         //public bool InactivityDetected { get; set; }
         //public bool AlarmContact { get; set; }
 

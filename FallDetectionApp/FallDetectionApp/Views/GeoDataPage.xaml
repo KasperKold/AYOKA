@@ -7,17 +7,6 @@
              mc:Ignorable="d"
              x:Class="FallDetectionApp.Views.GeoDataPage">
 
-    <!--xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"-->
-    <!--<ContentPage.ToolbarItems>
-        <ToolbarItem Text="+" Clicked="OnItemAdded">
-            <ToolbarItem.IconImageSource>
-                <OnPlatform x:TypeArguments="ImageSource">
-                    <On Platform="Android, UWP" Value="plus.png" />
-                </OnPlatform>
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-    </ContentPage.ToolbarItems>-->
-
     <ContentPage.Resources>
         <ResourceDictionary>
             <Color x:Key="Primary">#2196F3</Color>
@@ -25,7 +14,6 @@
             <Color x:Key="LightTextColor">#999999</Color>
         </ResourceDictionary>
     </ContentPage.Resources>
-
 
     <ContentPage.BindingContext>
         <vm:GeoDataViewModel />
@@ -35,8 +23,6 @@
         <Label  BackgroundColor="{StaticResource Primary}" HorizontalTextAlignment="Center"  />
         <Label Text="Are you OK?" FontSize="58" FontAttributes="Bold"  TextColor="{StaticResource Primary}"  HorizontalTextAlignment="Center" />
         <Button Margin="0,10,0,0" HeightRequest="150" Text="{Binding btnActivateTxt}" x:Name="btnActivate" Command="{Binding CmdToggleBtnActivate}"  HorizontalOptions="Fill" VerticalOptions="End" BackgroundColor="{StaticResource Primary}" IsEnabled="False" TextColor="White"/>
-        <!--x:Name="geoDataListView"       Command="{Binding OpenGeoDatabase}" IsRefreshing="{Binding IsBusy, Mode=OneWay}"  CachingStrategy="RecycleElement"  RefreshCommand="{Binding RefreshListView}"
-                IsPullToRefreshEnabled="true"-->
         <ListView x:Name="geoItems" Margin="20" ItemSelected="OnListItemSelected" HasUnevenRows="True">
             <ListView.ItemTemplate>
                 <DataTemplate>

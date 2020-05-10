@@ -4,20 +4,13 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Util;
 using Android.Locations;
-using Xamarin.Forms;
-using Application = Xamarin.Forms.Application;
-using FallDetectionApp.ViewModels;
-using Plugin.Messaging;
-using Xamarin.Essentials;
-using System.Collections.Generic;
-using Microsoft.Azure.Devices.Client;
-using FallDetectionApp.Droid.Services;
-
-using Xamarin.Forms.PlatformConfiguration.AndroidSpecific.AppCompat;
-using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
-using Android.Widget;
 using Android.Telephony;
 using Android.Content;
+using FallDetectionApp.ViewModels;
+using FallDetectionApp.Droid.Services;
+using Xamarin.Forms;
+using Plugin.Messaging;
+
 
 namespace FallDetectionApp.Droid
 {
@@ -26,17 +19,11 @@ namespace FallDetectionApp.Droid
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         private readonly string TAG = "Log MainActivity";
-
-
         public bool readyForSession;
         private PermissionService permissionService;
         private CallAndSms callAndSms;
         private Monitor monitor;
-
-
         private DeviceToCloud deviceToCloud;
-
-
         // HostName=IotFallApp.azure-devices.net;DeviceId=PederTestDevice;SharedAccessKey=kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA=
 
 
@@ -46,7 +33,6 @@ namespace FallDetectionApp.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
-
             base.OnCreate(savedInstanceState);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
@@ -54,12 +40,10 @@ namespace FallDetectionApp.Droid
             Forms.Init(this, savedInstanceState);
 
             permissionService = new PermissionService(this);
-            callAndSms = new CallAndSms();
-            callAndSms.setMainActivity(this);
+            callAndSms = new CallAndSms(this);
             monitor = new Monitor(this, callAndSms);
 
-            //phoneCallStateListener = new PhoneCallStateListener();
-            //phoneCallStateListener.setMainActivity(this);
+
             TelephonyManager telephonyManager = (TelephonyManager)GetSystemService(Context.TelephonyService);
             telephonyManager.Listen(callAndSms, PhoneStateListenerFlags.CallState);
 
@@ -84,17 +68,16 @@ namespace FallDetectionApp.Droid
             Log.Debug(TAG, "OnCreate: Location app is coming to life.");
 
 
+            // from btnActivate
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Activate", (sender) =>
             {
-
                 Console.WriteLine("STARTING Monitor");
                 monitor.StartMonitor();
             });
 
-            // from btnActivate
+
             MessagingCenter.Subscribe<GeoDataViewModel>(this, "Deactivate", (sender) =>
             {
-
                 Console.WriteLine("STOPPING Monitor");
                 monitor.StopMonitor();
             });

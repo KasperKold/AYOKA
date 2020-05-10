@@ -9,15 +9,11 @@
     </ContentPage.Resources>
     <StackLayout >
         <Label  BackgroundColor="{StaticResource Primary}" HorizontalTextAlignment="Center"  />
-
         <StackLayout Margin="20" VerticalOptions="StartAndExpand">
-
             <Label Text="Name" />
             <Entry Text="{Binding Name}" />
             <Label Text="PhoneNr" />
             <Entry Text="{Binding PhoneNr}" />
-            <!--<Label Text="Done" />-->
-            <!--<Switch IsToggled="{Binding Done}" />-->
             <Button Margin="0,20,0,0" Text="Save" Clicked="OnSaveClicked" TextColor="White" BackgroundColor="{StaticResource Primary}" />
             <Button Margin="0,20,0,0" Text="Delete" Clicked="OnDeleteClicked" TextColor="White" BackgroundColor="{StaticResource Primary}" />
             <Button Margin="0,20,0,0" Text="Cancel" Clicked="OnCancelClicked" TextColor="White" BackgroundColor="{StaticResource Primary}"  />

@@ -15,9 +15,6 @@ namespace FallDetectionApp.Views
         {
             InitializeComponent();
             this.On<Xamarin.Forms.PlatformConfiguration.Android>().SetIsSwipePagingEnabled(false);
-
         }
-
-
     }
 }

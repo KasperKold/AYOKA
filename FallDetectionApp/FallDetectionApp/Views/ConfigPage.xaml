@@ -30,7 +30,6 @@
     </ContentPage.ToolbarItems>
     <StackLayout>
         <Label Text="Contacts" FontSize="23" FontAttributes="Bold"  TextColor="White" BackgroundColor="{StaticResource Primary}" HorizontalTextAlignment="Center"  />
-
         <ListView x:Name="listView" Margin="20" ItemSelected="OnListItemSelected">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -38,42 +37,16 @@
                         <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                             <Label Text="{Binding Name}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
                             <Label Text="{Binding PhoneNr}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                            <!--<Image Source="check.png" HorizontalOptions="End" IsVisible="{Binding Done}" /> -->
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
-
-        <Label x:Name="lblSliderDialogue" Margin="0,0,0,0" Padding="5,5" TextColor="White" BackgroundColor="{StaticResource Primary}" HorizontalTextAlignment="Center" 
-
-               Text="{Binding Source={x:Reference sliderDialogue },
-                              Path=Value,
-                              StringFormat='Duration Alarm Dialogue: {0:F0} sec'}"
-               HorizontalOptions="FillAndExpand"
-               VerticalOptions="CenterAndExpand" FontSize="17"  />
-
+        <Label x:Name="lblSliderDialogue" Margin="0,0,0,0" Padding="5,5" TextColor="White" BackgroundColor="{StaticResource Primary}" HorizontalTextAlignment="Center" Text="{Binding Source={x:Reference sliderDialogue },Path=Value,StringFormat='Duration Alarm Dialogue: {0:F0} sec'}" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" FontSize="17"  />
         <Slider x:Name="sliderDialogue" Margin="30,12,30,12" Maximum="60"  Minimum="10" ValueChanged="OnSliderValueChanged" ThumbColor="SeaGreen" MinimumTrackColor="{StaticResource Primary}" MaximumTrackColor="DimGray" />
-
-        <Label x:Name="lblSliderThreshold" Margin="0,0,0,0" Padding="5,5"  TextColor="White" BackgroundColor="{StaticResource Primary}" HorizontalTextAlignment="Center" 
-               Text="{ Binding Source={x:Reference sliderThreshold},
-                              Path=Value,
-                              StringFormat='Inactivity Threshold: {0:F0} min'}"
-               HorizontalOptions="FillAndExpand"
-               VerticalOptions="Center" FontSize="17"  />
-        <!--Value="{Binding Source={x:Reference sliderDialogue}}-->
-
+        <Label x:Name="lblSliderThreshold" Margin="0,0,0,0" Padding="5,5"  TextColor="White" BackgroundColor="{StaticResource Primary}" HorizontalTextAlignment="Center" Text="{ Binding Source={x:Reference sliderThreshold},Path=Value,StringFormat='Inactivity Threshold: {0:F0} min'}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="17"  />
         <Slider x:Name="sliderThreshold"  Margin="30,12,30,12" Maximum="5" Minimum="1"  ValueChanged="OnSliderValueChanged" ThumbColor="SeaGreen" MinimumTrackColor="{StaticResource Primary}" MaximumTrackColor="DimGray" />
-
         <Label x:Name="lblMessage" Margin="0,0,0,0" Padding="5,5" TextColor="White" BackgroundColor="{StaticResource Primary}"  HorizontalTextAlignment="Center" Text="SMS / Digital Voice Message:" HorizontalOptions="FillAndExpand" VerticalOptions="Center" FontSize="17" />
-
-
-        <Editor  x:Name="lblTxtMessage" Margin="20,0,20,0"  Text= "{Binding textAlarmMessage}" Completed="EditorCompleted"   MaxLength="200" HeightRequest="140" FontSize="15" IsSpellCheckEnabled="true" Keyboard="Text" TextColor="{StaticResource Primary}"
-               HorizontalOptions="StartAndExpand"
-               VerticalOptions="CenterAndExpand"   />
-
-        <!--<Button Margin="30,20,30,40" Text="SAVE (for next time)" Command="{Binding CommandSaveTxtMessage}" BackgroundColor="{StaticResource Primary}" FontSize="22" TextColor="White" /> -->
-
+        <Editor  x:Name="lblTxtMessage" Margin="20,0,20,0"  Text= "{Binding textAlarmMessage}" Completed="EditorCompleted"   MaxLength="200" HeightRequest="140" FontSize="15" IsSpellCheckEnabled="true" Keyboard="Text" TextColor="{StaticResource Primary}" HorizontalOptions="StartAndExpand" VerticalOptions="CenterAndExpand"   />
     </StackLayout>
 </ContentPage>
