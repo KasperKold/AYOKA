@@ -108,10 +108,10 @@ namespace FallDetectionApp.Droid
 
 
 
-        public void SaveToDb(GeoLocation currentGeo)
+        public async Task SaveToDb(GeoLocation currentGeo)
         {
             Console.WriteLine("SAVING to Db and SENDING message for GUI update" + "\n");
-            App.Database.SaveGeoLocationItemAsync(currentGeo);
+            await App.Database.SaveGeoLocationItemAsync(currentGeo);
             MessagingCenter.Send<Object>(this, "latestGeo");
             countDownActivateBtn = savedCountDownActivateBtn;
 
@@ -134,8 +134,9 @@ namespace FallDetectionApp.Droid
             currentGeoPos.Latitude = lati;
             currentGeoPos.Longitude = longi;
             currentGeoPos.TimeDate = date_string;
-            currentGeoPos.DeviceId = GetDeviceId();
+            currentGeoPos.DeviceId = deviceId;
             currentGeoPos.SessionId = GetSessionId();
+            currentGeoPos.Info = "";
 
 
         }
@@ -183,17 +184,16 @@ namespace FallDetectionApp.Droid
             savedLat = GetCurrentGeoPos().Latitude;
             savedLong = GetCurrentGeoPos().Longitude;
             //Log.Debug(TAG, "COMPARING LONGITUDE : " + GetCurrentGeoPos().Longitude.ToString());
-
         }
 
 
-        public void StartMonitor()
+        public async void StartMonitor()
         {
             //setting up
             SetSessionId();
             setComparingGeo(); // to compare with
             this.tempGeoPos = GetCurrentGeoPos();
-            SaveToDb(tempGeoPos); // initial save and sent to GUI/db
+            await SaveToDb(tempGeoPos); // initial save and sent to GUI/db
 
             Log.Debug(TAG, "SEC_TO_ALARM : " + Convert.ToInt32(Application.Current.Properties["secToAlarm_setting"]).ToString());
             Log.Debug(TAG, "GEO_PERIOD : " + Convert.ToInt32(Application.Current.Properties["geoPeriod_setting"]).ToString());
@@ -232,11 +232,8 @@ namespace FallDetectionApp.Droid
 
         void CountDown(object sender, ElapsedEventArgs e)
         {
-
-
             TimeSpan time = TimeSpan.FromSeconds(countDownActivateBtn);
             string str = time.ToString(@"mm\:ss");
-
             MessagingCenter.Send<Object, string>(this, "SecToCheck", str);
             countDownActivateBtn--;
         }
@@ -246,7 +243,7 @@ namespace FallDetectionApp.Droid
         {
             mainActivity.RunOnUiThread(async () =>
           {
-              if (CheckInactivity())
+              if (await CheckInactivityAsync())
               {
                   alertTimer.Start();
                   alertBool = true;
@@ -286,17 +283,18 @@ namespace FallDetectionApp.Droid
             monitorTimer.Stop();
             guiTimer.Stop();
             MessagingCenter.Send<Object>(this, "InactivityDetected"); //setting button to "Activate
-            SendMessages(); // sending to iotHub
+                                                                      // await SendMessages(); // sending to iotHub
             await App.Database.DeleteAllGeoLocationItemAsync();
+            await App.Database.ResetAutoIncrement();
         }
 
 
 
-        public bool CheckInactivity()
+        public async Task<bool> CheckInactivityAsync()
         {
             bool inactivityDetected = false;
             this.tempGeoPos = GetCurrentGeoPos();
-            tempGeoPos.Info = "";
+
 
             if (tempGeoPos.Latitude.Substring(0, 5).Equals(savedLat.Substring(0, 5)) && tempGeoPos.Longitude.Substring(0, 5).Equals(savedLong.Substring(0, 5)))
             {
@@ -307,7 +305,8 @@ namespace FallDetectionApp.Droid
             savedLat = tempGeoPos.Latitude;
             savedLong = tempGeoPos.Longitude;
 
-            SaveToDb(tempGeoPos);
+            await SaveToDb(tempGeoPos);
+
             return inactivityDetected;
 
         }
@@ -347,9 +346,8 @@ namespace FallDetectionApp.Droid
 
 
 
-        public async void SendMessages()
+        public async Task SendMessages()
         {
-
             string msg;
             msg = await deviceToCloud.SendListToIotHubAsync();
             System.Diagnostics.Debug.WriteLine("{0} > Sending message[FROM MONITOR]: {1}", DateTime.Now, msg);

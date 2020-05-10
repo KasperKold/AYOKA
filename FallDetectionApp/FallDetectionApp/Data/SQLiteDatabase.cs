@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
 using FallDetectionApp.Models;
+using System.Diagnostics;
 
 namespace FallDetectionApp.Data
 {
@@ -102,7 +103,14 @@ namespace FallDetectionApp.Data
 
         public Task<int> DeleteAllGeoLocationItemAsync()
         {
+            Debug.WriteLine("Deleting all items");
             return Database.ExecuteAsync("DELETE FROM GeoLocation");
+        }
+
+        public Task<int> ResetAutoIncrement()
+        {
+            Debug.WriteLine("Resetting increment");
+            return Database.ExecuteAsync("DELETE FROM sqlite_sequence WHERE name = 'GeoLocation'");
         }
     }
 }
