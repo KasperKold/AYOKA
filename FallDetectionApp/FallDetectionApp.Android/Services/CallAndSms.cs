@@ -122,8 +122,8 @@ namespace FallDetectionApp.Droid.Services
         {
             configPageAlarmMessage = Application.Current.Properties["userAlarmMessage"].ToString();
             var location = monitor.GetCurrentGeoPos();
-            string message = configPageAlarmMessage + alarmMyLocationIs + alarmWordLongitude + location.Longitude + alarmWordLatitude
-                  + location.Latitude + alarmMessageDateTime + location.TimeDate + alarmMessageEnd;
+            string message = configPageAlarmMessage + alarmMyLocationIs + alarmWordLongitude + location.Latitude + alarmWordLatitude
+                  + location.Longitude + alarmMessageDateTime + location.TimeDate + alarmMessageEnd;
             return message;
         }
 
