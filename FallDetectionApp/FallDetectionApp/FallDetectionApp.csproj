@@ -39,12 +39,12 @@
     <Compile Update="Views\NewContactPage.xaml.cs">
       <DependentUpon>NewContactPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\GeoDataPage.xaml.cs">
-      <DependentUpon>GeoDataPage.xaml</DependentUpon>
+    <Compile Update="Views\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Views\GeoDataPage.xaml">
+    <EmbeddedResource Update="Views\HomePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

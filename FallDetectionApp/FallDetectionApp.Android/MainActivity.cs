@@ -69,14 +69,14 @@ namespace FallDetectionApp.Droid
 
 
             // from btnActivate
-            MessagingCenter.Subscribe<GeoDataViewModel>(this, "Activate", (sender) =>
+            MessagingCenter.Subscribe<HomeViewModel>(this, "Activate", (sender) =>
             {
                 Console.WriteLine("STARTING Monitor");
                 monitor.StartMonitor();
             });
 
 
-            MessagingCenter.Subscribe<GeoDataViewModel>(this, "Deactivate", (sender) =>
+            MessagingCenter.Subscribe<HomeViewModel>(this, "Deactivate", (sender) =>
             {
                 Console.WriteLine("STOPPING Monitor");
                 monitor.StopMonitor();

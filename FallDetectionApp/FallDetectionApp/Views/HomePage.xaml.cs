@@ -15,13 +15,13 @@ using Xamarin.Forms.Xaml;
 namespace FallDetectionApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class GeoDataPage : ContentPage, INotifyPropertyChanged
+    public partial class HomePage : ContentPage, INotifyPropertyChanged
     {
-        public GeoDataPage()
+        public HomePage()
         {
             InitializeComponent();
 
-            BindingContext = new GeoDataViewModel();
+            BindingContext = new HomeViewModel();
 
             listenToRefreshList();
 
@@ -42,7 +42,7 @@ namespace FallDetectionApp.Views
         {
             base.OnAppearing();
 
-            var vm = (GeoDataViewModel)BindingContext;
+            var vm = (HomeViewModel)BindingContext;
             vm.initialize();
 
 
@@ -52,7 +52,7 @@ namespace FallDetectionApp.Views
 
         async void OnItemAdded(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new GeoDataPage
+            await Navigation.PushAsync(new HomePage
             {
                 BindingContext = new GeoLocation()
             });
@@ -65,7 +65,7 @@ namespace FallDetectionApp.Views
 
             if (e.SelectedItem != null)
             {
-                await Navigation.PushAsync(new GeoDataPage
+                await Navigation.PushAsync(new HomePage
                 {
                     BindingContext = e.SelectedItem as GeoLocation
                 });

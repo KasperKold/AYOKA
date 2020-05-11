@@ -18,13 +18,13 @@ using System.Threading;
 
 namespace FallDetectionApp.ViewModels
 {
-    public class GeoDataViewModel : BaseViewModel, INotifyPropertyChanged
+    public class HomeViewModel : BaseViewModel, INotifyPropertyChanged
     {
 
         public ICommand CmdToggleBtnActivate { get; }
 
 
-        public GeoDataViewModel()
+        public HomeViewModel()
         {
             Title = "Home";
 
@@ -174,7 +174,7 @@ namespace FallDetectionApp.ViewModels
                 isActivated = false;
                 Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
-                MessagingCenter.Send<GeoDataViewModel>(this, "Deactivate");
+                MessagingCenter.Send<HomeViewModel>(this, "Deactivate");
             }
             else if (!isActivated && monitorReady)
             {
@@ -182,7 +182,7 @@ namespace FallDetectionApp.ViewModels
                 isActivated = true;
                 Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
-                MessagingCenter.Send<GeoDataViewModel>(this, "Activate");
+                MessagingCenter.Send<HomeViewModel>(this, "Activate");
             }
         }
 

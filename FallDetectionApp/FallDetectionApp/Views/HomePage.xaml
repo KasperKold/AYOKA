@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:FallDetectionApp.ViewModels"
              mc:Ignorable="d"
-             x:Class="FallDetectionApp.Views.GeoDataPage">
+             x:Class="FallDetectionApp.Views.HomePage">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -16,7 +16,7 @@
     </ContentPage.Resources>
 
     <ContentPage.BindingContext>
-        <vm:GeoDataViewModel />
+        <vm:HomeViewModel />
     </ContentPage.BindingContext>
 
     <StackLayout>
