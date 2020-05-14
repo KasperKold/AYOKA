@@ -108,10 +108,10 @@ namespace FallDetectionApp.Droid
 
 
 
-        public async Task SaveToDb(GeoLocation currentGeo)
+        public async Task SaveToDb(GeoLocation tempGeoPos)
         {
             Console.WriteLine("SAVING to Db and SENDING message for GUI update" + "\n");
-            await App.Database.SaveGeoLocationItemAsync(currentGeo);
+            await App.Database.SaveGeoLocationItemAsync(tempGeoPos);
             MessagingCenter.Send<Object>(this, "latestGeo");
             countDownActivateBtn = savedCountDownActivateBtn;
 
@@ -128,14 +128,18 @@ namespace FallDetectionApp.Droid
             string longi = $"{location.Longitude}";
 
             //get date
-            DateTime dateTime = DateTime.Now.ToLocalTime();
-            string date_string = dateTime.ToString();
+            DateTime timeDate = DateTime.Now.ToLocalTime();
+            string timeDateString = timeDate.ToString();
 
             currentGeoPos.Latitude = lati;
             currentGeoPos.Longitude = longi;
-            currentGeoPos.TimeDate = date_string;
+            currentGeoPos.TimeDate = timeDate;
             currentGeoPos.DeviceId = deviceId;
             currentGeoPos.SessionId = GetSessionId();
+            currentGeoPos.GuiTime = timeDateString;
+            currentGeoPos.InactivityDetected = 0;
+            //currentGeoPos.Alarmed = 0;
+
             currentGeoPos.Info = "";
 
 
@@ -189,6 +193,7 @@ namespace FallDetectionApp.Droid
 
         public async void StartMonitor()
         {
+
             //setting up
             SetSessionId();
             setComparingGeo(); // to compare with
@@ -226,6 +231,7 @@ namespace FallDetectionApp.Droid
             monitorTimer.Start();
             guiTimer.Start();
 
+
         }
 
 
@@ -242,50 +248,50 @@ namespace FallDetectionApp.Droid
         async public void Session(object sender, ElapsedEventArgs e)
         {
             mainActivity.RunOnUiThread(async () =>
-          {
-              if (await CheckInactivityAsync())
-              {
-                  alertTimer.Start();
-                  alertBool = true;
+            {
+                if (await CheckInactivityAsync())
 
-                  // user alarm dialogue 
-                  alert.SetTitle("Are You OK?");
-                  alert.SetMessage("\n            " + secToAlarm + " Seconds to ALARM ...");
-                  alert.SetButton("I´M OK!", (c, ev) =>
-                  {
-                      alertBool = false;
-                      AlertConfirmation("GOT IT!", "                      YOU ARE OK!", 1500);
-                  });
+                {
 
-                  alert.Show();
-                  //waiting before alarming
-                  await Task.Delay(1000 * savedSecToAlarm); //wait for X seconds
-                  if (!alertBool) //if  I´m ok button not pressed
-                  {
-                      alert.Dismiss();     //removing dialogue
-                  }
-                  else
-                  {
-                      StopMonitor();
-                      alert.Dismiss();
-                      Console.Write("A L A R M I N G !");
-                      AlertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call shortly", 2500);
-                      await callAndSms.SmsToContact();
-                      await callAndSms.CallContacts();
-                  }
-              }
-          });
+                    alertTimer.Start();
+                    alertBool = true;
 
+                    // user alarm dialogue 
+                    alert.SetTitle("Are You OK?");
+                    alert.SetMessage("\n            " + secToAlarm + " Seconds to ALARM ...");
+                    alert.SetButton("I´M OK!", async (c, ev) =>
+                    {
+
+                        alertBool = false;
+                        alert.Dismiss();
+                        AlertConfirmation("GOT IT!", "                      YOU ARE OK!", 1500);
+                    });
+
+                    alert.Show();
+                    //waiting before alarming
+                    await Task.Delay(1000 * savedSecToAlarm); //wait for X seconds
+                    if (alertBool) //if  I´m ok not button pressed
+                    {
+                        alert.Dismiss();
+                        StopMonitor();
+                        alert.Dismiss();
+                        Console.Write("A L A R M I N G !");
+                        AlertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS & Phone call shortly", 2500);
+                        await callAndSms.SmsToContact();
+                        await callAndSms.CallContacts();
+                    }
+                }
+            });
         }
 
-        async public void StopMonitor()
+        public void StopMonitor()
         {
             monitorTimer.Stop();
             guiTimer.Stop();
             MessagingCenter.Send<Object>(this, "InactivityDetected"); //setting button to "Activate
-                                                                      // await SendMessages(); // sending to iotHub
-            await App.Database.DeleteAllGeoLocationItemAsync();
-            await App.Database.ResetAutoIncrement();
+            SendMessages(); // sending to iotHub
+            App.Database.DeleteAllGeoLocationItemAsync();
+            App.Database.ResetAutoIncrement();
         }
 
 
@@ -296,12 +302,15 @@ namespace FallDetectionApp.Droid
             this.tempGeoPos = GetCurrentGeoPos();
 
 
-            if (tempGeoPos.Latitude.Substring(0, 5).Equals(savedLat.Substring(0, 5)) && tempGeoPos.Longitude.Substring(0, 5).Equals(savedLong.Substring(0, 5)))
+            if (tempGeoPos.Latitude.Substring(0, 6).Equals(savedLat.Substring(0, 6)) && tempGeoPos.Longitude.Substring(0, 6).Equals(savedLong.Substring(0, 6)))
             {
+                Log.Verbose(TAG, "INACTIVITY DETECTED");
                 tempGeoPos.Info = "INACTIVITY DETECTED";
-                inactivityDetected = true; //ALARM
-            }
+                tempGeoPos.InactivityDetected = 1;
+                inactivityDetected = true;
 
+            }
+            Log.Verbose(TAG, "\nCompared To:\nCOMP Lat: " + savedLat.Substring(0, 6) + "\nCOMP Longitude " + savedLong.Substring(0, 6));
             savedLat = tempGeoPos.Latitude;
             savedLong = tempGeoPos.Longitude;
 

@@ -11,12 +11,12 @@ namespace FallDetectionApp.Models
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string Info { get; set; }
-        public string TimeDate { get; set; }
+        public DateTime TimeDate { get; set; }
         public string DeviceId { get; set; }
         public string SessionId { get; set; }
-
-        //public bool InactivityDetected { get; set; }
-        //public bool AlarmContact { get; set; }
+        public string GuiTime { get; set; }
+        public int InactivityDetected { get; set; }
+        //public int Alarmed { get; set; }
 
     }
 }

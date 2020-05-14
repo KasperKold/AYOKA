@@ -19,9 +19,9 @@ namespace FallDetectionApp.Droid.Services
         private string alarmMyLocationIs = "\nMy location: ";
         private string alarmWordLongitude = "\nLongitude: ";
         private string alarmWordLatitude = " \nLatitude: ";
-        private string alarmMessageDateTime = "\nDate and time is: ";
-        private string alarmMessageEnd = "\nThis is an automatic message from a Mobile application. This person need your help. Please get help to this location. ";
-        private string alarmRepeat = "\nThis message will be repeated once more.\n";
+        private string alarmMessageDateTime = "\nDate and time is:\n";
+        private string alarmMessageEnd = "\nThis is an automatic message from a Mobile application. This person needs your help. Please get help to this location. ";
+        // private string alarmRepeat = "\nThis message will be repeated once more.\n";
         private readonly string TAG = "Log CallAndSms";
         private Monitor monitor;
         private MainActivity mainActivity;
@@ -92,7 +92,6 @@ namespace FallDetectionApp.Droid.Services
             // await TextToSpeech.SpeakAsync("Hello World! Nice weather today! I love Peder", settings);
             //await TextToSpeech.SpeakAsync("This is an automatic message!", settings);
             //Checking for permission.
-
             List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
 
             for (int i = 0; i < contactsFromLocalDB.Count; i++)
@@ -100,8 +99,6 @@ namespace FallDetectionApp.Droid.Services
                 var phoneCall = CrossMessaging.Current.PhoneDialer;
 
                 Log.Verbose(TAG, "Phone Contacts: " + contactsFromLocalDB[i].Name + " " + contactsFromLocalDB[i].PhoneNr);
-
-                //&& !(contactsFromLocalDB[i].PhoneNr == "")
 
                 if (phoneCall.CanMakePhoneCall && contactsFromLocalDB[i].PhoneNr != "")
                 {
@@ -112,6 +109,7 @@ namespace FallDetectionApp.Droid.Services
                     Toast errorToast = Toast.MakeText(Xamarin.Essentials.Platform.CurrentActivity, "Not Able to make a phone call", ToastLength.Short);
                     errorToast.SetGravity(GravityFlags.Center, 0, 0);
                     errorToast.Show();
+                    Log.Debug(TAG, "Not able to make a call");
                 }
             }
             return await Task.FromResult(true);
@@ -142,7 +140,7 @@ namespace FallDetectionApp.Droid.Services
                 var smsMessenger = Plugin.Messaging.CrossMessaging.Current.SmsMessenger;
                 if (smsMessenger.CanSendSmsInBackground)
                 {
-                    smsMessenger.SendSmsInBackground(contactsFromLocalDB[i].PhoneNr, alarmMessage + alarmMessage);
+                    smsMessenger.SendSmsInBackground(contactsFromLocalDB[i].PhoneNr, alarmMessage);
                 }
             }
 
@@ -154,6 +152,7 @@ namespace FallDetectionApp.Droid.Services
 
             return await Task.FromResult(true);
         }
+
 
 
 
@@ -177,7 +176,7 @@ namespace FallDetectionApp.Droid.Services
                     // active
                     Log.Debug(TAG, "OFFHOOK");
 
-                    await Task.Delay(5000);
+                    await Task.Delay(3000);
 
                     await TextToSpeech.SpeakAsync(alarmMessage);
 

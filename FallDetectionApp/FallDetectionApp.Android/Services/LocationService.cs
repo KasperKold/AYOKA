@@ -32,10 +32,12 @@ namespace FallDetectionApp.Droid.Services
             // both when the app is in the background, and in the foreground
             Log.Debug(logTag, $"Latitude is {location.Latitude}");
             Log.Debug(logTag, $"Longitude is {location.Longitude}");
+            Log.Debug(logTag, $"Accuracy is {location.Accuracy}");
+
             /*
             Log.Debug(logTag, $"Altitude is {location.Altitude}");
             Log.Debug(logTag, $"Speed is {location.Speed}");
-            Log.Debug(logTag, $"Accuracy is {location.Accuracy}");
+            
             Log.Debug(logTag, $"Bearing is {location.Bearing}");
             */
         }
@@ -113,8 +115,8 @@ namespace FallDetectionApp.Droid.Services
             //for example, we might want to preserve power, or get extreme accuracy
             var locationCriteria = new Criteria();
 
-            locationCriteria.Accuracy = Accuracy.NoRequirement;
-            locationCriteria.PowerRequirement = Power.NoRequirement;
+            locationCriteria.Accuracy = Accuracy.Fine;
+            locationCriteria.PowerRequirement = Power.Low;
 
             // get provider: GPS, Network, etc.
             var locationProvider = LocMgr.GetBestProvider(locationCriteria, true);

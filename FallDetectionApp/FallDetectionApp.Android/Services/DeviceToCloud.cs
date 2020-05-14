@@ -114,6 +114,8 @@ namespace FallDetectionApp.Droid.Services
                 tmdp.date_time = session[i].TimeDate;
                 tmdp.sessionId = session[i].SessionId;
                 tmdp.deviceId = session[i].DeviceId;
+                tmdp.inactivityDetected = session[i].InactivityDetected;
+                // tmdp.alarmed = session[i].Alarmed;
 
 
                 telemetrysToSend.Add(tmdp);
@@ -135,20 +137,15 @@ namespace FallDetectionApp.Droid.Services
 
 
     /*
-
         async void ReceiveCloudToDeviceMessagesAsync()
         {
             Log.Verbose(TAG, "\nReceiving cloud to device messages from service");
-
             while (true)
             {
                 var receivedMessage = await deviceClient.ReceiveAsync();
-
                 if (receivedMessage == null)
                     continue;
-
                 Log.Verbose(TAG, "Received message: {0}", Encoding.ASCII.GetString(receivedMessage.GetBytes()));
-
                 await deviceClient.CompleteAsync(receivedMessage);
             }
         }
@@ -157,4 +154,3 @@ namespace FallDetectionApp.Droid.Services
 
 
 }
-

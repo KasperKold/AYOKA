@@ -187,8 +187,3 @@ namespace FallDetectionApp.Droid
 
     }
 }
-
-
-
-
-

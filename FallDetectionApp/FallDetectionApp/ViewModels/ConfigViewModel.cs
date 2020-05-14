@@ -2,9 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
-
 using FallDetectionApp.Models;
 using FallDetectionApp.Views;
 using System.Windows.Input;
