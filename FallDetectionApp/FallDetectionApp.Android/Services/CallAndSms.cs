@@ -19,6 +19,9 @@ namespace FallDetectionApp.Droid.Services
         private string alarmMyLocationIs = "\nMy location: ";
         private string alarmWordLongitude = "\nLongitude: ";
         private string alarmWordLatitude = " \nLatitude: ";
+        private string alarmGooglelink = "https://www.google.com/maps/@";
+
+
         private string alarmMessageDateTime = "\nDate and time is:\n";
         private string alarmMessageEnd = "\nThis is an automatic message from a Mobile application. This person needs your help. Please get help to this location. ";
         // private string alarmRepeat = "\nThis message will be repeated once more.\n";
@@ -121,7 +124,7 @@ namespace FallDetectionApp.Droid.Services
             configPageAlarmMessage = Application.Current.Properties["userAlarmMessage"].ToString();
             var location = monitor.GetCurrentGeoPos();
             string message = configPageAlarmMessage + alarmMyLocationIs + alarmWordLongitude + location.Latitude + alarmWordLatitude
-                  + location.Longitude + alarmMessageDateTime + location.TimeDate + alarmMessageEnd;
+                  + location.Longitude + alarmMessageDateTime + location.TimeDate + "\n" + alarmGooglelink + location.Latitude + "," + location.Longitude + "\n" + alarmMessageEnd;
             return message;
         }
 
