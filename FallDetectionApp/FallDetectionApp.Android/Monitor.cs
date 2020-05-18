@@ -240,12 +240,13 @@ namespace FallDetectionApp.Droid
         {
             TimeSpan time = TimeSpan.FromSeconds(countDownActivateBtn);
             string str = time.ToString(@"mm\:ss");
+            //Sending message to HomeViewModel
             MessagingCenter.Send<Object, string>(this, "SecToCheck", str);
             countDownActivateBtn--;
         }
 
 
-        async public void Session(object sender, ElapsedEventArgs e)
+        public void Session(object sender, ElapsedEventArgs e)
         {
             mainActivity.RunOnUiThread(async () =>
             {
@@ -259,13 +260,13 @@ namespace FallDetectionApp.Droid
                     // user alarm dialogue 
                     alert.SetTitle("Are You OK?");
                     alert.SetMessage("\n            " + secToAlarm + " Seconds to ALARM ...");
-                    alert.SetButton("I´M OK!", async (c, ev) =>
-                    {
+                    alert.SetButton("I´M OK!", (c, ev) =>
+                   {
 
-                        alertBool = false;
-                        alert.Dismiss();
-                        AlertConfirmation("GOT IT!", "                      YOU ARE OK!", 1500);
-                    });
+                       alertBool = false;
+                       alert.Dismiss();
+                       AlertConfirmation("GOT IT!", "                      YOU ARE OK!", 1500);
+                   });
 
                     alert.Show();
                     //waiting before alarming
@@ -277,8 +278,8 @@ namespace FallDetectionApp.Droid
                         alert.Dismiss();
                         Console.Write("A L A R M I N G !"); //& Phone call
                         AlertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS shortly", 2500);
-                        //await callAndSms.SmsToContact();
-                        //await callAndSms.CallContacts();
+                        await callAndSms.SmsToContact();
+                        await callAndSms.CallContacts();
                     }
                 }
             });
@@ -289,7 +290,7 @@ namespace FallDetectionApp.Droid
             monitorTimer.Stop();
             guiTimer.Stop();
             MessagingCenter.Send<Object>(this, "InactivityDetected"); //setting button to "Activate
-            SendMessages(); // sending to iotHub
+            _ = SendMessages(); // sending to iotHub
             App.Database.DeleteAllGeoLocationItemAsync();
             App.Database.ResetAutoIncrement();
         }

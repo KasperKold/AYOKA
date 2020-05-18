@@ -1,6 +1,4 @@
-﻿using System;
-
-using Android.OS;
+﻿using Android.OS;
 
 namespace FallDetectionApp.Droid.Services
 {

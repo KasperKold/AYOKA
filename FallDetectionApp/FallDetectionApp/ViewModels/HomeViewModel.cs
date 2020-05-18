@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
-
-using FallDetectionApp.Models;
-using FallDetectionApp.Views;
 using System.Windows.Input;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Collections.Generic;
-
-using Xamarin.Essentials;
-using System.Threading;
 
 
 namespace FallDetectionApp.ViewModels
@@ -28,8 +17,8 @@ namespace FallDetectionApp.ViewModels
         {
             Title = "Home";
 
-            CmdToggleBtnActivate = new Command(async () => ToggleBtnActivate());
-            initialize();
+            CmdToggleBtnActivate = new Command(() => ToggleBtnActivate());
+            //initialize();
         }
 
 
@@ -62,7 +51,7 @@ namespace FallDetectionApp.ViewModels
 
         }
 
-        async public void setUp()
+        public void setUp()
 
         {
             //disable btn
@@ -84,7 +73,7 @@ namespace FallDetectionApp.ViewModels
                 btnActivateTxt = "Activate";
 
                 //saving to properties
-                Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
+                //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["monitorReady_state"] = monitorReady.ToString();
                 Application.Current.Properties["isVisited_state"] = "true";
                 Application.Current.Properties["isActivated_state"] = isActivated;
@@ -99,13 +88,13 @@ namespace FallDetectionApp.ViewModels
 
                 isActivated = false;
                 btnActivateTxt = "Activate";
-                Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
+                //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
 
             });
 
-
-            MessagingCenter.Subscribe<Object, string>(this, "SecToCheck", async (sender, arg) =>
+            //Message from countDown() in Android class Monitor
+            MessagingCenter.Subscribe<Object, string>(this, "SecToCheck", (sender, arg) =>
             {
                 btnActivateTxt = "DeActivate\n\nNext Check:\n" + arg;
             });
@@ -135,8 +124,9 @@ namespace FallDetectionApp.ViewModels
 
             if (isActivated)
             {
-                btnActivateTxt = "DEACTIVATE";
-                Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
+                //setting text while waiting for update from Monitor
+                btnActivateTxt = "DeActivate\n\nNext Check:\n";
+                //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
 
             }
@@ -146,13 +136,13 @@ namespace FallDetectionApp.ViewModels
                 {
 
                     btnActivateTxt = "Preparing Location\n   Service";
-                    Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
+                    //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 }
                 else
                 {
 
                     btnActivateTxt = "Activate";
-                    Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
+                    //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                     Application.Current.Properties["isActivated_state"] = isActivated;
                 }
             }
@@ -172,15 +162,16 @@ namespace FallDetectionApp.ViewModels
             {
                 btnActivateTxt = "Activate";
                 isActivated = false;
-                Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
+                // Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
                 MessagingCenter.Send<HomeViewModel>(this, "Deactivate");
             }
             else if (!isActivated && monitorReady)
             {
-                btnActivateTxt = "DEACTIVATE";
+                //setting text while waiting for update from Monitor
+                btnActivateTxt = "DeActivate\n\nNext Check:\n";
                 isActivated = true;
-                Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
+                //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
                 MessagingCenter.Send<HomeViewModel>(this, "Activate");
             }

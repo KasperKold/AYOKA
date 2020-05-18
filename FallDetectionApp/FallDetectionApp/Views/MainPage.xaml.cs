@@ -1,8 +1,6 @@
-﻿using System;
-using System.ComponentModel;
-using Xamarin.Forms;
+﻿using System.ComponentModel;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
-using Xamarin.Forms.Xaml;
+
 
 namespace FallDetectionApp.Views
 {

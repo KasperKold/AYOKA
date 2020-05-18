@@ -2,9 +2,6 @@
 using Xamarin.Forms;
 using FallDetectionApp.Models;
 using FallDetectionApp.ViewModels;
-using System.Diagnostics;
-
-using System.Threading.Tasks;
 
 namespace FallDetectionApp.Views
 
@@ -17,7 +14,6 @@ namespace FallDetectionApp.Views
         {
             InitializeComponent();
             BindingContext = new ConfigViewModel();
-            // listView.ItemsSource = await App.Database.GetItemsAsync();
         }
 
         protected override async void OnAppearing()

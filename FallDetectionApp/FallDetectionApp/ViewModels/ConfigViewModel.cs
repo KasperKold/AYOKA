@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-using FallDetectionApp.Models;
-using FallDetectionApp.Views;
+﻿using Xamarin.Forms;
 using System.Windows.Input;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Collections.Generic;
-
 
 
 namespace FallDetectionApp.ViewModels

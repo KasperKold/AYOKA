@@ -1,9 +1,7 @@
 ﻿using System;
-
 using Android.Content;
 using Android.OS;
 using Android.Util;
-
 using Object = Java.Lang.Object;
 
 namespace FallDetectionApp.Droid.Services

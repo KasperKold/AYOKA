@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Resources;
-using System.Threading.Tasks;
 using Android;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Android.Util;
-using DotNetty.Common;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+
 
 namespace FallDetectionApp.Droid.Services
 {
@@ -118,9 +113,9 @@ namespace FallDetectionApp.Droid.Services
             AlertDialog alertPermissions = dialogPermissions.Create();
 
             alertPermissions.SetTitle("This app need your permission to:");
-            alertPermissions.SetMessage("Monitor your Location\nCall your Contacts\nSend Sms your Contacts\nPlease press OK!");
+            alertPermissions.SetMessage("Monitor your location, Sms & call your contacts. Please press OK here & allow permissions in the following popups!\n\nThank u!");
 
-            alertPermissions.SetButton("OK!", (c, ev) =>
+            alertPermissions.SetButton("OK", (c, ev) =>
             {
                 ActivityCompat.RequestPermissions(mainActivity,
                 new String[] { Manifest.Permission.AccessFineLocation, Manifest.Permission.CallPhone, Manifest.Permission.SendSms, Manifest.Permission.ReadPhoneState },

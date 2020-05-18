@@ -23,8 +23,7 @@ namespace FallDetectionApp.Droid
         private PermissionService permissionService;
         private CallAndSms callAndSms;
         private Monitor monitor;
-        private DeviceToCloud deviceToCloud;
-        // HostName=IotFallApp.azure-devices.net;DeviceId=PederTestDevice;SharedAccessKey=kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA=
+
 
 
         protected override void OnCreate(Bundle savedInstanceState)
@@ -153,14 +152,14 @@ namespace FallDetectionApp.Droid
 
         // always monitoring according to LocationService.cs ->   LocMgr.RequestLocationUpdates(locationProvider, 2000, 0, this); (every 2 seconds)
         // registres when locations are coming in and  enables Activate button in GUI.
-        // saves locations to monitor ready to be monitored when activated
+        // saves locations to monitor ready - to be monitored when activated
 
         public void HandleLocationChanged(object sender, LocationChangedEventArgs e)
         {
 
             monitor.SetGeoInstance(e);
 
-            // Send message - ready to monitor
+            // Send message - ready to monitor to HomeViewModel
             MessagingCenter.Send<Object>(this, "GeoMonitorReady");
         }
 
@@ -180,6 +179,7 @@ namespace FallDetectionApp.Droid
             Log.Debug(TAG, "Location status changed, event raised");
         }
 
+        // not used atm
         public void UpdateCallState(CallState state, string incomingNumber)
         {
             // numberLabel.Text = ...

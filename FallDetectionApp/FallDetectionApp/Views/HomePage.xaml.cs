@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using FallDetectionApp.Models;
 using FallDetectionApp.ViewModels;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -25,18 +20,19 @@ namespace FallDetectionApp.Views
 
             listenToRefreshList();
 
-            MessagingCenter.Subscribe<Object, string>(this, "ableBtnActivate", async (sender, arg) =>
-            {
-                if (arg == "enable")
-                {
-                    btnActivate.IsEnabled = true;
-                }
-                else if (arg == "disable")
-                {
-                    btnActivate.IsEnabled = false;
-                }
-            });
+            MessagingCenter.Subscribe<Object, string>(this, "ableBtnActivate", (sender, arg) =>
+           {
+               if (arg == "enable")
+               {
+                   btnActivate.IsEnabled = true;
+               }
+               else if (arg == "disable")
+               {
+                   btnActivate.IsEnabled = false;
+               }
+           });
         }
+
 
         protected override async void OnAppearing()
         {

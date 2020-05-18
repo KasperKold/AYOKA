@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
-using Android.Locations;
-using Android.Media;
-using Android.OS;
-using Android.Support.V4.App;
 using Android.Util;
-using DotNetty.Common.Utilities;
 using FallDetectionApp.Models;
 using Microsoft.Azure.Devices.Client;
 using Newtonsoft.Json;
-using Encoding = System.Text.Encoding;
 using Message = Microsoft.Azure.Devices.Client.Message;
 
 
@@ -25,9 +15,10 @@ namespace FallDetectionApp.Droid.Services
     public class DeviceToCloud
     {
         private readonly string TAG = "Log DeviceToCloud";
-        int messageId = 1;
+        //int messageId = 1;
         DeviceClient deviceClient;
 
+        //not used atm but should probably be a part of the code to identify the device - see the commented out method below for example
         string deviceId;
         string deviceKey;
         string iotHostName;
@@ -40,22 +31,17 @@ namespace FallDetectionApp.Droid.Services
             this.iotHostName = iotHostName;
 
             deviceClient = DeviceClient.Create(iotHostName, new DeviceAuthenticationWithRegistrySymmetricKey(deviceId, deviceKey));
-            //deviceClient = DeviceClient.CreateFromConnectionString();
+
         }
 
 
 
-
+        /*
 
         public async Task<string> SendMessageToIotHubAsync(GeoLocation currentGeo)
         {
             GeoLocation messageGeoLocation = currentGeo;
-            //messageGeoLocation.DeviceId="";
-            //messageGeoLocation.Id ="";
-            //messageGeoLocation.Latitude = "55.11111";
-            //messageGeoLocation.Longitude = "13.34353636";
-            //messageGeoLocation.TimeDate="";
-            //messageGeoLocation.Info="";
+          
 
             var telemetryDataPoint = new
             {
@@ -73,27 +59,9 @@ namespace FallDetectionApp.Droid.Services
 
             return messageString;
         }
-
-        public async Task<string> SendTEXTMessageToIotHubAsync(string test)
-        {
+        */
 
 
-            var telemetryDataPoint = new
-            {
-                messageId = messageId++,
-                deviceId,
-                test
-            };
-
-            var messageString = JsonConvert.SerializeObject(telemetryDataPoint);
-            var message = new Message(System.Text.Encoding.ASCII.GetBytes(messageString));
-            Log.Verbose(TAG, "\nSENDING MESSAGE TO IOT-HUB");
-            Log.Verbose(TAG, "Message: " + message.ContentType + "\nMessageString: " + messageString);
-
-            await deviceClient.SendEventAsync(message);
-
-            return messageString;
-        }
 
 
 
@@ -131,8 +99,6 @@ namespace FallDetectionApp.Droid.Services
             telemetrysToSend.Clear();
             return messageString;
         }
-
-
     }
 
 
@@ -150,7 +116,5 @@ namespace FallDetectionApp.Droid.Services
             }
         }
         */
-
-
 
 }

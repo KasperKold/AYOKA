@@ -1,12 +1,6 @@
-﻿using System;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
+﻿using Xamarin.Forms;
 using FallDetectionApp.Views;
 using FallDetectionApp.Data;
-using FallDetectionApp.Models;
-using FallDetectionApp.ViewModels;
 using System.Diagnostics;
 
 namespace FallDetectionApp

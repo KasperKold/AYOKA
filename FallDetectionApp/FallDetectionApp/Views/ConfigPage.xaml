@@ -35,8 +35,8 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Margin="20,0,0,0" Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                            <Label Text="{Binding Name}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
-                            <Label Text="{Binding PhoneNr}" VerticalTextAlignment="Center" HorizontalOptions="StartAndExpand" />
+                            <Label WidthRequest = "300" Text="{Binding Name}"  FontSize="Small" FontAttributes= "Bold" VerticalTextAlignment="Center" HorizontalOptions="Start" />
+                            <Label WidthRequest = "300"  Text="{Binding PhoneNr}" FontSize="Small" FontAttributes= "Bold" VerticalTextAlignment="Center" HorizontalOptions="Start" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
