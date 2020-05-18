@@ -86,7 +86,7 @@ namespace FallDetectionApp.Droid
             guiTimer.Enabled = false;
             guiTimer.Interval = 1000;
 
-            //  create alert Timer
+            // create alert Timer
             alertTimer = new Timer();
             alertTimer.Elapsed += OnTimedEvent;
             alertTimer.Interval = 1000; //seconds
@@ -99,7 +99,7 @@ namespace FallDetectionApp.Droid
             monitorTimer.Elapsed += new ElapsedEventHandler(Session);
             monitorTimer.Enabled = false;
 
-            //iotHub
+            // iotHub
             iotHubDeviceId = "PederTestDevice";
             iotHubDeviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
             iotHubHostName = "IotFallApp.azure-devices.net";
@@ -127,7 +127,7 @@ namespace FallDetectionApp.Droid
             string lati = $"{location.Latitude}";
             string longi = $"{location.Longitude}";
 
-            //get date
+            // get date
             DateTime timeDate = DateTime.Now.ToLocalTime();
             string timeDateString = timeDate.ToString();
 
@@ -138,7 +138,7 @@ namespace FallDetectionApp.Droid
             currentGeoPos.SessionId = GetSessionId();
             currentGeoPos.GuiTime = timeDateString;
             currentGeoPos.InactivityDetected = 0;
-            //currentGeoPos.Alarmed = 0;
+            // currentGeoPos.Alarmed = 0;
 
             currentGeoPos.Info = "";
 
@@ -157,7 +157,7 @@ namespace FallDetectionApp.Droid
 
             if (string.IsNullOrWhiteSpace(deviceId))
             {
-                //deviceId = Guid.NewGuid().ToString();
+                // deviceId = Guid.NewGuid().ToString();
                 deviceId = Secure.GetString(mainActivity.ContentResolver, Secure.AndroidId);
                 Preferences.Set("deviceId", deviceId);
 
@@ -269,7 +269,7 @@ namespace FallDetectionApp.Droid
                    });
 
                     alert.Show();
-                    //waiting before alarming
+                    // waiting before alarming
                     await Task.Delay(1000 * savedSecToAlarm); //wait for X seconds
                     if (alertBool) //if  I´m ok not button pressed
                     {
@@ -279,7 +279,7 @@ namespace FallDetectionApp.Droid
                         Console.Write("A L A R M I N G !"); //& Phone call
                         AlertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS shortly", 2500);
                         await callAndSms.SmsToContact();
-                        await callAndSms.CallContacts();
+                        // await callAndSms.CallContacts();
                     }
                 }
             });

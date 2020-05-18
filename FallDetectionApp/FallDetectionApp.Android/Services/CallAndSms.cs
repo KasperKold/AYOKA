@@ -18,12 +18,9 @@ namespace FallDetectionApp.Droid.Services
         private string alarmMyLocationIs = "\nMy location: ";
         private string alarmWordLongitude = "\nLongitude: ";
         private string alarmWordLatitude = " \nLatitude: ";
-        private string alarmGooglelink = "https://www.google.com/maps/@";
-
-
+        private string alarmGooglelink = "http://www.google.com/maps/place/";
         private string alarmMessageDateTime = "\nDate and time is:\n";
         private string alarmMessageEnd = "\nThis is an automatic message from a Mobile application. This person needs your help. Please get help to this location. ";
-        // private string alarmRepeat = "\nThis message will be repeated once more.\n";
         private readonly string TAG = "Log CallAndSms";
         private Monitor monitor;
         private MainActivity mainActivity;
@@ -40,8 +37,6 @@ namespace FallDetectionApp.Droid.Services
 
         public void initializeComponents()
         {
-
-
         }
 
 
@@ -51,30 +46,11 @@ namespace FallDetectionApp.Droid.Services
         }
 
 
-        /*
-                public async Task SpeakNow()
-                {
-                    var locales = await TextToSpeech.GetLocalesAsync();
-
-                    // Grab the first locale
-                    var locale = locales.FirstOrDefault();
-
-                    var settings = new SpeechOptions()
-                    {
-                        Volume = .75f,
-                        Pitch = 1.0f,
-                        Locale = locale
-                    };
-
-                    await TextToSpeech.SpeakAsync("Hello World", settings);
-                }
-                */
-
-        // Test Call function
+        // Test Call function - works but volume of text to speech is low during call.
         public async Task<bool> CallContacts()
 
         {
-
+            var alarmMessage = assembleMessage();
 
             // speech settings - no or go?
             var locales = await TextToSpeech.GetLocalesAsync();
@@ -84,15 +60,15 @@ namespace FallDetectionApp.Droid.Services
 
             var settings = new SpeechOptions()
             {
-                Volume = .75f,
+                Volume = 0.9f,
                 Pitch = 1.0f,
                 Locale = locale
             };
 
-            // test - this is better sound
-
-            // await TextToSpeech.SpeakAsync("Hello World! Nice weather today! I love Peder", settings);
+            //test - this is better sound
+            //await TextToSpeech.SpeakAsync("Hello World! Nice weather today!", settings);
             //await TextToSpeech.SpeakAsync("This is an automatic message!", settings);
+
             //Checking for permission.
             List<Models.Contact> contactsFromLocalDB = await App.Database.GetItemsAsync();
 
@@ -105,13 +81,25 @@ namespace FallDetectionApp.Droid.Services
                 if (phoneCall.CanMakePhoneCall && contactsFromLocalDB[i].PhoneNr != "")
                 {
                     phoneCall.MakePhoneCall(contactsFromLocalDB[i].PhoneNr);
+                    await Task.Delay(3000);
+
+                    await TextToSpeech.SpeakAsync(alarmMessage);
+
+                    await Task.Delay(5000);
+
+
                 }
                 else
                 {
+                    Intent intent = mainActivity.PackageManager.GetLaunchIntentForPackage(mainActivity.PackageName);
+                    intent.AddFlags(ActivityFlags.ClearTop);
+                    mainActivity.StartActivity(intent);
+
                     Toast errorToast = Toast.MakeText(Xamarin.Essentials.Platform.CurrentActivity, "Not Able to make a phone call", ToastLength.Short);
                     errorToast.SetGravity(GravityFlags.Center, 0, 0);
                     errorToast.Show();
                     Log.Debug(TAG, "Not able to make a call");
+
                 }
             }
             return await Task.FromResult(true);
@@ -158,49 +146,48 @@ namespace FallDetectionApp.Droid.Services
 
 
 
-        async public override void OnCallStateChanged(CallState state, string incomingNumber)
-        {
-            base.OnCallStateChanged(state, incomingNumber);
+        //This works but not super together with callContacts - needs to be sorted out
+        /*
+                async public override void OnCallStateChanged(CallState state, string incomingNumber)
+                {
+                    base.OnCallStateChanged(state, incomingNumber);
 
-            //mainActivity.UpdateCallState(state, incomingNumber);
+                    //mainActivity.UpdateCallState(state, incomingNumber);
 
-            //gather message
-            var alarmMessage = assembleMessage();
+                    //gather message
+                    // var alarmMessage = assembleMessage();
 
-            switch (state)
-            {
-                case CallState.Ringing:
-                    // phone ringing
-                    Log.Debug(TAG, "RINGING, number: " + incomingNumber);
-                    break;
-
-                case CallState.Offhook:
-                    // active
-                    Log.Debug(TAG, "OFFHOOK");
-
-                    await Task.Delay(3000);
-
-                    await TextToSpeech.SpeakAsync(alarmMessage);
-
-                    await Task.Delay(5000);
-
-                    isPhoneCalling = true;
-                    break;
-                case CallState.Idle:
-                    Log.Debug(TAG, "IDLE");
-
-                    if (isPhoneCalling)
+                    switch (state)
                     {
+                        case CallState.Ringing:
+                            // phone ringing
+                            Log.Debug(TAG, "RINGING, number: " + incomingNumber);
+                            break;
 
-                        Log.Debug(TAG, "restart app");
+                        case CallState.Offhook:
+                            // active
+                            Log.Debug(TAG, "OFFHOOK");
 
-                        Intent i = mainActivity.PackageManager.GetLaunchIntentForPackage(mainActivity.PackageName);
-                        i.AddFlags(ActivityFlags.ClearTop);
-                        mainActivity.StartActivity(i);
 
-                    }
-                    break;
+
+                            isPhoneCalling = true;
+                            break;
+                        case CallState.Idle:
+                            Log.Debug(TAG, "IDLE");
+
+                            if (isPhoneCalling)
+                            {
+
+                                Log.Debug(TAG, "restart app");
+
+                                Intent i = mainActivity.PackageManager.GetLaunchIntentForPackage(mainActivity.PackageName);
+                                i.AddFlags(ActivityFlags.ClearTop);
+                                mainActivity.StartActivity(i);
+
+                            }
+                            break;
+                    }   
             }
-        }
+            */
     }
 }

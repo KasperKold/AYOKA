@@ -16,6 +16,7 @@ namespace FallDetectionApp.ViewModels
 
             if (Application.Current.Properties.ContainsKey("userAlarmMessage"))
             {
+
                 textAlarmMessage = Application.Current.Properties["userAlarmMessage"].ToString();
             }
             else
