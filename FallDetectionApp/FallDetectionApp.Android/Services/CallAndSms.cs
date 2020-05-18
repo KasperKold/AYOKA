@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+//!!!Keeping these "out commented using" here for future tries with calls!!!
+//using System.Linq;
 using System.Threading.Tasks;
-using Android.Content;
+//using Android.Content;
 using Android.Telephony;
 using Android.Util;
-using Android.Views;
-using Android.Widget;
-using Plugin.Messaging;
-using Xamarin.Essentials;
+//using Android.Views;
+//using Android.Widget;
+//using Plugin.Messaging;
+//using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FallDetectionApp.Droid.Services
@@ -24,7 +25,7 @@ namespace FallDetectionApp.Droid.Services
         private readonly string TAG = "Log CallAndSms";
         private Monitor monitor;
         private MainActivity mainActivity;
-        private bool isPhoneCalling = false;
+        //private bool isPhoneCalling = false;
 
         public CallAndSms(MainActivity mainActivity)
         {
@@ -47,7 +48,8 @@ namespace FallDetectionApp.Droid.Services
 
 
         // Test Call function - works but volume of text to speech is low during call.
-        public async Task<bool> CallContacts()
+
+        /*public async Task<bool> CallContacts()
 
         {
             var alarmMessage = assembleMessage();
@@ -104,6 +106,7 @@ namespace FallDetectionApp.Droid.Services
             }
             return await Task.FromResult(true);
         }
+        */
 
 
         public string assembleMessage()
@@ -146,7 +149,7 @@ namespace FallDetectionApp.Droid.Services
 
 
 
-        //This works but not super together with callContacts - needs to be sorted out
+        //This works recognizes states but great together with callContacts() - needs to be sorted out
         /*
                 async public override void OnCallStateChanged(CallState state, string incomingNumber)
                 {
