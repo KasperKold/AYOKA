@@ -36,7 +36,6 @@ namespace FallDetectionApp.Droid.Services
             /*
             Log.Debug(logTag, $"Altitude is {location.Altitude}");
             Log.Debug(logTag, $"Speed is {location.Speed}");
-            
             Log.Debug(logTag, $"Bearing is {location.Bearing}");
             */
         }

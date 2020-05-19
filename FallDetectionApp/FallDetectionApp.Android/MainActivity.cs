@@ -42,7 +42,6 @@ namespace FallDetectionApp.Droid
             callAndSms = new CallAndSms(this);
             monitor = new Monitor(this, callAndSms);
 
-
             TelephonyManager telephonyManager = (TelephonyManager)GetSystemService(Context.TelephonyService);
             telephonyManager.Listen(callAndSms, PhoneStateListenerFlags.CallState);
 

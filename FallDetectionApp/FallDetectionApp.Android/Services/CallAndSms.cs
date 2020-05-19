@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-//!!!Keeping these "out commented using" here for future tries with calls!!!
+//!!!Keeping these out commented below here for future tries with calls!
 //using System.Linq;
 using System.Threading.Tasks;
 //using Android.Content;
@@ -150,6 +150,7 @@ namespace FallDetectionApp.Droid.Services
 
 
         //This works recognizes states but great together with callContacts() - needs to be sorted out
+
         /*
                 async public override void OnCallStateChanged(CallState state, string incomingNumber)
                 {

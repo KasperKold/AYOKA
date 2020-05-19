@@ -279,7 +279,7 @@ namespace FallDetectionApp.Droid
                         Console.Write("A L A R M I N G !"); //& Phone call
                         AlertConfirmation("A L A R M I N G !", "Contacts will receive \nSMS shortly", 2500);
                         await callAndSms.SmsToContact();
-                        // await callAndSms.CallContacts();
+                        // await callAndSms.CallContacts(); 
                     }
                 }
             });

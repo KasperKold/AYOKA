@@ -36,35 +36,6 @@ namespace FallDetectionApp.Droid.Services
 
 
 
-        /*
-
-        public async Task<string> SendMessageToIotHubAsync(GeoLocation currentGeo)
-        {
-            GeoLocation messageGeoLocation = currentGeo;
-          
-
-            var telemetryDataPoint = new
-            {
-                messageId = messageId++,
-                deviceId,
-                messageGeoLocation
-            };
-
-            var messageString = JsonConvert.SerializeObject(telemetryDataPoint);
-            var message = new Message(System.Text.Encoding.ASCII.GetBytes(messageString));
-            Log.Verbose(TAG, "\nSENDING MESSAGE TO IOT-HUB");
-            Log.Verbose(TAG, "Message: " + message.ContentType + "\nMessageString: " + messageString);
-
-            await deviceClient.SendEventAsync(message);
-
-            return messageString;
-        }
-        */
-
-
-
-
-
 
         public async Task<string> SendListToIotHubAsync()
         {
@@ -101,6 +72,7 @@ namespace FallDetectionApp.Droid.Services
         }
     }
 
+    //Keeping below for future
 
     /*
         async void ReceiveCloudToDeviceMessagesAsync()

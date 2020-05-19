@@ -17,8 +17,6 @@ namespace FallDetectionApp.Droid.Services
 
 
 
-
-
         public PermissionService(MainActivity mainActivity)
         {
             this.mainActivity = mainActivity;

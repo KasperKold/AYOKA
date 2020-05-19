@@ -18,7 +18,6 @@ namespace FallDetectionApp.ViewModels
             Title = "Home";
 
             CmdToggleBtnActivate = new Command(() => ToggleBtnActivate());
-            //initialize();
         }
 
 
@@ -76,7 +75,6 @@ namespace FallDetectionApp.ViewModels
                 btnActivateTxt = "Activate";
 
                 //saving to properties
-                //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["monitorReady_state"] = monitorReady.ToString();
                 Application.Current.Properties["isVisited_state"] = "true";
                 Application.Current.Properties["isActivated_state"] = isActivated;
@@ -91,7 +89,6 @@ namespace FallDetectionApp.ViewModels
 
                 isActivated = false;
                 btnActivateTxt = "Activate";
-                //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
 
             });
@@ -129,7 +126,6 @@ namespace FallDetectionApp.ViewModels
             {
                 //setting text while waiting for update from Monitor
                 btnActivateTxt = "DeActivate\n\nNext Check:\n";
-                //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
 
             }
@@ -137,15 +133,11 @@ namespace FallDetectionApp.ViewModels
             {
                 if (!monitorReady)
                 {
-
                     btnActivateTxt = "Preparing Location\n   Service";
-                    //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 }
                 else
                 {
-
                     btnActivateTxt = "Activate";
-                    //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                     Application.Current.Properties["isActivated_state"] = isActivated;
                 }
             }
@@ -165,7 +157,6 @@ namespace FallDetectionApp.ViewModels
             {
                 btnActivateTxt = "Activate";
                 isActivated = false;
-                // Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
                 MessagingCenter.Send<HomeViewModel>(this, "Deactivate");
             }
@@ -174,7 +165,6 @@ namespace FallDetectionApp.ViewModels
                 //setting text while waiting for update from Monitor
                 btnActivateTxt = "DeActivate\n\nNext Check:\n";
                 isActivated = true;
-                //Application.Current.Properties["btnActivate_state"] = btnActivateTxt;
                 Application.Current.Properties["isActivated_state"] = isActivated;
                 MessagingCenter.Send<HomeViewModel>(this, "Activate");
             }
