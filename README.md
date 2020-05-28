@@ -18,8 +18,10 @@ Manual:
 
 1.
 Launch app
+
 2.
 A notification text on required permissions appears  - click OK.
+
 3.
 Allow permissions for accessing location, sending sms and  to make phone calls.
 4.
