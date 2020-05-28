@@ -31,10 +31,10 @@ namespace FallDetectionApp.Droid
         private Timer monitorTimer;
         private Timer alertTimer;
 
-        private DeviceToCloud deviceToCloud;
-        static string iotHubDeviceId;
-        static string iotHubDeviceKey;
-        static string iotHubHostName;
+        //private DeviceToCloud deviceToCloud;
+        //static string iotHubDeviceId;
+        //static string iotHubDeviceKey;
+        //static string iotHubHostName;
 
         private string sessionId;
         private string deviceId;
@@ -100,10 +100,10 @@ namespace FallDetectionApp.Droid
             monitorTimer.Enabled = false;
 
             // iotHub
-            iotHubDeviceId = "PederTestDevice";
-            iotHubDeviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
-            iotHubHostName = "IotFallApp.azure-devices.net";
-            deviceToCloud = new DeviceToCloud(iotHubDeviceId, iotHubDeviceKey, iotHubHostName);
+            // iotHubDeviceId = "PederTestDevice";
+            // iotHubDeviceKey = "kYMV9WOF4PSifDtML6K8JMO07ORitGaazeoWsCZHFBA="; //primarykey
+            // iotHubHostName = "IotFallApp.azure-devices.net";
+            // deviceToCloud = new DeviceToCloud(iotHubDeviceId, iotHubDeviceKey, iotHubHostName);
         }
 
 
@@ -290,7 +290,7 @@ namespace FallDetectionApp.Droid
             monitorTimer.Stop();
             guiTimer.Stop();
             MessagingCenter.Send<Object>(this, "InactivityDetected"); //setting button to "Activate
-            _ = SendMessages(); // sending to iotHub
+                                                                      // _ = SendMessages(); // sending to iotHub THIS is deactivated since iotHub subscription is no longer valid
             App.Database.DeleteAllGeoLocationItemAsync();
             App.Database.ResetAutoIncrement();
         }
@@ -355,12 +355,13 @@ namespace FallDetectionApp.Droid
         }
 
 
-
+        /*
         public async Task SendMessages()
         {
             string msg;
             msg = await deviceToCloud.SendListToIotHubAsync();
             System.Diagnostics.Debug.WriteLine("{0} > Sending message[FROM MONITOR]: {1}", DateTime.Now, msg);
         }
+        */
     }
 }
