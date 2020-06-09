@@ -24,10 +24,10 @@ A notification text on required permissions appears  - click OK.
 Allow permissions for accessing location, sending sms and  to make phone calls.
 ### 4. 
 Wait for the app to locate you (You are located when the enabled blue button has the text ACTIVATE).
-
+<p align="center">
 ![](https://lh4.googleusercontent.com/5XeuhEOc01RAGDDbD5ZRbsxpqYNfoyiFjd8OOdVlll1I_yilQ69TR8UES9KeMpAP3L2mmm8nMxPovvOOld2tnuTQs8h6Wduhc8waGC5o)
 
-
+</p>
 
 
 
