@@ -26,7 +26,7 @@ Allow permissions for accessing location, sending sms and  to make phone calls.
 Wait for the app to locate you (You are located when the enabled blue button has the text ACTIVATE).
 <p align="center">
 	
-<img src= https://lh4.googleusercontent.com/5XeuhEOc01RAGDDbD5ZRbsxpqYNfoyiFjd8OOdVlll1I_yilQ69TR8UES9KeMpAP3L2mmm8nMxPovvOOld2tnuTQs8h6Wduhc8waGC5o)
+<img src="https://lh4.googleusercontent.com/5XeuhEOc01RAGDDbD5ZRbsxpqYNfoyiFjd8OOdVlll1I_yilQ69TR8UES9KeMpAP3L2mmm8nMxPovvOOld2tnuTQs8h6Wduhc8waGC5o"
 <img/>
 </p>
 
