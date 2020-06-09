@@ -61,7 +61,7 @@ You will now see the remaining time to next check on the blue button which is al
 
 ### 13. 
 If an Inactivity is detected - an alarm dialogue starts and the app will ask you if you are OK. If you are ok press OK- the session continues.
-![(https://lh4.googleusercontent.com/vSDzUXJmOtS40ar8Gy0US8_jEgN5PwmUvis9Rszpfmjo2WGwxY1_IN8L_7uUWoNXQNdWg0lXfQfKTB_uL32FZSOVEkfim6hYKWEGgySU)
+![](https://lh4.googleusercontent.com/vSDzUXJmOtS40ar8Gy0US8_jEgN5PwmUvis9Rszpfmjo2WGwxY1_IN8L_7uUWoNXQNdWg0lXfQfKTB_uL32FZSOVEkfim6hYKWEGgySU)
 
 
 ![](https://lh5.googleusercontent.com/Y-wc2Nrf_B5i-UScu85rh-Mi21RBmZWNzp-Vojpf82fqeLF0MzuhB78iM5ma9tvpoqVRJJ4w8atBKjvzsrT3YJ5A7ZbBfnY31MvzXYQf)   ![](https://lh4.googleusercontent.com/T4Dbde5sfvafHxhc9nEKoQfmGalUwnVraRbmD9Q206yCPy7FNnpXbVRxwc0GMwVpNwFwG3qieEbNOgImvp6WVK1GA0tGv5ba62cQO66v)
