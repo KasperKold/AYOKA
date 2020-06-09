@@ -73,7 +73,7 @@ If an Inactivity is detected - an alarm dialogue starts and the app will ask you
 
 
 ### 14. 
-If no interaction is perceived from the user, the system stops the current session, sends an sms with the edited text and the last known location to the numbers in your contact list.
+If no interaction is perceived from the user, the system stops the current session, sends an sms with the edited text and the last known location to the numbers in your contact list. The Phone call functionality i currently deactivated.
 
 <p align="center">
 <img src="https://lh4.googleusercontent.com/vSDzUXJmOtS40ar8Gy0US8_jEgN5PwmUvis9Rszpfmjo2WGwxY1_IN8L_7uUWoNXQNdWg0lXfQfKTB_uL32FZSOVEkfim6hYKWEGgySU"/>
