@@ -25,7 +25,7 @@ Allow permissions for accessing location, sending sms and  to make phone calls.
 ### 4. 
 Wait for the app to locate you (You are located when the enabled blue button has the text ACTIVATE).
 
-![](http://lh4.googleusercontent.com/GHzVihFr-sZUkiJ5LZtcRTc-vFn9ds52PUM-dQfIwoPXWEyw8k-jzgTKh-GXJKOP-xcEAKNtg1UA6Ix0MK8oskXY4OXlRtybX2b_gDbH)
+![](https://lh4.googleusercontent.com/5XeuhEOc01RAGDDbD5ZRbsxpqYNfoyiFjd8OOdVlll1I_yilQ69TR8UES9KeMpAP3L2mmm8nMxPovvOOld2tnuTQs8h6Wduhc8waGC5o)
 
 
 
@@ -40,7 +40,7 @@ Select the Settings page tab.
 ### 6. 
 Add contacts by pressing the plus icon in the upper right corner.
 
-![](https://lh6.googleusercontent.com/cnlNDLn4YsxbL1aNo_vOnmQcetg4iuHgXZVCjNgXJvf1M-WEOFvWqu451rlhnfviPYITcJQW1o3T2MUUw8Rbzr2GRfZkGEcttx1qxJX8)   ![](https://lh4.googleusercontent.com/jHQRTuerGcqYAZflQvcG_jl9Wb-_0GEgX6psLy7BBATdpWsmnXKR3etsZZAC4y912oioDm8L9TSW9G-m3VAAYPAoVIKU8bNuWOgZ3kkE)
+![](https://lh5.googleusercontent.com/Ckdwal9ZvCn31mHf0V2SdJ3eqYzWBO3BW4G8Q6LnQKg72ZEHHtytbutQY9AlLuIsmDLQE44r7eGceR9e8GoP7i-8TF-OjZIzR25zrpcd)   ![](https://lh4.googleusercontent.com/q5VpVoDinJ3Q7qSER_sdydT9DlSSnzdtkfQ0RafG_IFi3KQjIKjSilut2XVHqxZ3_MzszMn9lWY33-b5y78m_Awn5PsED2qcTc_18w7B)
 		
 
 
@@ -57,7 +57,7 @@ Press ACTIVATE  - this is when latest edited settings are used, settings can´t 
 ### 12. 
 You will now see the remaining time to next check on the blue button which is also used to deactivate the detecting session. The initial location (coordinates )is displayed on the same page and will be filled with the next. 
 
-![](https://lh6.googleusercontent.com/qL4BUrHVscL5YCtBkgTS4_VAhUNaRvCWQtAiwqTGhmXsvb391xNBgMb3ECV_53Bh0mVgmWqoxqrB0wjXrww5QRcoRFkFdMjN6s_FN3Jj)
+![](https://lh5.googleusercontent.com/5qGWC33WYLSQE7L4lm5r-zPRyPufGKNr8Xiqrdf1xBDopUwTdtAT9s4loARvT6ELV8cnIRA4I-cNjoMnjRS0QqKr0CeL5Wg0fsx9JVtm)
 
 ### 13. 
 If an Inactivity is detected - an alarm dialogue starts and the app will ask you if you are OK. If you are ok press OK- the session continues.
