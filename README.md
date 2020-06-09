@@ -61,15 +61,18 @@ You will now see the remaining time to next check on the blue button which is al
 
 ### 13. 
 If an Inactivity is detected - an alarm dialogue starts and the app will ask you if you are OK. If you are ok press OK- the session continues.
-![](https://lh4.googleusercontent.com/vSDzUXJmOtS40ar8Gy0US8_jEgN5PwmUvis9Rszpfmjo2WGwxY1_IN8L_7uUWoNXQNdWg0lXfQfKTB_uL32FZSOVEkfim6hYKWEGgySU)
+
+![](https://lh5.googleusercontent.com/1k6odSaYUnDrlI4NExT_xOVPCnwwBQ95stv7FF-wlvy_ejqUdIMU1maQtgwMN2n-uaRFY8UzdJd9Cbf7e-j19SE8zjBeEkV9CG8Ghauu) ![](https://lh4.googleusercontent.com/6um1qrtAuR2udF_ftPoDRIBm7tOnk6ABnEHGfyd-LomWliwrS6ijemkYOBgWpq3QHHiwy5Ka0-sNm4YoxQwTTstq6fbq98LEvUtBvvXC)
 
 
-![](https://lh5.googleusercontent.com/Y-wc2Nrf_B5i-UScu85rh-Mi21RBmZWNzp-Vojpf82fqeLF0MzuhB78iM5ma9tvpoqVRJJ4w8atBKjvzsrT3YJ5A7ZbBfnY31MvzXYQf)   ![](https://lh4.googleusercontent.com/T4Dbde5sfvafHxhc9nEKoQfmGalUwnVraRbmD9Q206yCPy7FNnpXbVRxwc0GMwVpNwFwG3qieEbNOgImvp6WVK1GA0tGv5ba62cQO66v)
+
 
 ### 14. 
 If no interaction is perceived from the user, the system stops the current session, sends an sms with the edited text and the last known location to the numbers in your contact list.
 
-![](https://lh5.googleusercontent.com/s_hdBbQm1iFP1WVR6JusLQGDR3o8acmgKu3x6VgN_DIMmjI9ZPM2coGFewBAJBxNW2OEdLs5TMt7AxOy-PW4wsSCaUPkHetW-vOlRXdR)
+![](https://lh4.googleusercontent.com/vSDzUXJmOtS40ar8Gy0US8_jEgN5PwmUvis9Rszpfmjo2WGwxY1_IN8L_7uUWoNXQNdWg0lXfQfKTB_uL32FZSOVEkfim6hYKWEGgySU)
+
+
 
 
 ### 15. 
