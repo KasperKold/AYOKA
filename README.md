@@ -5,7 +5,8 @@ This is a prototype and is part of a Bachelor Thesis
 
 ### ON SECRECY
 
-Your location is tracked and there are permissons to call and send an receive SMS.
+Your location is tracked but not saved.
+Permissons are used used to call (not activated ATM) and to send an receive SMS.
 READ PHONE STATE is not used ATM but might be in future versions.
 
 This app uses  some of these permissions and otherrs are for future possible versions:
