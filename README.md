@@ -3,6 +3,28 @@ Fall detection system for runners and cyclists based on GPS-inactivty
 
 This is a prototype and is part of a Bachelor Thesis
 
+### ON SECRECY
+
+Your location is tracked and there are permissons to call and send an receive SMS.
+READ PHONE STATE is not used ATM but might be in future versions.
+
+This app uses  some of these permissions and otherrs are for future possible versions:
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+	<uses-permission android:name="android.permission.BATTERY_STATS" />
+	<uses-permission android:name="android.permission.ACCESS_CHECKIN_PROPERTIES" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<uses-permission android:name="android.permission.INSTANT_APP_FOREGROUND_SERVICE" />
+	<uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
+	<uses-permission android:name="android.permission.CALL_PHONE" />
+	<uses-permission android:name="android.permission.SEND_SMS" />
+	<uses-permission android:name="android.permission.RECEIVE_SMS" />
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
 *****
 Deactivated and commented out:
 
@@ -84,4 +106,7 @@ If no interaction is perceived from the user, the system stops the current sessi
 
 ### 15. 
 Geo locations are currently retrieved at all times from the app. Only checked geo locations are saved locally and all geolocations in one session are sent at once via IoT Hub and Stream Analytics and stored in an Azure SQL database when a session is deactivated or on alarm.
+
+
+
 
