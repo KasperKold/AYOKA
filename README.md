@@ -10,7 +10,7 @@ READ PHONE STATE is not used ATM but might be in future versions.
 
 This app uses  some of these permissions and otherrs are for future possible versions:
 
-	uses-permission android:name="android.permission.ACCESS_NETWORK_STATE
+	uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"
 	
 	uses-permission android:name="android.permission.INTERNET"
 	
